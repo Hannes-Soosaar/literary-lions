@@ -6,3 +6,16 @@ Login
 
 Landing page--
 
+
+
+
+
+
+Has user
+Has user roles 
+Has user posts
+Has book
+Has Post
+Has Thread
+Has Password
+Has 
