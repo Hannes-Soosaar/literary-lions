@@ -19,5 +19,4 @@ func main() {
 	fmt.Println("Starting the DB initializer")
 	utils.CreateDatabase()
 	utils.InitiateDb()
-
 }
