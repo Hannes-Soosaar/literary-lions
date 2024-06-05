@@ -16,7 +16,6 @@ It can be executed as a standalone
 	create the sqlite3 db
 	run scripts to populate the db
 	run db related tests
-
 */
 
 func main() {

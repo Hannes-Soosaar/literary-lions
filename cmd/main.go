@@ -11,7 +11,7 @@ func main() {
 
 	fmt.Println("Hello Lions!")
 
-	for i := 0; i < 25; i++ {
+	for i := 0; i < 5; i++ {
 
 		Id, err := utils.GenerateUUID()
 		if err != nil {
