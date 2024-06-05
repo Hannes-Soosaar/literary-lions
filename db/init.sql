@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS posts(
     id INTEGER PRIMARY  KEY,
     title TEXT NOT NULL,
     body   TEXT NOT NULL,
-    likes INTEGER NOT NULL, -- CHECK how the encryptions works
+    likes INTEGER NOT NULL, 
     dislikes INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     category_id INTEGER NOT NULL,
