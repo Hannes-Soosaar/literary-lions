@@ -3,8 +3,8 @@ package utils
 import (
 	"database/sql"
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
 
 	"gitea.kood.tech/hannessoosaar/literary-lions/intenal/config"
 	_ "github.com/mattn/go-sqlite3"
@@ -32,7 +32,7 @@ func InitiateDb() {
 		log.Fatal(err)
 	}
 	fmt.Println("Database Open")
-	sql, err := ioutil.ReadFile(config.INIT_SQL)
+	sql, err := os.ReadFile(config.INIT_SQL)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -42,4 +42,24 @@ func InitiateDb() {
 		log.Fatal(err)
 	}
 
+}
+
+func WipeDb() {
+	fmt.Println("Resetting Database")
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	sql, err := os.ReadFile(config.RESET_SQL)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = db.Exec(string(sql))
+	if err != nil {
+		fmt.Println("Failed to execute SQL script")
+		log.Fatal(err)
+	}
 }
