@@ -1,10 +1,12 @@
 body {
-    font-family: sans-serif;
-    background: linear-gradient(to right, #c4e0fa, #ebd7f9);
-    height: 89vh;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background: linear-gradient(to right, #b1d7fb, #ebd0ff);
+    height: 92vh;
+    max-height: 92vh;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 h1 {
@@ -17,7 +19,7 @@ h3 {
 
 .navbar {
     width: 100%;
-    height: 80px;
+    height: 8vh;
     background-color: whitesmoke;
     position: fixed;
     top: 0;
@@ -33,6 +35,8 @@ h3 {
     display: flex;
     align-items: center;
     height: 100%;
+    width: 200px;
+    min-width: 200px;
 }
 
 .navbar .logo img {
@@ -51,6 +55,7 @@ h3 {
     color: goldenrod;
     font-size: 30px;
     text-decoration: none;
+    display: block;
 }
 
 .search-form {
@@ -58,7 +63,6 @@ h3 {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 13%;
 }
 
 .search-form button {
@@ -78,9 +82,11 @@ h3 {
 .search-form input[type="text"] {
     background: whitesmoke;
     padding: 10px;
-    width: 250px;
+    width: 25%;
+    min-width: 46px;
     border: 2px solid goldenrod;
     border-radius: 15px;
+    margin-right: 5px;
 }
 
 .search-form input[type="text"]:hover {
@@ -95,8 +101,8 @@ h3 {
 }
 
 .account-icon {
-    margin-left: 15px;
-    margin-right: 10px;
+    margin-left: 143px;
+    margin-right: 15px;
 }
 
 .account-icon img {
@@ -105,7 +111,86 @@ h3 {
 }
 
 .forum_content {
-    margin-top: 75px;
-    /* Adjust based on the height of your navbar */
     padding: 20px;
+    box-sizing: border-box;
+    width: calc(100vw - 400px);
+    margin: auto;
+    margin-left: 200px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    word-wrap: break-word;
+}
+
+.container {
+    display: flex;
+    width: 100vw;
+    height: 92vh;
+    margin-top: 8vh;
+    overflow-y: auto;
+}
+
+.post-container {
+    width: calc(37% - 30px);
+    min-width: 400px;
+    margin: 20px;
+    height: auto;
+    border-width: 3px;
+    border-radius: 15px;
+    box-sizing: border-box;
+    text-align: left;
+    border: 10px solid transparent;
+}
+
+.post-container:hover {
+    border: 10px solid rgb(193, 195, 255);
+    background-color: rgb(193, 195, 255);
+    cursor: pointer;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: rgb(161, 0, 0);
+    color: white;
+    padding: 20px;
+    position: fixed;
+    box-sizing: border-box;
+    top: 8vh;
+    left: 0;
+    overflow-y: auto;
+    max-height: 92vh;
+}
+
+@media (max-width: 800px) {
+    .sidebar {
+        display: none;
+    }
+
+    .forum_content {
+        margin-left: 0;
+        width: 100vw;
+    }
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px 0;
+    border-bottom: 1px solid #555;
+    text-align: center;
+    border: 1px solid rgb(161, 0, 0);
+    border-radius: 10px;
+}
+
+.sidebar ul li:hover {
+    cursor: pointer;
+    border: 1px solid crimson;
+    background-color: crimson;
+    border-radius: 10px;
+    font-weight: bold;
 }
