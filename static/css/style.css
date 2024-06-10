@@ -1,12 +1,17 @@
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    background: linear-gradient(to right, #a5d3fe, #d0ffe1);
+    background: linear-gradient(to right, #7ec1ff, #7cffac);
     height: 92vh;
     max-height: 92vh;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: #204bb9;
 }
 
 h1 {
@@ -82,7 +87,7 @@ h3 {
 }
 
 .search-form button:hover {
-    background: goldenrod;
+    background: rgb(230, 230, 230);
     cursor: pointer;
 }
 
@@ -105,6 +110,7 @@ h3 {
     /* Remove default focus outline */
     border: 2px solid goldenrod;
     /* Apply custom border color on focus */
+    background-color: rgb(230, 230, 230);
 }
 
 .account-icon {
@@ -152,8 +158,8 @@ h3 {
 }
 
 .post-container:hover {
-    border: 10px solid rgb(193, 195, 255);
-    background-color: rgb(193, 195, 255);
+    border: 10px solid rgb(118, 255, 234);
+    background-color: rgb(118, 255, 234);
     cursor: pointer;
 }
 
@@ -221,9 +227,9 @@ h3 {
 
 .popup-content {
     position: relative;
-    background: white;
+    background: whitesmoke;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 15px;
     width: 300px;
     text-align: center;
 }
@@ -242,13 +248,14 @@ h3 {
 }
 
 .popup button {
-    background: white;
+    background: whitesmoke;
     border: 2px solid goldenrod;
     border-radius: 15px;
     height: 39px;
     width: 70px;
     margin-left: 5px;
     margin-top: 10px;
+    font-weight: bold;
 }
 
 .popup button:hover {
@@ -275,4 +282,22 @@ h3 {
     border: 2px solid goldenrod;
     border-radius: 15px;
     margin-right: 5px;
+}
+
+.popup input[type="text"]:focus {
+    background-color: rgb(230, 230, 230);
+    outline: none;
+    border: 2px solid goldenrod;
+}
+
+.popup input[type="password"]:focus {
+    background-color: rgb(230, 230, 230);
+    outline: none;
+    border: 2px solid goldenrod;
+}
+
+.popup input[type="username"]:focus {
+    background-color: rgb(230, 230, 230);
+    outline: none;
+    border: 2px solid goldenrod;
 }
