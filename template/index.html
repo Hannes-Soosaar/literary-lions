@@ -12,6 +12,18 @@
         {{ block "sidebar" . }}{{ end }}
         {{ block "forum-content" . }}{{ end }}
     </div>
+    {{ if .RegistrationSuccessMessage }}
+    <script>
+        alert("{{.RegistrationSuccessMessage}}");
+        window.location.href = "/";
+    </script>
+    {{ end }}
+    {{ if .ErrorMessage }}
+    <script>
+        alert("{{.ErrorMessage}}")
+        window.location.href = "/";
+    </script>
+    {{ end }}
 </body>
 
 </html>

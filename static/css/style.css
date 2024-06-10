@@ -24,6 +24,7 @@ h3 {
 
 .post-container-separator {
     width: calc(37% - 30px);
+    min-width: 400px;
     height: 1px;
     background-color: gray;
     margin: 5px 0;
@@ -198,6 +199,10 @@ h3 {
     text-align: center;
     border: 1px solid rgb(161, 0, 0);
     border-radius: 10px;
+}
+
+.sidebar h4 {
+    text-align: center;
 }
 
 .sidebar ul li:hover {

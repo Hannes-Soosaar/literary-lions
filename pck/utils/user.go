@@ -61,8 +61,8 @@ func AddActiveUser(user models.User) error {
 	return nil
 }
 
-//Sets the user to inactive does  not remove the user from the DB
-func InactiveActiveUser( user models.User) error {
+// Sets the user to inactive does  not remove the user from the DB
+func InactiveActiveUser(user models.User) error {
 	db, err := sql.Open("sqlite3", config.LION_DB)
 	if err != nil {
 		fmt.Println("error opening DB", err)
@@ -71,12 +71,12 @@ func InactiveActiveUser( user models.User) error {
 	user.ModifiedAt = time.Now().Format("02/01/06,15/04")
 	user.Active = config.INACTIVE
 	query := "UPDATE users SET Active = ?, modified_at = ? WHERE uuid = ?"
-	_,err = db.Exec(query,user.Active,user.ModifiedAt)
-	if err!= nil {
+	_, err = db.Exec(query, user.Active, user.ModifiedAt)
+	if err != nil {
 		fmt.Println("Error, updating user ", err)
 		return err
 	}
-	fmt.Printf("Use  update %v to Inactive  \n", user )
+	fmt.Printf("Use  update %v to Inactive  \n", user)
 	return nil
 }
 
@@ -91,7 +91,7 @@ func ActivateUser(user models.User) error {
 }
 
 // When we want to update a user we will find the user that is logged in by their UUID
-func FindUserByUUID(userUuid string ) models.User{
+func FindUserByUUID(userUuid string) models.User {
 	db, err := sql.Open("sqlite3", config.LION_DB)
 	if err != nil {
 		fmt.Println("error opening DB", err)
@@ -113,11 +113,11 @@ func FindUserByUUID(userUuid string ) models.User{
 	return user
 }
 
-func AddUserTest() {
+func AddUserTest(username string, email string, password string) {
 	var user models.User
-	user.Username = "NewName"
-	user.Email = "new@Email.com"
-	user.Password = "123"
+	user.Username = username
+	user.Email = email
+	user.Password = password
 	user.Role = "U"                                      // ? should we have this with integers as well ?
 	user.CreatedAt = time.Now().Format("02/01/06,15/04") //
 	user.ModifiedAt = time.Now().Format("02/01/06,15/04")
@@ -130,10 +130,9 @@ func AddUserTest() {
 	user.UUID = userUuid
 	err = AddActiveUser(user)
 	if err != nil {
-		fmt.Printf("The user %v was not added %v", user, err )
+		fmt.Printf("The user %v was not added %v", user, err)
 	}
 }
-
 
 func ValidateUser(userName string) error {
 
