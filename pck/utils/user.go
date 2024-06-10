@@ -11,7 +11,7 @@ import (
 func GetUserByUserName(userName string) models.User {
 	var user models.User
 	// See if we can make the open db into a separate function so we do not need to open close the DB for every request
-	db, err := sql.Open("sqlite3", "../db/lions.db") // ! the path is different here than it is for the other
+	db, err := sql.Open("sqlite3", "../../db/lions.db")  // ! the path is different here than it is for the other 
 	if err != nil {
 		fmt.Println("error opening DB", err)
 		return user // should return an empty use
@@ -29,4 +29,10 @@ func GetUserByUserName(userName string) models.User {
 		return models.User{} // consider returning an error too
 	}
 	return user
+}
+
+func AddActiveUser( user models.User)error{
+
+
+	return nil
 }
