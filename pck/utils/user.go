@@ -61,22 +61,60 @@ func AddActiveUser(user models.User) error {
 	return nil
 }
 
-func DeleteActiveUser(userID int) error {
-
-	// Find User by ID and changes the user to not active
+//Sets the user to inactive does  not remove the user from the DB
+func InactiveActiveUser( user models.User) error {
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		fmt.Println("error opening DB", err)
+	}
+	defer db.Close()
+	user.ModifiedAt = time.Now().Format("02/01/06,15/04")
+	user.Active = config.INACTIVE
+	query := "UPDATE users SET Active = ?, modified_at = ? WHERE uuid = ?"
+	_,err = db.Exec(query,user.Active,user.ModifiedAt)
+	if err!= nil {
+		fmt.Println("Error, updating user ", err)
+		return err
+	}
+	fmt.Printf("Use  update %v to Inactive  \n", user )
 	return nil
 }
 
-func FindUserByID(userId int ) error {
-
-return nil
+// Admin level function
+func ActivateUser(user models.User) error {
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		fmt.Println("error opening DB", err)
+	}
+	defer db.Close()
+	return nil
 }
 
+// When we want to update a user we will find the user that is logged in by their UUID
+func FindUserByUUID(userUuid string ) models.User{
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		fmt.Println("error opening DB", err)
+	}
+	defer db.Close()
+	query := "SELECT id, username,email,password,role,created_at,modified_at,active,uuid FROM users  WHERE username = ?"
+	row := db.QueryRow(query, userUuid)
+	var user models.User
+	err = row.Scan(&user.Username, &user.Email, &user.Role, &user.Password, &user.Role, &user.CreatedAt, &user.ModifiedAt, &user.Active, &user.UUID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			fmt.Printf("There is no user with the UUID  %s, was not found \n", userUuid)
+			return models.User{} // Consider returning an error too
+		}
+		fmt.Printf("error scanning rows: %v", err)
+		return models.User{} // consider returning an error too
+	}
+	fmt.Printf("User %v \n:", user)
+	return user
+}
 
 func AddUserTest() {
-
 	var user models.User
-
 	user.Username = "NewName"
 	user.Email = "new@Email.com"
 	user.Password = "123"
@@ -95,6 +133,7 @@ func AddUserTest() {
 		fmt.Printf("The user %v was not added %v", user, err )
 	}
 }
+
 
 func ValidateUser(userName string) error {
 
