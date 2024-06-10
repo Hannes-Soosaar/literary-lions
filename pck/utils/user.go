@@ -18,17 +18,17 @@ func GetUserByUserName(userName string) models.User {
 	}
 	defer db.Close()
 	query := "SELECT id, username,email,password,role,created_at,modified_at,active,uuid FROM users  WHERE username = ?"
-	row := db.QueryRow(query,userName)
-	err = row.Scan(&user.Username,&user.Email,&user.Role,&user.Password,&user.Role,&user.CreatedAt,&user.ModifiedAt,&user.Active,&user.UUID)
+	row := db.QueryRow(query, userName)
+	err = row.Scan(&user.Username, &user.Email, &user.Role, &user.Password, &user.Role, &user.CreatedAt, &user.ModifiedAt, &user.Active, &user.UUID)
 	if err != nil {
-		if err == sql.ErrNoRows{
+		if err == sql.ErrNoRows {
 			fmt.Printf("%s, was not found \n", userName)
-			return models.User{} // Consider returning an error too 
+			return models.User{} // Consider returning an error too
 		}
 		fmt.Printf("error scanning rows: %v", err)
 		return models.User{} // consider returning an error too
 	}
- return user
+	return user
 }
 
 func AddActiveUser( user models.User)error{
