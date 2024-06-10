@@ -8,10 +8,8 @@ import (
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/utils"
 )
 
-
-
 func RenderLandingPage(w http.ResponseWriter, tmpl string, data interface{}) {
-	utils.GetUserByUserName("bob")
+	utils.FindUserByUserName("bob")
 	template := template.Must(template.ParseFiles(
 		filepath.Join("../../template", "base.html"),
 		filepath.Join("../../template", "head.html"),
