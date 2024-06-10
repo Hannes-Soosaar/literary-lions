@@ -1,6 +1,6 @@
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    background: linear-gradient(to right, #b1d7fb, #ebd0ff);
+    background: linear-gradient(to right, #a5d3fe, #d0ffe1);
     height: 92vh;
     max-height: 92vh;
     margin: 0;
@@ -15,6 +15,13 @@ h1 {
 
 h3 {
     color: #533ed9;
+}
+
+.post-container-separator {
+    width: calc(37% - 30px);
+    height: 1px;
+    background-color: gray;
+    margin: 5px 0;
 }
 
 .navbar {
