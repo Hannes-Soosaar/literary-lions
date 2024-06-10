@@ -6,7 +6,6 @@ import (
 
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/render"
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/utils"
-
 )
 
 func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
@@ -22,6 +21,6 @@ func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 	render.RenderLandingPage(w, "index.html", data)
 }
 
-func LoginHandler(){
+func LoginHandler() {
 	// add logic to the login submit
 }

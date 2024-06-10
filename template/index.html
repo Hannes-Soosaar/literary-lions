@@ -1,120 +1,17 @@
 <!-- index.html-->
-{{ define "content"}}
-<nav class="navbar">
-    <div class="logo">
-        <a href="#">
-            <img src="static/images/LionsLogo_Renewed.png" alt="Logo">
-        </a>
-        <span class="logo-text"><b>Literary<br>Lions</b></span>
-    </div>
-    <form class="search-form">
-        <input type="text" placeholder="Search...">
-        <button type="submit"><b>Search</b></button>
-    </form>
-    <div class="account-icon">
-        <a href="#login">
-            <img src="static/images/AccountImage_53x53.png" alt="Account">
-        </a>
-    </div>
-</nav>
-<div id="login" class="popup">
-    <div class="popup-content">
-        <a href="#" class="close">&times;</a>
-        <h2>Login</h2>
-        <form>
-            <input type="text" placeholder="Email*" id="email" name="email">
-            <input type="password" placeholder="Password*" id="password" name="password">
-            <button type="submit">Login</button>
-            <p>New user? <a href="#register">Sign up!</a></p>
-        </form>
-    </div>
-</div>
-<div id="register" class="popup">
-    <div class="popup-content">
-        <a href="#" class="close">&times;</a>
-        <h2>Register</h2>
-        <form>
-            <input type="text" placeholder="Username*" id="username" name="username">
-            <input type="text" placeholder="Email*" id="email" name="email">
-            <input type="password" placeholder="Password*" id="password" name="password">
-            <button type="submit">Register</button>
-            <p>Already got an account? <a href="#login">Log in!</a></p>
-        </form>
-    </div>
-</div>
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    {{template "head.html" .}}
+</head>
 
-<div class="container">
-    <div class="sidebar">
-        <ul>
-            <li>Home</li>
-            <li>Categories</li>
-            <li>Users</li>
-            <li>Profile</li>
-            <li>Random</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-            <li>Test scrolling</li>
-        </ul>
+<body>
+    {{block "navbar" .}} {{end}}
+    <div class="container">
+        {{ block "sidebar" . }}{{ end }}
+        {{ block "forum-content" . }}{{ end }}
     </div>
-    <div class="forum_content">
-        <div class="post-container">
-            <h1>Hello Lions!</h1>
-            <p>Testing the forum functionality of text. This text should be justified, meaning, the sides should be
-                equal and a new row should start when the container limit is reached.</p>
-        </div>
-        <div class="post-container-separator"></div>
-        <div class="post-container">
-            <h1>Title</h1>
-            <p>Second post. Testing more text in one post. Second post. Testing more text in one post. Second post.
-                Testing more text in one post. Second post. Testing more text in one post. Second post. Testing more
-                text in one post. Second post. Testing more text in one post. Second post. Testing more text in one
-                post. Second post. Testing more text in one post. Second post. Testing more text in one post. Second
-                post. Testing more text in one post. Second post. Testing more text in one post. Second post. Testing
-                more text in one post.</p>
-            <p>Second post. Testing more text in one post and different paragraphs.</p>
-            <p>Second post. Testing more text in one post and different paragraphs.</p>
-            <p>Second post. Testing more text in one post and different paragraphs.</p>
-            <p>Second post. Testing more text in one post and different paragraphs.</p>
+</body>
 
-        </div>
-        <div class="post-container-separator"></div>
-        <div class="post-container">
-            <h1>Hello Lions!</h1>
-            <p>Third post</p>
-        </div>
-        <div class="post-container-separator"></div>
-        <div class="post-container">
-            <h1>Hello Lions!</h1>
-            <p>Fourth post</p>
-        </div>
-        <div class="post-container-separator"></div>
-        <div class="post-container">
-            <h1>Hello Lions!</h1>
-            <p>Fifth post, longer for scrolling. Also testing if one long string will be broken to fit into the
-                container or if overflow will happen.
-                @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-            </p>
-        </div>
-    </div>
-</div>
-
-{{end}}
+</html>
