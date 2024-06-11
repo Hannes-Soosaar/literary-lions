@@ -5,7 +5,7 @@ import (
 
 	utils "gitea.kood.tech/hannessoosaar/literary-lions/pck/utils"
 )
-
+//! this main has no function atm.
 func main() {
 
 	user := utils.FindUserByUserName("bob")

@@ -2,12 +2,10 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
 	"gitea.kood.tech/hannessoosaar/literary-lions/intenal/config"
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/handle"
-	utils "gitea.kood.tech/hannessoosaar/literary-lions/pck/utils"
 )
 
 func main() {
@@ -24,14 +22,4 @@ func main() {
 	}
 
 	fmt.Printf("Server started on Port: %s \n", config.PORT)
-
-	fmt.Println("Hello Lions!")
-	for i := 0; i < 5; i++ {
-		Id, err := utils.GenerateUUID()
-		if err != nil {
-			log.Printf("Error 1! %v", err)
-		}
-		fmt.Printf("Id %d, is %s", i, Id)
-	}
-
 }

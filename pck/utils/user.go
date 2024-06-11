@@ -32,7 +32,6 @@ func FindUserByUserName(userName string) models.User {
 		fmt.Printf("error scanning rows: %v", err)
 		return models.User{} // consider returning an error too
 	}
-	fmt.Printf("User %v \n:", user)
 	return user
 }
 
@@ -129,9 +128,9 @@ func AddNewUser(username string, email string, password string) error {
 	user.UUID = userUuid
 	err = AddActiveUser(user)
 	if err != nil {
-		fmt.Printf("The user %v was not added %v", user, err)
-		fmt.Errorf("A user with the")
+		return fmt.Errorf("The user was not added!")
 	}
+
 	return nil
 }
 
@@ -152,4 +151,9 @@ func ValidateUser(userName string, password string) (string,bool,error) {
 		return uuid, true, nil
 	}
 	return uuid,false, nil
+}
+
+func ValidateRegistrationOfUser(userName string, email string){
+
+
 }

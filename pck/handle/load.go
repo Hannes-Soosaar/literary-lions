@@ -3,130 +3,139 @@ package handle
 import (
 	"fmt"
 	"net/http"
-	"net/url"
 
+	"gitea.kood.tech/hannessoosaar/literary-lions/pck/models"
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/render"
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/utils"
 )
 
 func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 	data := struct {
+		SuccessMessage             string
 		RegistrationSuccessMessage string
 		ErrorMessage               string
 		Title                      string
+		Uuid                       string
 	}{
+		SuccessMessage:             "",
 		Title:                      "Lions",
 		RegistrationSuccessMessage: "",
 		ErrorMessage:               "",
+		Uuid:                       "",
 	}
 	render.RenderLandingPage(w, "index.html", data)
 }
 
 func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
-	if err != nil {
-		http.Error(w, "Failed to parse form data", http.StatusBadRequest)
+
+	if r.Method != http.MethodPost {
+		http.Error(w, "Invalid Request method", http.StatusMethodNotAllowed)
 		return
+	} else {
+		err := r.ParseForm()
+		if err != nil {
+			http.Error(w, "Failed to parse form data", http.StatusBadRequest)
+			return
+		}
 	}
 
-	successMessage := r.URL.Query().Get("success")
-
-	if successMessage != "" { // why are we loading the  page if we get a happy path ?
-		data := struct {
-			RegistrationSuccessMessage string
-			ErrorMessage               string
-			Title                      string
-		}{
-			Title:                      "Lions",
-			RegistrationSuccessMessage: successMessage,
-			ErrorMessage:               "",
-		}
-		render.RenderLandingPage(w, "index.html", data)
-		return
-	}
-
-	fmt.Println("We made it here")
-
-	username := r.FormValue("username")
-	email := r.FormValue("email")
-	password := r.FormValue("password")
-
-
-	switch { //TODO make database lookup functions to check if a username or email has already been used for another account and make the corresponding switch cases!
-	case username == "" || email == "" || password == "":
-		errorMessage := "None of the fields can be empty!"
-		data := struct {
-			RegistrationSuccessMessage string
-			ErrorMessage               string
-			Title                      string
-		}{
-			Title:                      "Lions",
-			RegistrationSuccessMessage: "",
-			ErrorMessage:               errorMessage,
-		}
-		render.RenderLandingPage(w, "index.html", data)
-		return
-		//! move to front end 
-	// case !strings.Contains(email, "@"):
-	// 	errorMessage := "Invalid email format! Please enter a valid email address."
+	// successMessage := r.URL.Query().Get("success")
+	// if successMessage != "" {
 	// 	data := struct {
 	// 		RegistrationSuccessMessage string
 	// 		ErrorMessage               string
 	// 		Title                      string
 	// 	}{
 	// 		Title:                      "Lions",
-	// 		RegistrationSuccessMessage: "",
-	// 		ErrorMessage:               errorMessage,
+	// 		RegistrationSuccessMessage: successMessage,
+	// 		ErrorMessage:               "",
 	// 	}
+	// 	render.RenderLandingPage(w, "index.html", data)
+	// 	return
+	// }
 
-		render.RenderLandingPage(w, "index.html", data)
+	username := r.FormValue("username")
+	email := r.FormValue("email")
+	password := r.FormValue("password")
 
-	default:
-		utils.AddNewUser(username, email, password)
+	err := utils.AddNewUser(username, email, password)
 
-		successMessage := "Registration successful!"
-		encodedMessage := url.QueryEscape(successMessage)
-
-		redirectURL := "/register?success=" + encodedMessage
-		http.Redirect(w, r, redirectURL, http.StatusSeeOther)
+	var errorMessage string
+	var successMessage string
+	var user  models.User
+	if err != nil {
+		errorMessage = err.Error()
+		fmt.Println(errorMessage)
+		}else {
+		successMessage = fmt.Sprintf("%s was added with the email %s",username,email)
+		user = utils.FindUserByUserName(username)
 	}
+		fmt.Println(successMessage)
+
+	data := struct {
+		SuccessMessage             string
+		ErrorMessage               string
+		RegistrationSuccessMessage string
+		Title                      string
+		Uuid                       string
+	}{
+		SuccessMessage:             successMessage,
+		ErrorMessage:               errorMessage,
+		RegistrationSuccessMessage: "",
+		Title:                      "Login page",
+		Uuid:                       user.UUID,
+	}
+
+	render.RenderLandingPage(w, "index.html", data)
+
+	// successMessage = "Registration successful!"
+	// encodedMessage := url.QueryEscape(successMessage)
+	// redirectURL := "/register?success=" + encodedMessage
+	// http.Redirect(w, r, redirectURL, http.StatusSeeOther)
+	// }
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
-	if r.Method != http.MethodPost{
+	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid Request method", http.StatusMethodNotAllowed)
 		return
+	} else {
+		err := r.ParseForm()
+		if err != nil {
+			http.Error(w, "Failed to parse form data", http.StatusBadRequest)
+		}
 	}
 
-	email := r.FormValue("email")
-	password :=r.FormValue("password")
 	var errorMessage string
-	//? simplify to only send back an error and uuid if uuid is not present it means no user exists
-	uuid,isActiveUser,err := utils.ValidateUser(email,password)
-	
+	var successMessage string
+	email := r.FormValue("email")
+	password := r.FormValue("password")
+	uuid, isActiveUser, err := utils.ValidateUser(email, password)
+
 	if err != nil {
 		errorMessage = err.Error()
 	}
 
-	// err := r.ParseForm()
-	// if err != nil {
-	// 	http.Error(w, "Failed to parse form data", http.StatusBadRequest)
-	// }
+	if isActiveUser {
+		successMessage = "Logged on as "+ email
+	}else{
+		successMessage = "Not a active user "
+		uuid = "No user"
+	}
+
 	data := struct {
+		SuccessMessage             string
 		ErrorMessage               string
 		RegistrationSuccessMessage string
 		Title                      string
-		Uuid					   string
+		Uuid                       string
 	}{
+		SuccessMessage:             successMessage, 
 		ErrorMessage:               errorMessage,
 		RegistrationSuccessMessage: "",
 		Title:                      "Login page",
-		Uuid: 						uuid,
+		Uuid:                       uuid,
 	}
-		if isActiveUser{
-			render.RenderLandingPage(w, "index.html", data)
-		}else {
-			fmt.Println(" NOT A USER REGISTER")
-		}
+		render.RenderLandingPage(w, "index.html", data)
 }

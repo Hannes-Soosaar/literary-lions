@@ -1,7 +1,11 @@
 {{ define "forum-content"}}
 <div class="forum_content">
     <div class="post-container">
+        {{if .Uuid}}
+        <h1>Hello {{.Uuid}}</h1>
+        {{else}}   
         <h1>Hello Lions!</h1>
+        {{end}}
         <p>Testing the forum functionality of text. This text should be justified, meaning, the sides should be
             equal and a new row should start when the container limit is reached.</p>
     </div>

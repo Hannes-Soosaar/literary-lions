@@ -5,11 +5,9 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"gitea.kood.tech/hannessoosaar/literary-lions/pck/utils"
 )
 
 func RenderLandingPage(w http.ResponseWriter, tmpl string, data interface{}) {
-	utils.FindUserByUserName("bob")
 	template := template.Must(template.ParseFiles(
 		filepath.Join("../../template", "index.html"),
 		filepath.Join("../../template", "head.html"),
