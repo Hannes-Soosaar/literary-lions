@@ -278,6 +278,16 @@ h3 {
     margin-right: 5px;
     margin-bottom: 10px;
 }
+.popup input[type="email"] {
+    background: whitesmoke;
+    padding: 10px;
+    width: 90%;
+    min-width: 46px;
+    border: 2px solid goldenrod;
+    border-radius: 15px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+}
 
 .popup input[type="password"] {
     background: whitesmoke;
@@ -290,6 +300,12 @@ h3 {
 }
 
 .popup input[type="text"]:focus {
+    background-color: rgb(230, 230, 230);
+    outline: none;
+    border: 2px solid goldenrod;
+}
+
+.popup input[type="email"]:focus {
     background-color: rgb(230, 230, 230);
     outline: none;
     border: 2px solid goldenrod;

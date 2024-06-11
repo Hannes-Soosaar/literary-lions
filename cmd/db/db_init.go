@@ -20,8 +20,6 @@ It can be executed as a standalone
 
 func main() {
 	fmt.Println("Starting the DB initializer")
-	utils.CreateDatabase()
-	utils.InitiateDb()
 	reader := bufio.NewReader(os.Stdin)
 	prompt := "Do you want to delete the database? (yes/no)"
 	var operation string
@@ -55,4 +53,6 @@ func main() {
 			break
 		}
 	}
+	utils.CreateDatabase()
+	utils.InitiateDb()
 }

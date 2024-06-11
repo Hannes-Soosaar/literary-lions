@@ -1,47 +1,64 @@
 {{ define "navbar" }}
 <nav class="navbar">
-    <div class="logo">
-        <a href="/">
-            <img src="static/images/LionsLogo_Renewed.png" alt="Logo">
-        </a>
-        <a href="/">
-            <span class="logo-text"><b>Literary<br>Lions</b></span>
-        </a>
-
-    </div>
-    <form class="search-form">
-        <input type="text" placeholder="Search...">
-        <button type="submit"><b>Search</b></button>
-    </form>
-    <div class="account-icon">
-        <a href="#login">
-            <img src="static/images/AccountImage_53x53.png" alt="Account">
-        </a>
-    </div>
+	<div class="logo">
+		<a href="/">
+			<img src="static/images/LionsLogo_Renewed.png" alt="Logo" />
+		</a>
+		<a href="/">
+			<span class="logo-text"
+				><b>Literary<br />Lions</b></span
+			>
+		</a>
+	</div>
+	<form class="search-form">
+		<input type="text" placeholder="Search..." />
+		<button type="submit"><b>Search</b></button>
+	</form>
+	<div class="account-icon">
+		<a href="#login">
+			<img src="static/images/AccountImage_53x53.png" alt="Account" />
+		</a>
+	</div>
 </nav>
 <div id="login" class="popup">
-    <div class="popup-content">
-        <a href="#" class="close">&times;</a>
-        <h2>Login</h2>
-        <form>
-            <input type="text" placeholder="Email*" id="email" name="email">
-            <input type="password" placeholder="Password*" id="password" name="password">
-            <button type="submit">Login</button>
-            <p>New user? <a href="#register">Sign up!</a></p>
-        </form>
-    </div>
+	<div class="popup-content">
+		<a href="#" class="close">&times;</a>
+		<h2>Login</h2>
+		<form action="/login" method="post">
+			<input type="text" placeholder="Email*" id="email" name="email"/>
+			<input
+				type="password"
+				placeholder="Password*"
+				id="password"
+				name="password"
+			/>
+			<button type="submit">Login</button>
+			<p>New user? <a href="#register">Sign up!</a></p>
+		</form>
+	</div>
 </div>
 <div id="register" class="popup">
-    <div class="popup-content">
-        <a href="#" class="close">&times;</a>
-        <h2>Register</h2>
-        <form action="/register" method="post">
-            <input type="text" placeholder="Username*" id="username" name="username">
-            <input type="text" placeholder="Email*" id="email" name="email">
-            <input type="password" placeholder="Password*" id="password" name="password">
-            <button type="submit">Register</button>
-            <p>Already got an account? <a href="#login">Log in!</a></p>
-        </form>
-    </div>
+	<div class="popup-content">
+		<a href="#" class="close">&times;</a>
+		<h2>Register</h2>
+		<form action="/register" method="post">
+			<input
+				type="text"
+				placeholder="Username*"
+				id="username"
+				name="username"
+			required />
+            <!-- the required auto checks if the email is correct from the fron  -->
+			<input type="email" placeholder="Email*" id="email" name="email"  required /> 
+			<input
+				type="password"
+				placeholder="Password*"
+				id="password"
+				name="password"
+			required/>
+			<button type="submit">Register</button>
+			<p>Already got an account? <a href="#login">Log in!</a></p>
+		</form>
+	</div>
 </div>
 {{ end }}
