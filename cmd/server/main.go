@@ -12,11 +12,12 @@ func main() {
 
 	fs := http.FileServer(http.Dir("../../static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
-	fmt.Printf("server is running and listening on  Port %s", config.PORT)
+	fmt.Printf("server is running and listening on  Port %s \n", config.PORT)
 	http.HandleFunc("/", handle.LandingPageHandler)
 	http.HandleFunc("/register", handle.RegistrationHandler)
 	http.HandleFunc("/login", handle.LoginHandler)
 	http.HandleFunc("/logout", handle.LogoutHandler)
+	http.HandleFunc("/profile", handle.ProfileHandler)
 	err := http.ListenAndServe(config.PORT, nil)
 	if err != nil {
 		fmt.Printf("Error:%s", err)

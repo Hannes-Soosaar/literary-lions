@@ -15,8 +15,29 @@
 	<h4>Site Navigation:</h4>
 
 	<ul>
-		<li>Homepage</li>
-		<li>Your Profile</li>
+		<a href="/">
+			{{ if .MainPage }}
+			<div class="sidebar-focused">
+				<li><b>Homepage</b></li>
+			</div>
+			{{ else }}
+			<div class="sidebar-unfocused">
+				<li>Homepage</li>
+			</div>
+			{{ end }}
+		</a>
+
+		<a href="/profile">
+			{{ if .ProfilePage }}
+			<div class="sidebar-focused">
+				<li><b>Your Profile</b></li>
+			</div>
+			{{ else }}
+			<div class="sidebar-unfocused">
+				<li>Your Profile</li>
+			</div>
+			{{ end }}
+		</a>
 		<li>Your Posts</li>
 	</ul>
 	{{end}}

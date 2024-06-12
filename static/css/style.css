@@ -1,17 +1,28 @@
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    background: linear-gradient(to right, #7ec1ff, #7cffac);
+    background: linear-gradient(to right, #80ddeb, #9280e8);
     height: 92vh;
     max-height: 92vh;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    overflow-x: hidden;
+    overflow: hidden;
+}
+
+.usernameText {
+    position: fixed;
+    z-index: 1001;
+    top: 12px;
+    right: 70px;
+    width: 20%;
+    height: 40px;
+    background-color: transparent;
+    text-align: right;
 }
 
 a {
     text-decoration: none;
-    color: #204bb9;
+    color: blue;
 }
 
 h1 {
@@ -20,6 +31,10 @@ h1 {
 
 h3 {
     color: #533ed9;
+}
+
+h4 {
+    color: gold;
 }
 
 .post-container-separator {
@@ -138,6 +153,16 @@ h3 {
     word-wrap: break-word;
 }
 
+.profile-container {
+    height: 500px;
+    padding: 20px;
+    box-sizing: border-box;
+    width: calc(100vw - 400px);
+    margin: auto;
+    margin-left: 200px;
+    text-align: center;
+}
+
 .container {
     display: flex;
     width: 100vw;
@@ -158,9 +183,21 @@ h3 {
     border: 10px solid transparent;
 }
 
+.post-container-welcome {
+    width: calc(37% - 30px);
+    min-width: 400px;
+    margin: 20px;
+    height: auto;
+    border-width: 3px;
+    border-radius: 15px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+
 .post-container:hover {
-    border: 10px solid rgb(118, 255, 234);
-    background-color: rgb(118, 255, 234);
+    border: 10px solid rgb(118, 191, 255);
+    background-color: rgb(118, 191, 255);
     cursor: pointer;
 }
 
@@ -180,6 +217,11 @@ h3 {
 @media (max-width: 850px) {
     .sidebar {
         display: none;
+    }
+
+    .usernameText {
+        color: transparent;
+        z-index: 900;
     }
 
     .forum_content {
@@ -217,6 +259,17 @@ h3 {
     background-color: crimson;
     border-radius: 10px;
     font-weight: bold;
+}
+
+.sidebar-focused {
+    border: 1px solid crimson;
+    background-color: crimson;
+    color: white;
+    border-radius: 10px;
+}
+
+.sidebar-unfocused {
+    color: white;
 }
 
 .popup {

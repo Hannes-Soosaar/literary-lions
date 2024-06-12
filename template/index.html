@@ -7,22 +7,26 @@
 </head>
 
 <body>
+    {{ if .Username}}
+    <div class="usernameText">
+        <p><b>{{ .Username}}</b></p>
+    </div>
+    {{ end }}
     {{block "navbar" .}} {{end}}
     <div class="container">
         {{ block "sidebar" . }}{{ end }}
         {{ block "forum-content" . }}{{ end }}
+
+        {{if .ProfilePage}}
+        {{ block "profile" .}}{{ end }}
+        {{end}}
+
     </div>
 
-    {{ if .SuccessMessage}}
-    <script>
-        alert("{{.SuccessMessage}}");
-        // window.location.href = "/";
-    </script>
-    {{ end }}
     {{ if .ErrorMessage }}
     <script>
         alert("{{.ErrorMessage}}")
-        // window.location.href = "/";
+        window.location.href = "/";
     </script>
     {{ end }}
 </body>

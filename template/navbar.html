@@ -7,15 +7,18 @@
 		<a href="/">
 			<span class="logo-text"><b>Literary<br />Lions</b></span>
 		</a>
-
 	</div>
-
+	{{ if not .ProfilePage}}
 	<form class="search-form">
 		<input type="text" placeholder="Search..." />
-		<button type="submit"><b>Search</b></button>
+		<form action="/search" method="GET">
+			<button type="submit"><b>Search</b></button>
+		</form>
 	</form>
+	{{ end }}
 	<div class="account-icon">
 		{{if .IsLoggedIn}}
+		<!--<span class="account-icon-text"><b>{{ .Username}}</b></span>-->
 		<a href="#logout">
 			<img src="static/images/AccountImage_53x53.png" alt="Account" />
 		</a>
@@ -41,7 +44,7 @@
 		<a href="#" class="close">&times;</a>
 		<h2>Login</h2>
 		<form action="/login" method="post">
-			<input type="text" placeholder="Email*" id="email" name="email" />
+			<input type="text" placeholder="Username*" id="username" name="username" />
 			<input type="password" placeholder="Password*" id="password" name="password" />
 			<button type="submit">Login</button>
 			<p>New user? <a href="#register">Sign up!</a></p>
