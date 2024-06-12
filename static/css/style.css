@@ -270,7 +270,7 @@ h3 {
 }
 
 .popup button:hover {
-    background: whitesmoke;
+    background: rgb(230, 230, 230);
     cursor: pointer;
 }
 

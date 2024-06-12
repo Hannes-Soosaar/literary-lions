@@ -11,7 +11,7 @@
 		<li>Miscellaneous</li>
 	</ul>
 
-	{{if .Uuid}}
+	{{if .IsLoggedIn}}
 	<h4>Site Navigation:</h4>
 
 	<ul>
@@ -20,6 +20,6 @@
 		<li>Your Posts</li>
 	</ul>
 	{{end}}
-    
+
 </div>
 {{ end }}
