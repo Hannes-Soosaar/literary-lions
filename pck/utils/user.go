@@ -134,26 +134,22 @@ func AddNewUser(username string, email string, password string) error {
 	return nil
 }
 
-func ValidateUser(userName string, password string) (string,bool,error) {
+func ValidateUser(userName string, password string) (string, bool, error) {
 	user := FindUserByUserName(userName)
 	var uuid string
-	if (user == models.User{}){
+	if (user == models.User{}) {
 		err := fmt.Errorf("user not found")
-		return uuid,false,err
-	} else if ( user.Active == config.INACTIVE){
+		return uuid, false, err
+	} else if user.Active == config.INACTIVE {
 		err := fmt.Errorf("account blocked, please contact the admin")
-		return uuid,false,err
-	} else if (user.Password != password){
-		err := fmt.Errorf("wrong password")
-		return uuid,false, err
-	} else if (user.Password == password) {
-		uuid= user.UUID
+		return uuid, false, err
+	} else if ValidateUserCredential(user.Password, password) {
+		uuid = user.UUID
 		return uuid, true, nil
 	}
-	return uuid,false, nil
+	return uuid, false, nil
 }
 
-func ValidateRegistrationOfUser(userName string, email string){
-
+func ValidateRegistrationOfUser(userName string, email string) {
 
 }

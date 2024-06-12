@@ -104,7 +104,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	var errorMessage string
 	var successMessage string
 	email := r.FormValue("email")
-	password := utils.HashString(r.FormValue("password"))
+	password := r.FormValue("password")
 	uuid, isActiveUser, err := utils.ValidateUser(email, password)
 
 	if err != nil {
