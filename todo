@@ -9,16 +9,25 @@ DONE: Posts are stored in the database. // there is a post table
 DONE: Comments are stored in the database. // each comment can be 
 DONE: Only allowed packages are used.
 DONE: The code uses at least one CREATE query.// in the db sql setup uses create you can not use create to modify the existing schema when the program is running.
+DONE: Passwords are secured and encrypted using bcrypt or other strong algorithms. // REGULAR hash ATM
+DONE: Users can register successfully. // can create a new user
+
+
 
 --- User and Session---
-TODO: Passwords are secured and encrypted using bcrypt or other strong algorithms. // REGULAR hash ATM
-TODO: Users can register successfully. // can create a new use 
+
 TODO: The forum detects duplicate email or username during registration. // Check on the backend two function get user by Name and Get user by email
+
 TODO: Registered users can log in and access features.  
+
 TODO: UUIDs are used to manage sessions.
-TODO: Sessions are implemented for user persistence. // what does this mean ?
+
+TODO: Sessions are implemented for user persistence. //You stay logged in when navigating until you logout.
+
 TODO: Multiple browser sessions function correctly.
+
 TODO: Users have access to profile pages.
+
 
 ---Posts,likes and comments---
 TODO: Only registered users can create posts and comments.

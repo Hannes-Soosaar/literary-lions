@@ -47,22 +47,15 @@ func InitiateDb() {
 
 //! THIS FUNCTION IS TO BE RAN ONLY ONCE IT WILL HASH ALL PWs IF ALREADY RAN IT WILL DO A HASH OF A HASH  
 func PasswordHashing(){
-
 	fmt.Println("Opening Database for PW hashing")
 	db, err := sql.Open("sqlite3", config.LION_DB)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer db.Close()
-
 	var users []models.User
-	
-
 	queryRead := "SELECT id,password FROM users"
-
 	rows,err := db.Query(queryRead)
-
-
 	for rows.Next(){
 		var user models.User
 		err := rows.Scan(&user.ID,&user.Password)
@@ -71,20 +64,17 @@ func PasswordHashing(){
 		}
 		users = append(users, user)
 	}
-
 	stmt, err := db.Prepare("UPDATE users SET password=? WHERE id=?")
     if err != nil {
         panic(err.Error())
     }
     defer stmt.Close()
-
 	for _, user := range users {
 		_, err = stmt.Exec(HashString(user.Password),user.ID)
 		if err != nil {
 			panic(err.Error())
 		}
 	}
-
 }
 
 func WipeDb() {
