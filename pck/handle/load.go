@@ -27,6 +27,9 @@ func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
+	var errorMessage string
+	var successMessage string
+	var user models.User
 
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid Request method", http.StatusMethodNotAllowed)
@@ -39,35 +42,18 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// successMessage := r.URL.Query().Get("success")
-	// if successMessage != "" {
-	// 	data := struct {
-	// 		RegistrationSuccessMessage string
-	// 		ErrorMessage               string
-	// 		Title                      string
-	// 	}{
-	// 		Title:                      "Lions",
-	// 		RegistrationSuccessMessage: successMessage,
-	// 		ErrorMessage:               "",
-	// 	}
-	// 	render.RenderLandingPage(w, "index.html", data)
-	// 	return
-	// }
 	username := r.FormValue("username")
 	email := r.FormValue("email")
 	password := utils.HashString(r.FormValue("password"))
 	err := utils.AddNewUser(username, email, password)
-	var errorMessage string
-	var successMessage string
-	var user  models.User
 	if err != nil {
 		errorMessage = err.Error()
 		fmt.Println(errorMessage)
-		}else {
-		successMessage = fmt.Sprintf("%s was added with the email %s",username,email)
+	} else {
+		successMessage = fmt.Sprintf("%s was added with the email %s", username, email)
 		user = utils.FindUserByUserName(username)
 	}
-		fmt.Println(successMessage)
+	fmt.Println(successMessage)
 	data := struct {
 		SuccessMessage             string
 		ErrorMessage               string
@@ -82,11 +68,6 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		Uuid:                       user.UUID,
 	}
 	render.RenderLandingPage(w, "index.html", data)
-	// successMessage = "Registration successful!"
-	// encodedMessage := url.QueryEscape(successMessage)
-	// redirectURL := "/register?success=" + encodedMessage
-	// http.Redirect(w, r, redirectURL, http.StatusSeeOther)
-	// }
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -112,8 +93,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if isActiveUser {
-		successMessage = "Logged on as "+ email
-	}else{
+		successMessage = "Logged on as " + email
+	} else {
 		successMessage = "Not a active user "
 		uuid = ""
 	}
@@ -125,7 +106,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		Title                      string
 		Uuid                       string
 	}{
-		SuccessMessage:             successMessage, 
+		SuccessMessage:             successMessage,
 		ErrorMessage:               errorMessage,
 		RegistrationSuccessMessage: "",
 		Title:                      "Login page",
@@ -135,7 +116,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	render.RenderLandingPage(w, "index.html", data)
 }
 
-func LogoutHandler(w http.ResponseWriter, r *http.Request){
+func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 
 	data := struct {
 		SuccessMessage             string

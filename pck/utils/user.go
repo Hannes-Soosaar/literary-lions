@@ -3,7 +3,6 @@ package utils
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"time"
 
 	// "gitea.kood.tech/hannessoosaar/literary-lions/intenal/config"
@@ -23,7 +22,7 @@ func FindUserByUserName(userName string) models.User {
 	defer db.Close()
 	query := "SELECT id, username,email,password,role,created_at,modified_at,active,uuid FROM users  WHERE username = ?"
 	row := db.QueryRow(query, userName)
-	err = row.Scan(&user.Username, &user.Email, &user.Role, &user.Password, &user.Role, &user.CreatedAt, &user.ModifiedAt, &user.Active, &user.UUID)
+	err = row.Scan(&user.ID,&user.Username, &user.Email,&user.Password,&user.Role,&user.CreatedAt, &user.ModifiedAt, &user.Active, &user.UUID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			fmt.Printf("%s, was not found \n", userName)
@@ -42,19 +41,29 @@ func AddActiveUser(user models.User) error {
 		return err
 	}
 	defer db.Close()
+
 	dbUser := FindUserByUserName(user.Username)
-	if (dbUser == models.User{}) {
+	fmt.Printf("Adding ACTIVE User %s \n", user.Username)
+	fmt.Printf("Found user %s \n", dbUser.Username)
+	fmt.Printf("Adding user %v \n", user)
+
+	//TODO make a query to find if the email exists 
+
+	if (dbUser == models.User{}) { 
 		query := "INSERT INTO users (username,email,password,role,created_at,modified_at,active,uuid) VALUES (?,?,?,?,?,?,?,?)"
 		_, err := db.Exec(query, user.Username, user.Email, user.Password, user.Role, user.CreatedAt, user.ModifiedAt, user.Active, user.UUID)
 		if err != nil {
-			fmt.Printf("Error adding User: %v, Error: %v", user, err)
+			err:= fmt.Errorf("error adding User: %v, Error: %v", user.Username, err)
+			return err
 		}
-	} else {
-		fmt.Printf("There is User %s by this name!", dbUser.Username)
-		return nil
-	}
-	fmt.Printf("User %s added", user.Username)
-	return nil
+	} else if (dbUser.Username == user.Username) {
+		err:= fmt.Errorf("the user name %s is taken please choose another", dbUser.Username)
+		return err
+	} else if (dbUser.Username == user.Email){
+		err:= fmt.Errorf("there is User registered with %s this email, pleas register with another email", dbUser.Email)
+		return err
+	} 
+	return err
 }
 
 // Sets the user to inactive does  not remove the user from the DB
@@ -64,6 +73,7 @@ func InactiveActiveUser(user models.User) error {
 		fmt.Println("error opening DB", err)
 	}
 	defer db.Close()
+
 	user.ModifiedAt = time.Now().Format("02/01/06,15/04")
 	user.Active = config.INACTIVE
 	query := "UPDATE users SET Active = ?, modified_at = ? WHERE uuid = ?"
@@ -121,16 +131,14 @@ func AddNewUser(username string, email string, password string) error {
 	user.Active = config.ACTIVE
 	userUuid, err := GenerateUUID()
 	if err != nil {
-		fmt.Printf("there was an error generating a UUID")
-		log.Panic(err) // ! a bit over board with this!
+	return err
 	}
 
 	user.UUID = userUuid
 	err = AddActiveUser(user)
 	if err != nil {
-		return fmt.Errorf("The user was not added!")
+		return err
 	}
-
 	return nil
 }
 
