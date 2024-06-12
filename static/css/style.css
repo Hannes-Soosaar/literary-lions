@@ -32,7 +32,7 @@ h3 {
 
 .navbar {
     width: 100%;
-    height: 8vh;
+    height: 75px;
     background-color: whitesmoke;
     position: fixed;
     top: 0;
@@ -142,7 +142,7 @@ h3 {
     display: flex;
     width: 100vw;
     height: 92vh;
-    margin-top: 8vh;
+    margin-top: 75px;
     overflow-y: auto;
 }
 
@@ -165,19 +165,19 @@ h3 {
 }
 
 .sidebar {
-    width: 200px;
+    width: 210px;
     background-color: rgb(161, 0, 0);
     color: white;
     padding: 20px;
     position: fixed;
     box-sizing: border-box;
-    top: 8vh;
+    top: 75px;
     left: 0;
     overflow-y: auto;
     max-height: 92vh;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 850px) {
     .sidebar {
         display: none;
     }
@@ -185,6 +185,12 @@ h3 {
     .forum_content {
         margin-left: 0;
         width: 100vw;
+    }
+}
+
+@media (max-width: 550px) {
+    .account-icon {
+        margin-left: 10%;
     }
 }
 
@@ -278,6 +284,7 @@ h3 {
     margin-right: 5px;
     margin-bottom: 10px;
 }
+
 .popup input[type="email"] {
     background: whitesmoke;
     padding: 10px;

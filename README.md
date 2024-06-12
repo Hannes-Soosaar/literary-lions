@@ -19,3 +19,6 @@ Has Post
 Has Thread
 Has Password
 Has 
+
+Necessities:
+go get golang.org/x/crypto/bcrypt
