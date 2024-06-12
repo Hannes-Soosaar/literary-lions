@@ -115,7 +115,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		successMessage = "Logged on as "+ email
 	}else{
 		successMessage = "Not a active user "
-		uuid = "No user"
+		uuid = ""
 	}
 
 	data := struct {
@@ -131,5 +131,24 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		Title:                      "Login page",
 		Uuid:                       uuid,
 	}
-		render.RenderLandingPage(w, "index.html", data)
+
+	render.RenderLandingPage(w, "index.html", data)
+}
+
+func LogoutHandler(w http.ResponseWriter, r *http.Request){
+
+	data := struct {
+		SuccessMessage             string
+		RegistrationSuccessMessage string
+		ErrorMessage               string
+		Title                      string
+		Uuid                       string
+	}{
+		SuccessMessage:             "You are now logged out!",
+		Title:                      "Lions",
+		RegistrationSuccessMessage: "",
+		ErrorMessage:               "",
+		Uuid:                       "",
+	}
+	render.RenderLandingPage(w, "index.html", data)
 }

@@ -1,52 +1,60 @@
-TODO :The forum requires email, username and password for registration.  // users table has email, username and password for entry
-TODO: The forum detects incorrect email or password during login. // Implement two stage check FE and on int BE
-TODO: Registered users can log in and access features.  // 
+DONE :The forum requires email, username and password for registration.  // users table has email, username and password for entry
+DONE: The forum detects incorrect email or password during login. // Implement two stage check FE and on int BE
+DONE: The server uses correct HTTP methods (GET, POST, PUT...etc). // will be added for sure, can not do it without.
+DONE: The code uses at least one SELECT query. // will be implemented 
+DONE: The database is designed with an Entity Relationship Diagram ERD // In progress 
+DONE: The code uses at least one INSERT query.
+DONE: User registration data is stored in the database. // make sure all the fields are used
+DONE: Posts are stored in the database. // there is a post table
+DONE: Comments are stored in the database. // each comment can be 
+DONE: Only allowed packages are used.
+DONE: The code uses at least one CREATE query.// in the db sql setup uses create you can not use create to modify the existing schema when the program is running.
+
+--- User and Session---
+TODO: Passwords are secured and encrypted using bcrypt or other strong algorithms. // REGULAR hash ATM
+TODO: Users can register successfully. // can create a new use 
 TODO: The forum detects duplicate email or username during registration. // Check on the backend two function get user by Name and Get user by email
+TODO: Registered users can log in and access features.  
+TODO: UUIDs are used to manage sessions.
 TODO: Sessions are implemented for user persistence. // what does this mean ?
-TODO: The code uses at least one SELECT query. // will be implemented 
-TODO: The database is designed with an Entity Relationship Diagram ERD // In progress 
-TODO: Users can register successfully.
 TODO: Multiple browser sessions function correctly.
-TODO: The code uses at least one CREATE query.
-TODO: The code uses at least one INSERT query.
+TODO: Users have access to profile pages.
+
+---Posts,likes and comments---
+TODO: Only registered users can create posts and comments.
+TODO: Only registered users can like or dislike posts and comments.
 TODO: Empty posts and comments are not allowed.
 TODO: The number of likes and dislikes for comments is visible to all users. // a section is added to the 
 TODO: Posts can be filtered by category.
-TODO: The project handles HTTP status 400 and 500 errors gracefully.
-TODO: The forum displays a warning message for invalid login attempts.
-TODO: A Docker image can be built successfully using the Dockerfile.
-TODO: The container runs successfully using the created image.
-TODO: The project has no unused Docker objects.
-TODO: Only registered users can create posts and comments.
 TODO: Posts can be associated with categories.
 TODO: The number of likes and dislikes is displayed and updated correctly. // Each post has the like dislike count
+TODO: Registered users can view their created posts and liked posts. // each post has a user_id ref
+TODO: Posts cannot be liked and disliked simultaneously. // Try to handle on the FE if session if session id has done a POST... to the /like or /dislike handler don't let it be done again.
+
+
+---Server
+TODO: The project handles HTTP status 400 and 500 errors gracefully.
+TODO: The forum displays a warning message for invalid login attempts.
 TODO: The server behaves as expected (no crashes).
 TODO: All pages function correctly (no unhandled 404 errors).
 TODO: The server uses appropriate HTTP response codes, 2XX, 4XX.
 TODO: The interface handles 5XX HTTP response codes gracefully.
-TODO: Only registered users can like or dislike posts and comments.
-TODO: Registered users can view their created posts and liked posts. // each post has a user_id ref
-TODO: Only allowed packages are used.
-TODO: User registration data is stored in the database. // make sure all the fields are used
-TODO: Posts are stored in the database. // there is a post table
-TODO: Comments are stored in the database. // each comment can be 
-TODO: Only registered users can create posts and comments. // BE logic will handle it 
-TODO: A Dockerfile is present in the project.
-TODO: Posts cannot be liked and disliked simultaneously. // Try to handle on the FE if session if session id has done a POST... to the /like or /dislike handler don't let it be done again.
-TODO: The server uses correct HTTP methods (GET, POST, PUT...etc). // will be added for sure, can not do it without.
+
+--- User friendliness---
 TODO: It is easy to respond to posts and comments.
-TODO: UUIDs are used to manage sessions.
 TODO: Categories are effective in organising discussions.
 TODO: Content has intuitive filtering.
 TODO: Error messages are informative and user-friendly.
 TODO: SQL queries are effective and efficient.
 TODO: The registration process is user-friendly and secure.
-TODO: Passwords are secured and encrypted using bcrypt or other strong algorithms.
-TODO: The project has other bonus features that are not listed in the bonus part.
 TODO: The interface is clear, well set out and navigable.
+
+
+---DOCKER---
+TODO: A Dockerfile is present in the project.
+TODO: A Docker image can be built successfully using the Dockerfile.
+TODO: The container runs successfully using the created image.
+TODO: The project has no unused Docker objects.
+--- FUNCTIONALITY ---
+TODO: The project has other bonus features that are not listed in the bonus part.
 TODO: Search functionality is implemented, with advanced search options.
-TODO: Users have access to profile pages.
-TODO:
-TODO:
-
-

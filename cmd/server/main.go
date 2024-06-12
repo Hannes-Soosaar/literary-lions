@@ -16,6 +16,7 @@ func main() {
 	http.HandleFunc("/", handle.LandingPageHandler)
 	http.HandleFunc("/register", handle.RegistrationHandler)
 	http.HandleFunc("/login", handle.LoginHandler)
+	http.HandleFunc("/logout", handle.LogoutHandler)
 	err := http.ListenAndServe(config.PORT, nil)
 	if err != nil {
 		fmt.Printf("Error:%s", err)
