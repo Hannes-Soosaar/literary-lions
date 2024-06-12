@@ -2,17 +2,15 @@ package utils
 
 // Add logic to encrypt pw
 import(
-
-	"fmt"
-	"crypto/sha256"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func HashString(s string)string{
-	hash:= sha256.New()
-	hash.Write([]byte(s))
-	hashedBytes :=hash.Sum(nil)
-	hashedString :=fmt.Sprintf("%x",hashedBytes)
-	fmt.Printf("the hashed String is %s", hashedString )
+	hashedBytes,err :=bcrypt.GenerateFromPassword([]byte(s),bcrypt.DefaultCost)
+	if err!= nil {
+		return ""
+	}
+	hashedString:=string(hashedBytes)
 	return hashedString
 }
 

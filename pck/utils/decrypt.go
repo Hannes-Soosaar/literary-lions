@@ -1,3 +1,10 @@
 package utils
 
-// Add logic to decrypt pw
+import (
+	"golang.org/x/crypto/bcrypt"
+)
+
+func ValidateUserCredential(savedPassword,inputPassword string) bool{
+	err := bcrypt.CompareHashAndPassword([]byte(savedPassword),[]byte(inputPassword))
+	return err == nil
+}
