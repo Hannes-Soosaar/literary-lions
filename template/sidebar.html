@@ -1,22 +1,25 @@
 {{ define "sidebar"}}
 <div class="sidebar">
-    <h4>Post Categories:</h4>
-    <ul>
-        <li>Horror</li>
-        <li>Sci-Fi</li>
-        <li>Action</li>
-        <li>Adventure</li>
-        <li>Romance</li>
-        <li>Kids</li>
-        <li>Miscellaneous</li>
-    </ul>
-    <h4>
-        Site Navigation:
-    </h4>
-    <ul>
-        <li>Homepage</li>
-        <li>Your Profile</li>
-        <li>Your Posts</li>
-    </ul>
+	<h4>Post Categories:</h4>
+	<ul>
+		<li>Horror</li>
+		<li>Sci-Fi</li>
+		<li>Action</li>
+		<li>Adventure</li>
+		<li>Romance</li>
+		<li>Kids</li>
+		<li>Miscellaneous</li>
+	</ul>
+
+	{{if .Uuid}}
+	<h4>Site Navigation:</h4>
+
+	<ul>
+		<li>Homepage</li>
+		<li>Your Profile</li>
+		<li>Your Posts</li>
+	</ul>
+	{{end}}
+    
 </div>
 {{ end }}

@@ -11,6 +11,15 @@
 		</a>
 
 	</div>
+
+	{{if .Uuid}}
+	<div id ="logout">
+		<form action ="/logout" method="GET">
+		<button type ="submit"> Logout</button>
+		</form>
+	</div>
+	{{end}}
+	
 	<form class="search-form">
 		<input type="text" placeholder="Search..." />
 		<button type="submit"><b>Search</b></button>

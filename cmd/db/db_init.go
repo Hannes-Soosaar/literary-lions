@@ -53,7 +53,7 @@ func main() {
 			break
 		}
 	}
-	
 	utils.CreateDatabase()
 	utils.InitiateDb()
+	utils.PasswordHashing()
 }

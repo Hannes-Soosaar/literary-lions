@@ -53,13 +53,10 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	// 	render.RenderLandingPage(w, "index.html", data)
 	// 	return
 	// }
-
 	username := r.FormValue("username")
 	email := r.FormValue("email")
-	password := r.FormValue("password")
-
+	password := utils.HashString(r.FormValue("password"))
 	err := utils.AddNewUser(username, email, password)
-
 	var errorMessage string
 	var successMessage string
 	var user  models.User
@@ -71,7 +68,6 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		user = utils.FindUserByUserName(username)
 	}
 		fmt.Println(successMessage)
-
 	data := struct {
 		SuccessMessage             string
 		ErrorMessage               string
@@ -85,9 +81,7 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		Title:                      "Login page",
 		Uuid:                       user.UUID,
 	}
-
 	render.RenderLandingPage(w, "index.html", data)
-
 	// successMessage = "Registration successful!"
 	// encodedMessage := url.QueryEscape(successMessage)
 	// redirectURL := "/register?success=" + encodedMessage
@@ -110,7 +104,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	var errorMessage string
 	var successMessage string
 	email := r.FormValue("email")
-	password := r.FormValue("password")
+	password := utils.HashString(r.FormValue("password"))
 	uuid, isActiveUser, err := utils.ValidateUser(email, password)
 
 	if err != nil {

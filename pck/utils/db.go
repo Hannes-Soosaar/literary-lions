@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"gitea.kood.tech/hannessoosaar/literary-lions/intenal/config"
+	"gitea.kood.tech/hannessoosaar/literary-lions/pck/models"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -40,6 +41,48 @@ func InitiateDb() {
 	if err != nil {
 		fmt.Println("Database Open", config.INIT_SQL)
 		log.Fatal(err)
+	}
+
+}
+
+//! THIS FUNCTION IS TO BE RAN ONLY ONCE IT WILL HASH ALL PWs IF ALREADY RAN IT WILL DO A HASH OF A HASH  
+func PasswordHashing(){
+
+	fmt.Println("Opening Database for PW hashing")
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	var users []models.User
+	
+
+	queryRead := "SELECT id,password FROM users"
+
+	rows,err := db.Query(queryRead)
+
+
+	for rows.Next(){
+		var user models.User
+		err := rows.Scan(&user.ID,&user.Password)
+		if err != nil {
+			panic(err.Error())
+		}
+		users = append(users, user)
+	}
+
+	stmt, err := db.Prepare("UPDATE users SET password=? WHERE id=?")
+    if err != nil {
+        panic(err.Error())
+    }
+    defer stmt.Close()
+
+	for _, user := range users {
+		_, err = stmt.Exec(HashString(user.Password),user.ID)
+		if err != nil {
+			panic(err.Error())
+		}
 	}
 
 }
