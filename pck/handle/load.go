@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"time"
 
-	"gitea.kood.tech/hannessoosaar/literary-lions/pck/models"
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/render"
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/utils"
 )
@@ -54,7 +53,6 @@ func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	var errorMessage string
 	var successMessage string
-	var user models.User
 
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid Request method", http.StatusMethodNotAllowed)
@@ -76,11 +74,10 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(errorMessage)
 	} else {
 		successMessage = fmt.Sprintf("%s was added with the email %s", username, email)
-		user = utils.FindUserByUserName(username)
 	}
 	fmt.Println(successMessage)
 	data := struct {
-		SuccessMessage             string
+		Username                   string
 		ErrorMessage               string
 		RegistrationSuccessMessage string
 		Title                      string
@@ -89,11 +86,11 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		ProfilePage                bool
 		MainPage                   bool
 	}{
-		SuccessMessage:             successMessage,
+		Username:                   "",
 		ErrorMessage:               errorMessage,
-		RegistrationSuccessMessage: "",
+		RegistrationSuccessMessage: "Account created successfully! You can now log in.",
 		Title:                      "Login page",
-		Uuid:                       user.UUID,
+		Uuid:                       "",
 		IsLoggedIn:                 false,
 		ProfilePage:                false,
 		MainPage:                   false,
@@ -140,6 +137,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		})
 	} else {
 		uuid = ""
+		errorMessage = "Not a valid user!"
 	}
 
 	data := struct {

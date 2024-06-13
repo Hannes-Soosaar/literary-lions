@@ -184,8 +184,8 @@ h4 {
 }
 
 .post-container-welcome {
-    width: calc(37% - 30px);
-    min-width: 400px;
+    width: calc(100% - 30px);
+    min-width: 600px;
     margin: 20px;
     height: auto;
     border-width: 3px;
