@@ -283,3 +283,35 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 		render.RenderLandingPage(w, "index.html", data)
 	}
 }
+
+func LikeHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Handle like logic here (update database, etc.)
+	// Example: Updating database
+	// Replace this with your actual database update logic
+	// _, err := db.Exec("UPDATE posts SET likes = likes + 1 WHERE id = ?", postID)
+
+	// Redirect back to the previous page (referer)
+	referer := r.Header.Get("Referer")
+	http.Redirect(w, r, referer, http.StatusSeeOther)
+}
+
+func DislikeHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Handle like logic here (update database, etc.)
+	// Example: Updating database
+	// Replace this with your actual database update logic
+	// _, err := db.Exec("UPDATE posts SET dislikes = dislikes + 1 WHERE id = ?", postID)
+
+	// Redirect back to the previous page (referer)
+	referer := r.Header.Get("Referer")
+	http.Redirect(w, r, referer, http.StatusSeeOther)
+}

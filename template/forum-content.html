@@ -18,8 +18,34 @@
         <h1>Hello Lions!</h1>
         <p>Testing the forum functionality of text. This text should be justified, meaning, the sides should be
             equal and a new row should start when the container limit is reached.</p>
+        <div class="flex-container">
+            <div class="post-likes-dislikes">
+                {{ if .IsLoggedIn }}
+                <form action="/like" method="post">
+                    {{ end }}
+                    <button type="submit" class="like-icon"><img src="static/images/thumbsup.png"
+                            alt="Like" />20</button>
+                </form>
+                {{ if .IsLoggedIn }}
+                <form action="/dislike" method="post">
+                    {{ end }}
+                    <button type="submit" class="dislike-icon"><img src="static/images/thumbsdown.png"
+                            alt="Dislike" />20</button>
+                </form>
+
+            </div>
+            <div class="post-comment-amount">
+                <a href="">
+                    <div class="comments-icon"><img src="static/images/CommentsIcon.png" alt="CommentsIcon" />111</div>
+                </a>
+            </div>
+        </div>
     </div>
     <div class="post-container-separator"></div>
+
+
+
+
     <div class="post-container">
         <h1>Title</h1>
         <p>Second post. Testing more text in one post. Second post. Testing more text in one post. Second post.

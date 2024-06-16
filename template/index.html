@@ -29,6 +29,12 @@
         window.location.href = "/";
     </script>
     {{ end }}
+    {{ if .Uuid}}
+    <script>
+        alert("Welcome, {{.Username}}")
+        window.location.href = "/";
+    </script>
+    {{ end }}
 
 </body>
 
