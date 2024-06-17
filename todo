@@ -17,15 +17,10 @@ DONE: The forum detects duplicate email or username during registration. // Chec
 
 --- User and Session---
 
-
 DONE: Registered users can log in and access features.  
-
 DONE: UUIDs are used to manage sessions.
-
 DONE: Sessions are implemented for user persistence. //You stay logged in when navigating until you logout.
-
 DONE: Multiple browser sessions function correctly.
-
 DONE: Users have access to profile pages. //TODO need to add content on the profile page
 
 

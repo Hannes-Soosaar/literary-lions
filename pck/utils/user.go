@@ -194,3 +194,5 @@ func UserWithUserNameExists (userName string) bool {
 	}
 	return false
 }
+
+//TODO: updateUser

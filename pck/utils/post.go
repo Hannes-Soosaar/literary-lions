@@ -42,3 +42,16 @@ func RetrieveAllPosts() models.Posts {
 
 	return posts
 }
+
+//TODO: GetPostFromUser
+//TODO: GetPostFromCategory
+//TODO: GetAllPostLikes
+//TODO: GetAllPostDislikes no need to implement, if there is a counter you can just 
+//TODO: GetPostContaining
+//TODO: AddUserPost
+//? which rout should we go.
+//TODO: AddLike and RemoveLike
+//TODO: Add dislike and RemoveDisLike
+
+
+
