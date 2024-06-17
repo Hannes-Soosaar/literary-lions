@@ -2,10 +2,14 @@ package handle
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 
+	"gitea.kood.tech/hannessoosaar/literary-lions/intenal/config"
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/models"
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/render"
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/utils"
@@ -16,7 +20,6 @@ type contextKey string
 const userContextKey = contextKey("username")
 
 var sessionStore = map[string]string{}
-var loggedInUsername string
 
 func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -24,30 +27,18 @@ func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 	isLoggedIn := err == nil && isValidSession(sessionToken.Value)
 	allPosts := utils.RetrieveAllPosts()
 
-	data := struct {
-		Username                   string
-		RegistrationSuccessMessage string
-		ErrorMessage               string
-		Title                      string
-		Uuid                       string
-		IsLoggedIn                 bool
-		ProfilePage                bool
-		MainPage                   bool
-		AllPosts                   models.Posts
-	}{
-		Username:                   "",
-		Title:                      "Lions",
-		RegistrationSuccessMessage: "",
-		ErrorMessage:               "",
-		Uuid:                       "",
-		IsLoggedIn:                 isLoggedIn,
-		ProfilePage:                false,
-		MainPage:                   true,
-		AllPosts:                   allPosts,
-	}
+	data := models.DefaultTemplateData()
+	data.IsLoggedIn = isLoggedIn
+	data.MainPage = true
+	data.ProfilePage = false
+	data.AllPosts = allPosts
+
 	if isLoggedIn {
 		if data.Username == "" {
-			data.Username = loggedInUsername
+			data.Username = GetUsernameFromCookie(r)
+			if data.Username == "" {
+				render.RenderLandingPage(w, "index.html", data)
+			}
 		}
 	}
 
@@ -81,27 +72,13 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(successMessage)
 	allPosts := utils.RetrieveAllPosts()
-	data := struct {
-		Username                   string
-		ErrorMessage               string
-		RegistrationSuccessMessage string
-		Title                      string
-		Uuid                       string
-		IsLoggedIn                 bool
-		ProfilePage                bool
-		MainPage                   bool
-		AllPosts                   models.Posts
-	}{
-		Username:                   "",
-		ErrorMessage:               errorMessage,
-		RegistrationSuccessMessage: "Account created successfully! You can now log in.",
-		Title:                      "Login page",
-		Uuid:                       "",
-		IsLoggedIn:                 false,
-		ProfilePage:                false,
-		MainPage:                   false,
-		AllPosts:                   allPosts,
-	}
+
+	data := models.DefaultTemplateData()
+	data.AllPosts = allPosts
+	data.ErrorMessage = errorMessage
+	data.RegistrationSuccessMessage = "Account created successfully! You can now log in."
+	data.Title = "Registration"
+
 	render.RenderLandingPage(w, "index.html", data)
 }
 
@@ -156,31 +133,15 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	allPosts := utils.RetrieveAllPosts()
 
-	data := struct {
-		Username                   string
-		ErrorMessage               string
-		RegistrationSuccessMessage string
-		Title                      string
-		Uuid                       string
-		IsLoggedIn                 bool
-		ProfilePage                bool
-		MainPage                   bool
-		AllPosts                   models.Posts
-	}{
-		Username:                   username,
-		ErrorMessage:               errorMessage,
-		RegistrationSuccessMessage: "",
-		Title:                      "Login page",
-		Uuid:                       uuid,
-		IsLoggedIn:                 false,
-		ProfilePage:                false,
-		MainPage:                   false,
-		AllPosts:                   allPosts,
-	}
+	data := models.DefaultTemplateData()
+	data.Username = username
+	data.ErrorMessage = errorMessage
+	data.Uuid = uuid
+	data.AllPosts = allPosts
+	data.Title = "Login"
 
 	if isActiveUser {
 		data.IsLoggedIn = true
-		loggedInUsername = username
 	}
 	render.RenderLandingPage(w, "index.html", data)
 
@@ -196,28 +157,10 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	})
 
 	allPosts := utils.RetrieveAllPosts()
+	data := models.DefaultTemplateData()
+	data.Title = "Logout"
+	data.AllPosts = allPosts
 
-	data := struct {
-		Username                   string
-		RegistrationSuccessMessage string
-		ErrorMessage               string
-		Title                      string
-		Uuid                       string
-		IsLoggedIn                 bool
-		ProfilePage                bool
-		MainPage                   bool
-		AllPosts                   models.Posts
-	}{
-		Username:                   "",
-		Title:                      "Lions",
-		RegistrationSuccessMessage: "",
-		ErrorMessage:               "",
-		Uuid:                       "",
-		IsLoggedIn:                 false,
-		ProfilePage:                false,
-		MainPage:                   false,
-		AllPosts:                   allPosts,
-	}
 	for key := range sessionStore {
 		delete(sessionStore, key)
 		break
@@ -278,25 +221,11 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	isLoggedIn := true
-	data := struct {
-		Username                   string
-		RegistrationSuccessMessage string
-		ErrorMessage               string
-		Title                      string
-		Uuid                       string
-		IsLoggedIn                 bool
-		ProfilePage                bool
-		MainPage                   bool
-	}{
-		Username:                   ctxUsername,
-		Title:                      "Your Profile",
-		RegistrationSuccessMessage: "",
-		ErrorMessage:               "",
-		Uuid:                       "",
-		IsLoggedIn:                 isLoggedIn,
-		ProfilePage:                true,
-		MainPage:                   false,
-	}
+	data := models.DefaultTemplateData()
+	data.Username = ctxUsername
+	data.Title = "Your Profile"
+	data.ProfilePage = true
+	data.IsLoggedIn = true
 
 	if isLoggedIn {
 		render.RenderProfile(w, "index.html", data)
@@ -311,15 +240,122 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
+	var postIDstr string
+	path := r.URL.Path
+	parts := strings.Split(path, "/")
+	for _, part := range parts {
+		// Check if the part is a numeric string
+		_, err := strconv.Atoi(part)
+		if err == nil { // Found the numeric part which is the postID
+			postIDstr = part
+			break
+		}
+	}
 
-	// Handle like logic here (update database, etc.)
-	// Example: Updating database
-	// Replace this with your actual database update logic
-	// _, err := db.Exec("UPDATE posts SET likes = likes + 1 WHERE id = ?", postID)
+	if postIDstr == "" {
+		http.Error(w, "Invalid URL", http.StatusBadRequest)
+	}
+	postID, _ := strconv.Atoi(postIDstr)
+	HasLiked, _ := CheckUserActivity(postID, r)
+	username := GetUsernameFromCookie(r)
+	user := utils.FindUserByUserName(username)
+	if !HasLiked {
+		db, err := sql.Open("sqlite3", config.LION_DB)
+		if err != nil {
+			http.Error(w, "Database error", http.StatusInternalServerError)
+			return
+		}
+		defer db.Close()
 
-	// Redirect back to the previous page (referer)
+		_, err = db.Exec("UPDATE posts SET likes = likes + 1 WHERE id = ?", postIDstr)
+		if err != nil {
+			http.Error(w, "Database error", http.StatusInternalServerError)
+		}
+
+		MarkPostAsLiked(user.ID, postID)
+	} else {
+		db, err := sql.Open("sqlite3", config.LION_DB)
+		if err != nil {
+			http.Error(w, "Database error", http.StatusInternalServerError)
+			return
+		}
+		defer db.Close()
+
+		_, err = db.Exec("UPDATE posts SET likes = likes - 1 WHERE id = ?", postIDstr)
+		if err != nil {
+			http.Error(w, "Database error", http.StatusInternalServerError)
+		}
+		MarkPostAsUnliked(user.ID, postID)
+	}
+
 	referer := r.Header.Get("Referer")
 	http.Redirect(w, r, referer, http.StatusSeeOther)
+}
+
+func MarkPostAsLiked(userID, postID int) error {
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	// Check if there's already an entry for this user and post
+	var likeActivity bool
+	err = db.QueryRow("SELECT like_activity FROM user_activity WHERE user_id = ? AND post_id = ?", userID, postID).Scan(&likeActivity)
+	switch {
+	case err == sql.ErrNoRows:
+		// No existing entry, insert a new one
+		_, err := db.Exec("INSERT INTO user_activity (user_id, post_id, like_activity) VALUES (?, ?, 1)", userID, postID)
+		if err != nil {
+			return err
+		}
+	case err != nil:
+		return err
+	default:
+		// There's an existing entry, update it
+		if !likeActivity {
+			_, err := db.Exec("UPDATE user_activity SET like_activity = 1 WHERE user_id = ? AND post_id = ?", userID, postID)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+func MarkPostAsUnliked(userID, postID int) error {
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+	// Check if there's already an entry for this user and post
+	var likeActivity bool
+	err = db.QueryRow("SELECT like_activity FROM user_activity WHERE user_id = ? AND post_id = ?", userID, postID).Scan(&likeActivity)
+	switch {
+	case err == sql.ErrNoRows:
+		fmt.Println("No existing entry?")
+		// No existing entry, insert a new one with dislike_activity set to 1
+		_, err := db.Exec("INSERT INTO user_activity (user_id, post_id, like_activity) VALUES (?, ?, 0)", userID, postID)
+		if err != nil {
+			fmt.Println("error", err)
+			return err
+		}
+	case err != nil:
+		return err
+	default:
+		// There's an existing entry, update it
+		if likeActivity {
+			_, err := db.Exec("UPDATE user_activity SET like_activity = 0 WHERE user_id = ? AND post_id = ?", userID, postID)
+			if err != nil {
+				fmt.Println("Liking set to 0")
+				return err
+			}
+		}
+	}
+
+	return nil
 }
 
 func DislikeHandler(w http.ResponseWriter, r *http.Request) {
@@ -327,13 +363,169 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
+	var postIDstr string
+	path := r.URL.Path
+	parts := strings.Split(path, "/")
+	for _, part := range parts {
+		// Check if the part is a numeric string
+		_, err := strconv.Atoi(part)
+		if err == nil { // Found the numeric part which is the postID
+			postIDstr = part
+			break
+		}
+	}
 
-	// Handle like logic here (update database, etc.)
-	// Example: Updating database
-	// Replace this with your actual database update logic
-	// _, err := db.Exec("UPDATE posts SET dislikes = dislikes + 1 WHERE id = ?", postID)
+	if postIDstr == "" {
+		http.Error(w, "Invalid URL", http.StatusBadRequest)
+	}
 
-	// Redirect back to the previous page (referer)
+	postID, _ := strconv.Atoi(postIDstr)
+	_, HasDisliked := CheckUserActivity(postID, r)
+	username := GetUsernameFromCookie(r)
+	user := utils.FindUserByUserName(username)
+	if !HasDisliked {
+		db, err := sql.Open("sqlite3", config.LION_DB)
+		if err != nil {
+			http.Error(w, "Database error", http.StatusInternalServerError)
+			return
+		}
+		defer db.Close()
+
+		_, err = db.Exec("UPDATE posts SET dislikes = dislikes + 1 WHERE id = ?", postIDstr)
+		if err != nil {
+			http.Error(w, "Database error", http.StatusInternalServerError)
+		}
+
+		MarkPostAsDisliked(user.ID, postID)
+	} else {
+		db, err := sql.Open("sqlite3", config.LION_DB)
+		if err != nil {
+			http.Error(w, "Database error", http.StatusInternalServerError)
+			return
+		}
+		defer db.Close()
+
+		_, err = db.Exec("UPDATE posts SET dislikes = dislikes - 1 WHERE id = ?", postIDstr)
+		if err != nil {
+			http.Error(w, "Database error", http.StatusInternalServerError)
+		}
+		MarkPostAsUndisliked(user.ID, postID)
+	}
+
 	referer := r.Header.Get("Referer")
 	http.Redirect(w, r, referer, http.StatusSeeOther)
+}
+
+func MarkPostAsDisliked(userID, postID int) error {
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	// Check if there's already an entry for this user and post
+	var dislikeActivity bool
+	err = db.QueryRow("SELECT dislike_activity FROM user_activity WHERE user_id = ? AND post_id = ?", userID, postID).Scan(&dislikeActivity)
+	switch {
+	case err == sql.ErrNoRows:
+		// No existing entry, insert a new one
+		_, err := db.Exec("INSERT INTO user_activity (user_id, post_id, dislike_activity) VALUES (?, ?, 1)", userID, postID)
+		if err != nil {
+			return err
+		}
+	case err != nil:
+		return err
+	default:
+		// There's an existing entry, update it
+		if !dislikeActivity {
+			_, err := db.Exec("UPDATE user_activity SET dislike_activity = 1 WHERE user_id = ? AND post_id = ?", userID, postID)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+func MarkPostAsUndisliked(userID, postID int) error {
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+	// Check if there's already an entry for this user and post
+	var dislikeActivity bool
+	err = db.QueryRow("SELECT dislike_activity FROM user_activity WHERE user_id = ? AND post_id = ?", userID, postID).Scan(&dislikeActivity)
+	switch {
+	case err == sql.ErrNoRows:
+		fmt.Println("No existing entry?")
+		// No existing entry, insert a new one with dislike_activity set to 1
+		_, err := db.Exec("INSERT INTO user_activity (user_id, post_id, dislike_activity) VALUES (?, ?, 0)", userID, postID)
+		if err != nil {
+			fmt.Println("error", err)
+			return err
+		}
+	case err != nil:
+		return err
+	default:
+		// There's an existing entry, update it
+		if dislikeActivity {
+			_, err := db.Exec("UPDATE user_activity SET dislike_activity = 0 WHERE user_id = ? AND post_id = ?", userID, postID)
+			if err != nil {
+				fmt.Println("Disiking set to 0")
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+func CheckUserActivity(postID int, r *http.Request) (bool, bool) {
+
+	type UserActivity struct {
+		HasLiked    bool
+		HasDisliked bool
+	}
+
+	username := GetUsernameFromCookie(r)
+	user := utils.FindUserByUserName(username)
+
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		fmt.Println("Database error:", err)
+		return false, false
+	}
+	defer db.Close()
+
+	query := "SELECT like_activity, dislike_activity FROM user_activity WHERE user_id = ? AND post_id = ?"
+	row := db.QueryRow(query, user.ID, postID)
+
+	var activity UserActivity
+	err = row.Scan(&activity.HasLiked, &activity.HasDisliked)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			// No activity found for user and post
+			return false, false
+		}
+		fmt.Println("Database error:", err)
+		return false, false
+	}
+
+	// Update HasLiked and HasDisliked based on user activity
+	return activity.HasLiked, activity.HasDisliked
+}
+
+func GetUsernameFromCookie(r *http.Request) string {
+	cookie, err := r.Cookie("session_token")
+	if err != nil {
+		return ""
+	}
+	sessionToken := cookie.Value
+	username, exists := sessionStore[sessionToken]
+	if !exists {
+		return ""
+	}
+	return username
 }

@@ -7,7 +7,7 @@
         <div class="flex-container">
             <div class="post-likes-dislikes">
                 {{ if $.IsLoggedIn }}
-                <form action="/like" method="post">
+                <form action="/like/{{.ID}}" method="post">
                     {{ end }}
                     <button type="submit" class="like-icon">
                         <img src="static/images/thumbsup.png" alt="Like" />
@@ -15,7 +15,7 @@
                     </button>
                 </form>
                 {{ if $.IsLoggedIn }}
-                <form action="/dislike" method="post">
+                <form action="/dislike/{{.ID}}" method="post">
                     {{ end }}
                     <button type="submit" class="dislike-icon">
                         <img src="static/images/thumbsdown.png" alt="Dislike" />

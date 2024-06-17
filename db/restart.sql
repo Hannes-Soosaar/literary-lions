@@ -5,3 +5,4 @@ DROP TABLE IF EXISTS posts;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS post_comments;
+DROP TABLE IF EXISTS user_activity;
