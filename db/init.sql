@@ -46,7 +46,7 @@ INSERT INTO posts(title,body,likes,dislikes,user_id,category_id,created_at,modif
 ('POST 3','Lorem ipsum dolor sit amet, consectetur adipiscing elit.. ',74,0,3,2,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,1),
 ('POST 4','Lorem ipsum dolor sit amet, consectetur adipiscing elit.. ',0,0,2,4,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,0),
 ('POST 5','Lorem ipsum dolor sit amet, consectetur adipiscing elit.. ',99,100,1,3,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,1),
-('POST 6','Lorem ipsum dolor sit amet, consectetur adipiscing elit.. ',-100,-0,1,2,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,1);
+('POST 6','Lorem ipsum dolor sit amet, consectetur adipiscing elit.. ',100,-0,1,2,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP,1);
 
 -- create the comments table
 CREATE TABLE IF NOT EXISTS  comments(
@@ -103,3 +103,12 @@ INSERT INTO post_comments(comment_id,post_id) VALUES
 (5,4),
 (5,1);
 
+-- user activity table
+CREATE TABLE IF NOT EXISTS user_activity (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    post_id INT NOT NULL,
+    like_activity BOOLEAN DEFAULT FALSE,
+    dislike_activity BOOLEAN DEFAULT FALSE,
+    UNIQUE(user_id, post_id)
+);

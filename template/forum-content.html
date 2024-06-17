@@ -1,88 +1,39 @@
 {{ define "forum-content"}}
 <div class="forum_content">
+    {{ range .AllPosts.AllPosts}}
+    <div class="post-container">
+        <h1>{{.Title}}</h1>
+        <p>{{.Body}}</p>
+        <div class="flex-container">
+            <div class="post-likes-dislikes">
+                {{ if $.IsLoggedIn }}
+                <form action="/like/{{.ID}}" method="post">
+                    {{ end }}
+                    <button type="submit" class="like-icon">
+                        <img src="static/images/thumbsup.png" alt="Like" />
+                        <span class="like-number">{{.Likes}}</span>
+                    </button>
+                </form>
+                {{ if $.IsLoggedIn }}
+                <form action="/dislike/{{.ID}}" method="post">
+                    {{ end }}
+                    <button type="submit" class="dislike-icon">
+                        <img src="static/images/thumbsdown.png" alt="Dislike" />
+                        <span class="dislike-number">{{.Dislikes}}</span>
+                    </button>
+                </form>
 
-    {{ if .Uuid}}
-    <div class="post-container-welcome">
-        <h1>Welcome, {{ .Username}}!</h1>
+            </div>
+            <div class="post-comment-amount">
+                <a href="">
+                    <div class="comments-icon">
+                        <img src="static/images/CommentsIcon.png" alt="CommentsIcon" />
+                        <span class="comments-number">111</span>
+                    </div>
+                </a>
+            </div>
+        </div>
     </div>
     <div class="post-container-separator"></div>
     {{ end }}
-
-    <div class="post-container">
-        <h1>Hello Lions!</h1>
-        <p>Testing the forum functionality of text. This text should be justified, meaning, the sides should be
-            equal and a new row should start when the container limit is reached.</p>
-    </div>
-    <div class="post-container-separator"></div>
-    <div class="post-container">
-        <h1>Title</h1>
-        <p>Second post. Testing more text in one post. Second post. Testing more text in one post. Second post.
-            Testing more text in one post. Second post. Testing more text in one post. Second post. Testing more
-            text in one post. Second post. Testing more text in one post. Second post. Testing more text in one
-            post. Second post. Testing more text in one post. Second post. Testing more text in one post. Second
-            post. Testing more text in one post. Second post. Testing more text in one post. Second post. Testing
-            more text in one post.</p>
-        <p>Second post. Testing more text in one post and different paragraphs.</p>
-        <p>Second post. Testing more text in one post and different paragraphs.</p>
-        <p>Second post. Testing more text in one post and different paragraphs.</p>
-        <p>Second post. Testing more text in one post and different paragraphs.</p>
-
-    </div>
-    <div class="post-container-separator"></div>
-    <div class="post-container">
-        <h1>Hello Lions!</h1>
-        <p>Third post</p>
-    </div>
-    <div class="post-container-separator"></div>
-    <div class="post-container">
-        <h1>Hello Lions!</h1>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-        <p>Fourth post</p>
-    </div>
-    <div class="post-container-separator"></div>
-    <div class="post-container">
-        <h1>Hello Lions!</h1>
-        <p>Fifth post, longer for scrolling. Also testing if one long string will be broken to fit into the
-            container or if overflow will happen.
-            @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-        </p>
-    </div>
-</div>
-{{ end }}
+    {{ end }}

@@ -18,15 +18,15 @@ DONE: The forum detects duplicate email or username during registration. // Chec
 --- User and Session---
 
 
-TODO: Registered users can log in and access features.  
+DONE: Registered users can log in and access features.  
 
-TODO: UUIDs are used to manage sessions.
+DONE: UUIDs are used to manage sessions.
 
-TODO: Sessions are implemented for user persistence. //You stay logged in when navigating until you logout.
+DONE: Sessions are implemented for user persistence. //You stay logged in when navigating until you logout.
 
-TODO: Multiple browser sessions function correctly.
+DONE: Multiple browser sessions function correctly.
 
-TODO: Users have access to profile pages.
+DONE: Users have access to profile pages. //TODO need to add content on the profile page
 
 
 ---Posts,likes and comments---

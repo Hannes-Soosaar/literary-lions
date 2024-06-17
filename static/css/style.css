@@ -22,7 +22,7 @@ body {
 
 a {
     text-decoration: none;
-    color: blue;
+    color: #533ed9;
 }
 
 h1 {
@@ -35,6 +35,105 @@ h3 {
 
 h4 {
     color: gold;
+}
+
+.post-container h1 {
+    font-size: 30px;
+}
+
+.post-container p {
+    font-size: 18px;
+}
+
+.comments-icon img {
+    height: 20px;
+    width: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+    margin-bottom: 9px;
+}
+
+.like-icon img {
+    height: 20px;
+    width: 20px;
+    vertical-align: top;
+    margin-right: 5px;
+}
+
+.like-icon .like-number,
+.dislike-icon .dislike-number {
+    font-size: 20px;
+    color: #533ed9;
+    font-weight: normal;
+    position: relative;
+    top: -2px;
+}
+
+.comments-icon .comments-number {
+    font-size: 20px;
+    color: #533ed9;
+    font-weight: normal;
+    position: relative;
+    top: -3px;
+}
+
+.dislike-icon img {
+    height: 20px;
+    width: 20px;
+    vertical-align: top;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.flex-container {
+    display: flex;
+    align-items: center;
+    /* Aligns items vertically center */
+    margin-left: 0;
+}
+
+.post-comment-amount {
+    background: whitesmoke;
+    border: 2px solid #533ed9;
+    border-radius: 30px;
+    height: 20px;
+    margin-left: 5px;
+    display: flex;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 10px;
+}
+
+.post-comment-amount:hover {
+    background: rgb(230, 230, 230);
+}
+
+.post-likes-dislikes {
+    background: whitesmoke;
+    border: 2px solid #533ed9;
+    border-radius: 30px;
+    height: 20px;
+    margin-left: 5px;
+    display: flex;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: 0;
+}
+
+.post-likes-dislikes button {
+    border: none;
+    background-color: whitesmoke;
+    background: transparent;
+}
+
+.post-likes-dislikes button:hover {
+    cursor: pointer;
+}
+
+.post-likes-dislikes img {
+    margin-bottom: 3px;
 }
 
 .post-container-separator {
@@ -184,8 +283,8 @@ h4 {
 }
 
 .post-container-welcome {
-    width: calc(37% - 30px);
-    min-width: 400px;
+    width: calc(100% - 30px);
+    min-width: 600px;
     margin: 20px;
     height: auto;
     border-width: 3px;

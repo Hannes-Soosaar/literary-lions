@@ -18,6 +18,8 @@ func main() {
 	http.HandleFunc("/login", handle.LoginHandler)
 	http.HandleFunc("/logout", handle.LogoutHandler)
 	http.HandleFunc("/profile", handle.ProfileHandler)
+	http.HandleFunc("/like/", handle.LikeHandler)
+	http.HandleFunc("/dislike/", handle.DislikeHandler)
 	err := http.ListenAndServe(config.PORT, nil)
 	if err != nil {
 		fmt.Printf("Error:%s", err)
