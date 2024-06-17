@@ -256,36 +256,38 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid URL", http.StatusBadRequest)
 	}
 	postID, _ := strconv.Atoi(postIDstr)
-	HasLiked, _ := CheckUserActivity(postID, r)
+	HasLiked, HasDisliked := CheckUserActivity(postID, r)
 	username := GetUsernameFromCookie(r)
 	user := utils.FindUserByUserName(username)
-	if !HasLiked {
-		db, err := sql.Open("sqlite3", config.LION_DB)
-		if err != nil {
-			http.Error(w, "Database error", http.StatusInternalServerError)
-			return
-		}
-		defer db.Close()
+	if !HasDisliked {
+		if !HasLiked {
+			db, err := sql.Open("sqlite3", config.LION_DB)
+			if err != nil {
+				http.Error(w, "Database error", http.StatusInternalServerError)
+				return
+			}
+			defer db.Close()
 
-		_, err = db.Exec("UPDATE posts SET likes = likes + 1 WHERE id = ?", postIDstr)
-		if err != nil {
-			http.Error(w, "Database error", http.StatusInternalServerError)
-		}
+			_, err = db.Exec("UPDATE posts SET likes = likes + 1 WHERE id = ?", postIDstr)
+			if err != nil {
+				http.Error(w, "Database error", http.StatusInternalServerError)
+			}
 
-		MarkPostAsLiked(user.ID, postID)
-	} else {
-		db, err := sql.Open("sqlite3", config.LION_DB)
-		if err != nil {
-			http.Error(w, "Database error", http.StatusInternalServerError)
-			return
-		}
-		defer db.Close()
+			MarkPostAsLiked(user.ID, postID)
+		} else {
+			db, err := sql.Open("sqlite3", config.LION_DB)
+			if err != nil {
+				http.Error(w, "Database error", http.StatusInternalServerError)
+				return
+			}
+			defer db.Close()
 
-		_, err = db.Exec("UPDATE posts SET likes = likes - 1 WHERE id = ?", postIDstr)
-		if err != nil {
-			http.Error(w, "Database error", http.StatusInternalServerError)
+			_, err = db.Exec("UPDATE posts SET likes = likes - 1 WHERE id = ?", postIDstr)
+			if err != nil {
+				http.Error(w, "Database error", http.StatusInternalServerError)
+			}
+			MarkPostAsUnliked(user.ID, postID)
 		}
-		MarkPostAsUnliked(user.ID, postID)
 	}
 
 	referer := r.Header.Get("Referer")
@@ -380,36 +382,38 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	postID, _ := strconv.Atoi(postIDstr)
-	_, HasDisliked := CheckUserActivity(postID, r)
+	HasLiked, HasDisliked := CheckUserActivity(postID, r)
 	username := GetUsernameFromCookie(r)
 	user := utils.FindUserByUserName(username)
-	if !HasDisliked {
-		db, err := sql.Open("sqlite3", config.LION_DB)
-		if err != nil {
-			http.Error(w, "Database error", http.StatusInternalServerError)
-			return
-		}
-		defer db.Close()
+	if !HasLiked {
+		if !HasDisliked {
+			db, err := sql.Open("sqlite3", config.LION_DB)
+			if err != nil {
+				http.Error(w, "Database error", http.StatusInternalServerError)
+				return
+			}
+			defer db.Close()
 
-		_, err = db.Exec("UPDATE posts SET dislikes = dislikes + 1 WHERE id = ?", postIDstr)
-		if err != nil {
-			http.Error(w, "Database error", http.StatusInternalServerError)
-		}
+			_, err = db.Exec("UPDATE posts SET dislikes = dislikes + 1 WHERE id = ?", postIDstr)
+			if err != nil {
+				http.Error(w, "Database error", http.StatusInternalServerError)
+			}
 
-		MarkPostAsDisliked(user.ID, postID)
-	} else {
-		db, err := sql.Open("sqlite3", config.LION_DB)
-		if err != nil {
-			http.Error(w, "Database error", http.StatusInternalServerError)
-			return
-		}
-		defer db.Close()
+			MarkPostAsDisliked(user.ID, postID)
+		} else {
+			db, err := sql.Open("sqlite3", config.LION_DB)
+			if err != nil {
+				http.Error(w, "Database error", http.StatusInternalServerError)
+				return
+			}
+			defer db.Close()
 
-		_, err = db.Exec("UPDATE posts SET dislikes = dislikes - 1 WHERE id = ?", postIDstr)
-		if err != nil {
-			http.Error(w, "Database error", http.StatusInternalServerError)
+			_, err = db.Exec("UPDATE posts SET dislikes = dislikes - 1 WHERE id = ?", postIDstr)
+			if err != nil {
+				http.Error(w, "Database error", http.StatusInternalServerError)
+			}
+			MarkPostAsUndisliked(user.ID, postID)
 		}
-		MarkPostAsUndisliked(user.ID, postID)
 	}
 
 	referer := r.Header.Get("Referer")
