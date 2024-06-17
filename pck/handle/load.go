@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"gitea.kood.tech/hannessoosaar/literary-lions/pck/models"
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/render"
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/utils"
 )
@@ -21,6 +22,7 @@ func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 
 	sessionToken, err := r.Cookie("session_token")
 	isLoggedIn := err == nil && isValidSession(sessionToken.Value)
+	allPosts := utils.RetrieveAllPosts()
 
 	data := struct {
 		Username                   string
@@ -31,6 +33,7 @@ func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 		IsLoggedIn                 bool
 		ProfilePage                bool
 		MainPage                   bool
+		AllPosts                   models.Posts
 	}{
 		Username:                   "",
 		Title:                      "Lions",
@@ -40,6 +43,7 @@ func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 		IsLoggedIn:                 isLoggedIn,
 		ProfilePage:                false,
 		MainPage:                   true,
+		AllPosts:                   allPosts,
 	}
 	if isLoggedIn {
 		if data.Username == "" {
@@ -76,6 +80,7 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		successMessage = fmt.Sprintf("%s was added with the email %s", username, email)
 	}
 	fmt.Println(successMessage)
+	allPosts := utils.RetrieveAllPosts()
 	data := struct {
 		Username                   string
 		ErrorMessage               string
@@ -85,6 +90,7 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		IsLoggedIn                 bool
 		ProfilePage                bool
 		MainPage                   bool
+		AllPosts                   models.Posts
 	}{
 		Username:                   "",
 		ErrorMessage:               errorMessage,
@@ -94,6 +100,7 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		IsLoggedIn:                 false,
 		ProfilePage:                false,
 		MainPage:                   false,
+		AllPosts:                   allPosts,
 	}
 	render.RenderLandingPage(w, "index.html", data)
 }
@@ -120,6 +127,12 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if isActiveUser {
+		for key, storedUsername := range sessionStore {
+			if storedUsername == username {
+				delete(sessionStore, key)
+				break
+			}
+		}
 
 		sessionToken, err := utils.GenerateUUID()
 		if err != nil {
@@ -127,6 +140,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		sessionStore[sessionToken] = username
+
 		fmt.Println("Session token/UUID and username:", sessionStore)
 
 		http.SetCookie(w, &http.Cookie{
@@ -140,6 +154,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		errorMessage = "Not a valid user!"
 	}
 
+	allPosts := utils.RetrieveAllPosts()
+
 	data := struct {
 		Username                   string
 		ErrorMessage               string
@@ -149,6 +165,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		IsLoggedIn                 bool
 		ProfilePage                bool
 		MainPage                   bool
+		AllPosts                   models.Posts
 	}{
 		Username:                   username,
 		ErrorMessage:               errorMessage,
@@ -158,6 +175,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		IsLoggedIn:                 false,
 		ProfilePage:                false,
 		MainPage:                   false,
+		AllPosts:                   allPosts,
 	}
 
 	if isActiveUser {
@@ -177,6 +195,8 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		Path:    "/",
 	})
 
+	allPosts := utils.RetrieveAllPosts()
+
 	data := struct {
 		Username                   string
 		RegistrationSuccessMessage string
@@ -186,6 +206,7 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		IsLoggedIn                 bool
 		ProfilePage                bool
 		MainPage                   bool
+		AllPosts                   models.Posts
 	}{
 		Username:                   "",
 		Title:                      "Lions",
@@ -195,6 +216,7 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		IsLoggedIn:                 false,
 		ProfilePage:                false,
 		MainPage:                   false,
+		AllPosts:                   allPosts,
 	}
 	for key := range sessionStore {
 		delete(sessionStore, key)

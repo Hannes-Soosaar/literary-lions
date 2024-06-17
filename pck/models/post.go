@@ -12,3 +12,7 @@ type Post struct {
 	ModifiedAt string
 	Active     int
 }
+
+type Posts struct {
+	AllPosts []Post
+}

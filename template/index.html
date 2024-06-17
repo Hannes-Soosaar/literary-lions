@@ -35,6 +35,12 @@
         window.location.href = "/";
     </script>
     {{ end }}
+    {{ if .RegistrationSuccessMessage}}
+    <script>
+        alert("{{.RegistrationSuccessMessage}}")
+        window.location.href = "/"
+    </script>
+    {{ end }}
 
 </body>
 
