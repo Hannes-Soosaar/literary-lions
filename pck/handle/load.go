@@ -70,35 +70,46 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	email := r.FormValue("email")
 	password := utils.HashString(r.FormValue("password"))
+
 	err := utils.AddNewUser(username, email, password)
+
 	if err != nil {
+		fmt.Println("We are in the error path of the Registration handler")
 		errorMessage = err.Error()
 		fmt.Println(errorMessage)
 	} else {
 		successMessage = fmt.Sprintf("%s was added with the email %s", username, email)
 		user = utils.FindUserByUserName(username)
 	}
+
 	fmt.Println(successMessage)
+	fmt.Println(errorMessage)
+	fmt.Printf(" The user is %v", user)
 	data := struct {
 		SuccessMessage             string
 		ErrorMessage               string
 		RegistrationSuccessMessage string
 		Title                      string
-		Uuid                       string
+		User                       models.User
 		IsLoggedIn                 bool
 		ProfilePage                bool
 		MainPage                   bool
+		Username                   string
+		Uuid                       string
 	}{
 		SuccessMessage:             successMessage,
 		ErrorMessage:               errorMessage,
 		RegistrationSuccessMessage: "",
 		Title:                      "Login page",
-		Uuid:                       user.UUID,
+		User:                       user,
 		IsLoggedIn:                 false,
 		ProfilePage:                false,
 		MainPage:                   false,
+		Username:                   user.Username,
+		Uuid:                       user.UUID,
 	}
-	render.RenderLandingPage(w, "index.html", data)
+
+	render.RenderLandingPage(w, "index.html", data) //TODO this should be handled as logged out as standard 
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {

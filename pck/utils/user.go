@@ -22,7 +22,7 @@ func FindUserByUserName(userName string) models.User {
 	defer db.Close()
 	query := "SELECT id, username,email,password,role,created_at,modified_at,active,uuid FROM users  WHERE username = ?"
 	row := db.QueryRow(query, userName)
-	err = row.Scan(&user.ID,&user.Username, &user.Email,&user.Password,&user.Role,&user.CreatedAt, &user.ModifiedAt, &user.Active, &user.UUID)
+	err = row.Scan(&user.ID, &user.Username, &user.Email, &user.Password, &user.Role, &user.CreatedAt, &user.ModifiedAt, &user.Active, &user.UUID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			fmt.Printf("%s, was not found \n", userName)
@@ -41,27 +41,19 @@ func AddActiveUser(user models.User) error {
 		return err
 	}
 	defer db.Close()
-
-	dbUser := FindUserByUserName(user.Username)
-	fmt.Printf("Adding ACTIVE User %s \n", user.Username)
-	fmt.Printf("Found user %s \n", dbUser.Username)
-	fmt.Printf("Adding user %v \n", user)
-
-	//TODO make a query to find if the email exists 
-
-	if (dbUser == models.User{}) { 
+	if UserWithEmailExists(user.Email) {
+		err := fmt.Errorf("there is User registered with %s this email, pleas register with another email", user.Email)
+		return err
+	} else if UserWithUserNameExists(user.Username) {
+		err := fmt.Errorf("there is User registered with %s this username, pleas register with another username", user.Username)
+		return err
+	}else {
 		query := "INSERT INTO users (username,email,password,role,created_at,modified_at,active,uuid) VALUES (?,?,?,?,?,?,?,?)"
 		_, err := db.Exec(query, user.Username, user.Email, user.Password, user.Role, user.CreatedAt, user.ModifiedAt, user.Active, user.UUID)
 		if err != nil {
-			err:= fmt.Errorf("error adding User: %v, Error: %v", user.Username, err)
+			err := fmt.Errorf("error adding User: %v, Error: %v", user.Username, err)
 			return err
 		}
-	} else if (dbUser.Username == user.Username) {
-		err:= fmt.Errorf("the user name %s is taken please choose another", dbUser.Username)
-		return err
-	} else if (dbUser.Username == user.Email){
-		err:= fmt.Errorf("there is User registered with %s this email, pleas register with another email", dbUser.Email)
-		return err
 	} 
 	return err
 }
@@ -73,7 +65,6 @@ func InactiveActiveUser(user models.User) error {
 		fmt.Println("error opening DB", err)
 	}
 	defer db.Close()
-
 	user.ModifiedAt = time.Now().Format("02/01/06,15/04")
 	user.Active = config.INACTIVE
 	query := "UPDATE users SET Active = ?, modified_at = ? WHERE uuid = ?"
@@ -103,10 +94,10 @@ func FindUserByUUID(userUuid string) models.User {
 		fmt.Println("error opening DB", err)
 	}
 	defer db.Close()
-	query := "SELECT id, username,email,password,role,created_at,modified_at,active,uuid FROM users  WHERE username = ?"
+	query := "SELECT id,username,email,password,role,created_at,modified_at,active,uuid FROM users  WHERE username = ?" // can be simplified with using * instead of specfing the columns
 	row := db.QueryRow(query, userUuid)
 	var user models.User
-	err = row.Scan(&user.Username, &user.Email, &user.Role, &user.Password, &user.Role, &user.CreatedAt, &user.ModifiedAt, &user.Active, &user.UUID)
+	err = row.Scan(&user.ID, &user.Username, &user.Email, &user.Role, &user.Password, &user.Role, &user.CreatedAt, &user.ModifiedAt, &user.Active, &user.UUID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			fmt.Printf("There is no user with the UUID  %s, was not found \n", userUuid)
@@ -131,11 +122,12 @@ func AddNewUser(username string, email string, password string) error {
 	user.Active = config.ACTIVE
 	userUuid, err := GenerateUUID()
 	if err != nil {
-	return err
+		return err
 	}
 
 	user.UUID = userUuid
 	err = AddActiveUser(user)
+	fmt.Printf("Error from Add ActiveUser %v  \n",err)
 	if err != nil {
 		return err
 	}
@@ -160,4 +152,45 @@ func ValidateUser(userName string, password string) (string, bool, error) {
 
 func ValidateRegistrationOfUser(userName string, email string) {
 
+}
+
+func UserWithEmailExists(email string) bool {
+	var exists bool
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		fmt.Println("error opening DB", err)
+	}
+	defer db.Close()
+	query := `SELECT EXISTS (SELECT 1 FROM users WHERE email = ?);`
+		err = db.QueryRow(query, email).Scan(&exists)
+	if exists {
+		return true
+	}
+	fmt.Printf("The query gives us the following result %v ", exists)
+	if err != nil {
+		fmt.Errorf("error in the query to finding the mail from users", err)
+		return true
+	}
+	return false
+}
+
+
+func UserWithUserNameExists (userName string) bool {
+	var exists bool
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		fmt.Println("error opening DB", err)
+	}
+	defer db.Close()
+	query := `SELECT EXISTS (SELECT 1 FROM users WHERE username = ?);`
+		err = db.QueryRow(query, userName).Scan(&exists)
+	if exists {
+		return true
+	}
+	fmt.Printf("The query gives us the following result %v ", exists)
+	if err != nil {
+		fmt.Errorf("error in the query to finding the username from users", err)
+		return true
+	}
+	return false
 }
