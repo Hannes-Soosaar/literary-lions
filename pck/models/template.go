@@ -1,5 +1,7 @@
 package models
 
+// import "gitea.kood.tech/hannessoosaar/literary-lions/pck/models"
+
 type TemplateData struct {
 	Username                   string
 	RegistrationSuccessMessage string
@@ -10,6 +12,9 @@ type TemplateData struct {
 	ProfilePage                bool
 	MainPage                   bool
 	AllPosts                   Posts
+	Categories                 []Category
+	PostComments               []PostComment
+	Comments					[]Comment
 }
 
 func DefaultTemplateData() TemplateData {
@@ -23,5 +28,8 @@ func DefaultTemplateData() TemplateData {
 		ProfilePage:                false,
 		MainPage:                   false,
 		AllPosts:                   Posts{},
+		Categories:                 []Category{},
+		PostComments:               []PostComment{},
+		Comments:					[]Comment{} ,				
 	}
 }

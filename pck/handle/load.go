@@ -97,16 +97,13 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Failed to parse form data", http.StatusBadRequest)
 		}
 	}
-
 	var errorMessage string
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 	uuid, isActiveUser, err := utils.ValidateUser(username, password)
-
 	if err != nil {
 		errorMessage = err.Error()
 	}
-
 	if isActiveUser {
 		for key, storedUsername := range sessionStore {
 			if storedUsername == username {
@@ -114,16 +111,12 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 		}
-
 		sessionToken, err := utils.GenerateUUID()
 		if err != nil {
 			errorMessage = errorMessage + " Failed to generate UUID"
 		}
-
 		sessionStore[sessionToken] = username
-
 		fmt.Println("Session token/UUID and username:", sessionStore)
-
 		http.SetCookie(w, &http.Cookie{
 			Name:    "session_token",
 			Value:   sessionToken,
@@ -134,16 +127,13 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		uuid = ""
 		errorMessage = "Not a valid user!"
 	}
-
 	allPosts := utils.RetrieveAllPosts()
-
 	data := models.DefaultTemplateData()
 	data.Username = username
 	data.ErrorMessage = errorMessage
 	data.Uuid = uuid
 	data.AllPosts = allPosts
 	data.Title = "Login"
-
 	if isActiveUser {
 		data.IsLoggedIn = true
 	}
@@ -152,19 +142,16 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
-
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session_token",
 		Value:   "",
 		Expires: time.Now().Add(-1 * time.Hour),
 		Path:    "/",
 	})
-
 	allPosts := utils.RetrieveAllPosts()
 	data := models.DefaultTemplateData()
 	data.Title = "Logout"
 	data.AllPosts = allPosts
-
 	for key := range sessionStore {
 		delete(sessionStore, key)
 		break
@@ -178,14 +165,12 @@ func isValidSession(sessionToken string) bool {
 }
 
 func AuthSessionToken(next http.HandlerFunc) http.HandlerFunc {
-	fmt.Println("TEST")
 	return func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("session_token")
 		if err != nil {
 			http.Redirect(w, r, "/", http.StatusFound)
 			return
 		}
-
 		sessionToken := cookie.Value
 		username, exists := sessionStore[sessionToken]
 		if !exists {
@@ -206,24 +191,20 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
-
 	sessionToken := cookie.Value
 	username, exists := sessionStore[sessionToken]
 	if !exists {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
-
 	// Retrieve username from session token
 	ctx := context.WithValue(r.Context(), userContextKey, username)
-
 	// Proceed with handling the request
 	ctxUsername, ok := ctx.Value(userContextKey).(string)
 	if !ok {
 		http.Error(w, "Unable to retrieve username from context", http.StatusInternalServerError)
 		return
 	}
-
 	isLoggedIn := true
 	data := models.DefaultTemplateData()
 	data.Username = ctxUsername
@@ -255,7 +236,6 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
-
 	if postIDstr == "" {
 		http.Error(w, "Invalid URL", http.StatusBadRequest)
 	}
@@ -271,12 +251,10 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			defer db.Close()
-
 			_, err = db.Exec("UPDATE posts SET likes = likes + 1 WHERE id = ?", postIDstr)
 			if err != nil {
 				http.Error(w, "Database error", http.StatusInternalServerError)
 			}
-
 			MarkPostAsLiked(user.ID, postID)
 		} else {
 			db, err := sql.Open("sqlite3", config.LION_DB)
@@ -285,7 +263,6 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			defer db.Close()
-
 			_, err = db.Exec("UPDATE posts SET likes = likes - 1 WHERE id = ?", postIDstr)
 			if err != nil {
 				http.Error(w, "Database error", http.StatusInternalServerError)
@@ -293,7 +270,6 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 			MarkPostAsUnliked(user.ID, postID)
 		}
 	}
-
 	referer := r.Header.Get("Referer")
 	http.Redirect(w, r, referer, http.StatusSeeOther)
 }
@@ -304,7 +280,6 @@ func MarkPostAsLiked(userID, postID int) error {
 		return err
 	}
 	defer db.Close()
-
 	// Check if there's already an entry for this user and post
 	var likeActivity bool
 	err = db.QueryRow("SELECT like_activity FROM user_activity WHERE user_id = ? AND post_id = ?", userID, postID).Scan(&likeActivity)
@@ -360,7 +335,6 @@ func MarkPostAsUnliked(userID, postID int) error {
 			}
 		}
 	}
-
 	return nil
 }
 
@@ -380,11 +354,9 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
-
 	if postIDstr == "" {
 		http.Error(w, "Invalid URL", http.StatusBadRequest)
 	}
-
 	postID, _ := strconv.Atoi(postIDstr)
 	HasLiked, HasDisliked := CheckUserActivity(postID, r)
 	username := GetUsernameFromCookie(r)
@@ -397,12 +369,10 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			defer db.Close()
-
 			_, err = db.Exec("UPDATE posts SET dislikes = dislikes + 1 WHERE id = ?", postIDstr)
 			if err != nil {
 				http.Error(w, "Database error", http.StatusInternalServerError)
 			}
-
 			MarkPostAsDisliked(user.ID, postID)
 		} else {
 			db, err := sql.Open("sqlite3", config.LION_DB)
@@ -411,7 +381,6 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			defer db.Close()
-
 			_, err = db.Exec("UPDATE posts SET dislikes = dislikes - 1 WHERE id = ?", postIDstr)
 			if err != nil {
 				http.Error(w, "Database error", http.StatusInternalServerError)
@@ -419,7 +388,6 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 			MarkPostAsUndisliked(user.ID, postID)
 		}
 	}
-
 	referer := r.Header.Get("Referer")
 	http.Redirect(w, r, referer, http.StatusSeeOther)
 }
