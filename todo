@@ -12,29 +12,24 @@ DONE: The code uses at least one CREATE query.// in the db sql setup uses create
 DONE: Passwords are secured and encrypted using bcrypt or other strong algorithms. // REGULAR hash ATM
 DONE: Users can register successfully. // can create a new user
 DONE: The forum detects duplicate email or username during registration. // Check on the backend two function get user by Name and Get user by email
-
-
-
---- User and Session---
-
 DONE: Registered users can log in and access features.  
 DONE: UUIDs are used to manage sessions.
-DONE: Sessions are implemented for user persistence. //You stay logged in when navigating until you logout.
+DONE: Sessions are implemented for user persistence.
 DONE: Multiple browser sessions function correctly.
-DONE: Users have access to profile pages. //TODO need to add content on the profile page
+DONE: Users have access to profile pages.
+DONE: Only registered users can like or dislike posts and comments.
+DONE: Posts cannot be liked and disliked simultaneously. // Try to handle on the FE if session if session id has done a POST... to the /like or /dislike handler don't let it be done again.
+
 
 
 ---Posts,likes and comments---
 TODO: Only registered users can create posts and comments.
-TODO: Only registered users can like or dislike posts and comments.
 TODO: Empty posts and comments are not allowed.
 TODO: The number of likes and dislikes for comments is visible to all users. // a section is added to the 
 TODO: Posts can be filtered by category.
 TODO: Posts can be associated with categories.
 TODO: The number of likes and dislikes is displayed and updated correctly. // Each post has the like dislike count
 TODO: Registered users can view their created posts and liked posts. // each post has a user_id ref
-TODO: Posts cannot be liked and disliked simultaneously. // Try to handle on the FE if session if session id has done a POST... to the /like or /dislike handler don't let it be done again.
-
 
 ---Server
 TODO: The project handles HTTP status 400 and 500 errors gracefully.
@@ -52,6 +47,7 @@ TODO: Error messages are informative and user-friendly.
 TODO: SQL queries are effective and efficient.
 TODO: The registration process is user-friendly and secure.
 TODO: The interface is clear, well set out and navigable.
+TODO: Design
 
 
 ---DOCKER---

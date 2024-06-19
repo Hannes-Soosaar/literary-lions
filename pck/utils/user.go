@@ -111,7 +111,6 @@ func FindUserByUUID(userUuid string) models.User {
 }
 
 func AddNewUser(username string, email string, password string) error {
-
 	var user models.User
 	user.Username = username
 	user.Email = email
@@ -124,7 +123,6 @@ func AddNewUser(username string, email string, password string) error {
 	if err != nil {
 		return err
 	}
-
 	user.UUID = userUuid
 	err = AddActiveUser(user)
 	fmt.Printf("Error from Add ActiveUser %v  \n",err)

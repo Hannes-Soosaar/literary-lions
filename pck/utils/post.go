@@ -43,6 +43,21 @@ func RetrieveAllPosts() models.Posts {
 	return posts
 }
 
+
+func FindPostsByUserName(userID string)models.Posts{
+
+
+return models.Posts{}
+}
+
+func FindPostByCategory( categoryName string) models.Posts {
+
+
+	
+return models.Posts{}
+}
+
+
 //TODO: GetPostFromUser
 //TODO: GetPostFromCategory
 //TODO: GetAllPostLikes

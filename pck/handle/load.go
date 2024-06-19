@@ -19,7 +19,7 @@ type contextKey string
 
 const userContextKey = contextKey("username")
 
-var sessionStore = map[string]string{} //!if we log out we need to empty this,  too I could login with a copied session ID form the previous login.
+var sessionStore = map[string]string{} //!if we log out we need to empty this,  too I could login with a copied session ID form the previous login ?
 
 func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -27,13 +27,13 @@ func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 	isLoggedIn := err == nil && isValidSession(sessionToken.Value)
 	allPosts := utils.RetrieveAllPosts()
 	categories := utils.GetActiveCategories()
+	// creates a new empty data model
 	data := models.DefaultTemplateData()
 	data.IsLoggedIn = isLoggedIn
 	data.MainPage = true
 	data.ProfilePage = false
 	data.AllPosts = allPosts
 	data.Categories = categories
-
 	if isLoggedIn {
 		if data.Username == "" {
 			data.Username = GetUsernameFromCookie(r)
@@ -42,12 +42,9 @@ func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
+
 	render.RenderLandingPage(w, "index.html", data)
 }
-
-
-
-
 
 func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	var errorMessage string
@@ -77,13 +74,14 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(successMessage)
 	allPosts := utils.RetrieveAllPosts()
 	data := models.DefaultTemplateData()
+	categories := utils.GetActiveCategories()
+	data.Categories = categories
 	data.AllPosts = allPosts
 	data.ErrorMessage = errorMessage
 	data.RegistrationSuccessMessage = "Account created successfully! You can now log in."
 	data.Title = "Registration"
 	render.RenderLandingPage(w, "index.html", data)
 }
-
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -114,7 +112,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 			errorMessage = errorMessage + " Failed to generate UUID"
 		}
 		sessionStore[sessionToken] = username
-		fmt.Println("Session token/UUID and username:", sessionStore)
 		http.SetCookie(w, &http.Cookie{
 			Name:    "session_token",
 			Value:   sessionToken,
@@ -127,7 +124,11 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	allPosts := utils.RetrieveAllPosts()
 	data := models.DefaultTemplateData()
+	categories := utils.GetActiveCategories()
+
 	data.Username = username
+	data.User = utils.FindUserByUserName(username)
+	data.Categories = categories
 	data.ErrorMessage = errorMessage
 	data.Uuid = uuid
 	data.AllPosts = allPosts
@@ -136,7 +137,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		data.IsLoggedIn = true
 	}
 	render.RenderLandingPage(w, "index.html", data)
-
 }
 
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
@@ -150,18 +150,20 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	data := models.DefaultTemplateData()
 	data.Title = "Logout"
 	data.AllPosts = allPosts
+	categories := utils.GetActiveCategories()
+	data.Categories = categories
 	for key := range sessionStore {
 		delete(sessionStore, key)
 		break
 	}
 	render.RenderLandingPage(w, "index.html", data)
 }
-
+//TODO Is a Util
 func isValidSession(sessionToken string) bool {
 	_, isValidSession := sessionStore[sessionToken]
 	return isValidSession
 }
-
+//TODO need to move to a different file
 func AuthSessionToken(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("session_token")
@@ -205,7 +207,12 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	isLoggedIn := true
 	data := models.DefaultTemplateData()
-	data.Username = ctxUsername //! need to validate if the user exists, else you could "login" by creating a cookie 
+	user := utils.FindUserByUserName(username)
+	categories := utils.GetActiveCategories()
+	data.Categories = categories
+	data.User = user
+	data.Categories = categories
+	data.Username = ctxUsername
 	data.ProfilePage = true
 	data.IsLoggedIn = true
 
@@ -270,7 +277,6 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 	referer := r.Header.Get("Referer")
 	http.Redirect(w, r, referer, http.StatusSeeOther)
 }
-
 
 func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
