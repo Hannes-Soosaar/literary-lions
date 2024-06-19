@@ -19,19 +19,20 @@ type contextKey string
 
 const userContextKey = contextKey("username")
 
-var sessionStore = map[string]string{}
+var sessionStore = map[string]string{} //!if we log out we need to empty this,  too I could login with a copied session ID form the previous login.
 
 func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 
 	sessionToken, err := r.Cookie("session_token")
 	isLoggedIn := err == nil && isValidSession(sessionToken.Value)
 	allPosts := utils.RetrieveAllPosts()
-
+	categories := utils.GetActiveCategories()
 	data := models.DefaultTemplateData()
 	data.IsLoggedIn = isLoggedIn
 	data.MainPage = true
 	data.ProfilePage = false
 	data.AllPosts = allPosts
+	data.Categories = categories
 
 	if isLoggedIn {
 		if data.Username == "" {
@@ -41,9 +42,12 @@ func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-
 	render.RenderLandingPage(w, "index.html", data)
 }
+
+
+
+
 
 func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	var errorMessage string
@@ -59,13 +63,10 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-
 	username := r.FormValue("username")
 	email := r.FormValue("email")
 	password := utils.HashString(r.FormValue("password"))
-
 	err := utils.AddNewUser(username, email, password)
-
 	if err != nil {
 		fmt.Println("We are in the error path of the Registration handler")
 		errorMessage = err.Error()
@@ -73,21 +74,18 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		successMessage = fmt.Sprintf("%s was added with the email %s", username, email)
 	}
-
 	fmt.Println(successMessage)
 	allPosts := utils.RetrieveAllPosts()
-
 	data := models.DefaultTemplateData()
 	data.AllPosts = allPosts
 	data.ErrorMessage = errorMessage
 	data.RegistrationSuccessMessage = "Account created successfully! You can now log in."
 	data.Title = "Registration"
-
 	render.RenderLandingPage(w, "index.html", data)
 }
 
-func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
+func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid Request method", http.StatusMethodNotAllowed)
 		return
@@ -148,7 +146,7 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		Expires: time.Now().Add(-1 * time.Hour),
 		Path:    "/",
 	})
-	allPosts := utils.RetrieveAllPosts()
+	allPosts := utils.RetrieveAllPosts() //! RenamedToGet  use GET if you are certain you will get data and use FIND if you are not sure if the data exists.
 	data := models.DefaultTemplateData()
 	data.Title = "Logout"
 	data.AllPosts = allPosts
@@ -207,8 +205,7 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	isLoggedIn := true
 	data := models.DefaultTemplateData()
-	data.Username = ctxUsername
-	data.Title = "Your Profile"
+	data.Username = ctxUsername //! need to validate if the user exists, else you could "login" by creating a cookie 
 	data.ProfilePage = true
 	data.IsLoggedIn = true
 
@@ -274,69 +271,6 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, referer, http.StatusSeeOther)
 }
 
-func MarkPostAsLiked(userID, postID int) error {
-	db, err := sql.Open("sqlite3", config.LION_DB)
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-	// Check if there's already an entry for this user and post
-	var likeActivity bool
-	err = db.QueryRow("SELECT like_activity FROM user_activity WHERE user_id = ? AND post_id = ?", userID, postID).Scan(&likeActivity)
-	switch {
-	case err == sql.ErrNoRows:
-		// No existing entry, insert a new one
-		_, err := db.Exec("INSERT INTO user_activity (user_id, post_id, like_activity) VALUES (?, ?, 1)", userID, postID)
-		if err != nil {
-			return err
-		}
-	case err != nil:
-		return err
-	default:
-		// There's an existing entry, update it
-		if !likeActivity {
-			_, err := db.Exec("UPDATE user_activity SET like_activity = 1 WHERE user_id = ? AND post_id = ?", userID, postID)
-			if err != nil {
-				return err
-			}
-		}
-	}
-
-	return nil
-}
-
-func MarkPostAsUnliked(userID, postID int) error {
-	db, err := sql.Open("sqlite3", config.LION_DB)
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-	// Check if there's already an entry for this user and post
-	var likeActivity bool
-	err = db.QueryRow("SELECT like_activity FROM user_activity WHERE user_id = ? AND post_id = ?", userID, postID).Scan(&likeActivity)
-	switch {
-	case err == sql.ErrNoRows:
-		fmt.Println("No existing entry?")
-		// No existing entry, insert a new one with dislike_activity set to 1
-		_, err := db.Exec("INSERT INTO user_activity (user_id, post_id, like_activity) VALUES (?, ?, 0)", userID, postID)
-		if err != nil {
-			fmt.Println("error", err)
-			return err
-		}
-	case err != nil:
-		return err
-	default:
-		// There's an existing entry, update it
-		if likeActivity {
-			_, err := db.Exec("UPDATE user_activity SET like_activity = 0 WHERE user_id = ? AND post_id = ?", userID, postID)
-			if err != nil {
-				fmt.Println("Liking set to 0")
-				return err
-			}
-		}
-	}
-	return nil
-}
 
 func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -390,118 +324,4 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	referer := r.Header.Get("Referer")
 	http.Redirect(w, r, referer, http.StatusSeeOther)
-}
-
-func MarkPostAsDisliked(userID, postID int) error {
-	db, err := sql.Open("sqlite3", config.LION_DB)
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
-	// Check if there's already an entry for this user and post
-	var dislikeActivity bool
-	err = db.QueryRow("SELECT dislike_activity FROM user_activity WHERE user_id = ? AND post_id = ?", userID, postID).Scan(&dislikeActivity)
-	switch {
-	case err == sql.ErrNoRows:
-		// No existing entry, insert a new one
-		_, err := db.Exec("INSERT INTO user_activity (user_id, post_id, dislike_activity) VALUES (?, ?, 1)", userID, postID)
-		if err != nil {
-			return err
-		}
-	case err != nil:
-		return err
-	default:
-		// There's an existing entry, update it
-		if !dislikeActivity {
-			_, err := db.Exec("UPDATE user_activity SET dislike_activity = 1 WHERE user_id = ? AND post_id = ?", userID, postID)
-			if err != nil {
-				return err
-			}
-		}
-	}
-
-	return nil
-}
-
-func MarkPostAsUndisliked(userID, postID int) error {
-	db, err := sql.Open("sqlite3", config.LION_DB)
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-	// Check if there's already an entry for this user and post
-	var dislikeActivity bool
-	err = db.QueryRow("SELECT dislike_activity FROM user_activity WHERE user_id = ? AND post_id = ?", userID, postID).Scan(&dislikeActivity)
-	switch {
-	case err == sql.ErrNoRows:
-		fmt.Println("No existing entry?")
-		// No existing entry, insert a new one with dislike_activity set to 1
-		_, err := db.Exec("INSERT INTO user_activity (user_id, post_id, dislike_activity) VALUES (?, ?, 0)", userID, postID)
-		if err != nil {
-			fmt.Println("error", err)
-			return err
-		}
-	case err != nil:
-		return err
-	default:
-		// There's an existing entry, update it
-		if dislikeActivity {
-			_, err := db.Exec("UPDATE user_activity SET dislike_activity = 0 WHERE user_id = ? AND post_id = ?", userID, postID)
-			if err != nil {
-				fmt.Println("Disiking set to 0")
-				return err
-			}
-		}
-	}
-
-	return nil
-}
-
-func CheckUserActivity(postID int, r *http.Request) (bool, bool) {
-
-	type UserActivity struct {
-		HasLiked    bool
-		HasDisliked bool
-	}
-
-	username := GetUsernameFromCookie(r)
-	user := utils.FindUserByUserName(username)
-
-	db, err := sql.Open("sqlite3", config.LION_DB)
-	if err != nil {
-		fmt.Println("Database error:", err)
-		return false, false
-	}
-	defer db.Close()
-
-	query := "SELECT like_activity, dislike_activity FROM user_activity WHERE user_id = ? AND post_id = ?"
-	row := db.QueryRow(query, user.ID, postID)
-
-	var activity UserActivity
-	err = row.Scan(&activity.HasLiked, &activity.HasDisliked)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			// No activity found for user and post
-			return false, false
-		}
-		fmt.Println("Database error:", err)
-		return false, false
-	}
-
-	// Update HasLiked and HasDisliked based on user activity
-	return activity.HasLiked, activity.HasDisliked
-}
-
-func GetUsernameFromCookie(r *http.Request) string {
-	cookie, err := r.Cookie("session_token")
-	if err != nil {
-		return ""
-	}
-	sessionToken := cookie.Value
-	username, exists := sessionStore[sessionToken]
-	if !exists {
-		return ""
-	}
-	return username
 }

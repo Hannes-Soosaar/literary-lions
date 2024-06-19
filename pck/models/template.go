@@ -15,8 +15,10 @@ type TemplateData struct {
 	Categories                 []Category
 	PostComments               []PostComment
 	Comments					[]Comment
+	User 						User
 }
 
+//TODO migrate all user data fields to the user struct
 func DefaultTemplateData() TemplateData {
 	return TemplateData{
 		Username:                   "",
@@ -30,6 +32,7 @@ func DefaultTemplateData() TemplateData {
 		AllPosts:                   Posts{},
 		Categories:                 []Category{},
 		PostComments:               []PostComment{},
-		Comments:					[]Comment{} ,				
+		Comments:					[]Comment{} ,
+		User: 						User{},				
 	}
 }

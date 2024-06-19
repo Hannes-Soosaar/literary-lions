@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 )
 
+
 func RenderProfile(w http.ResponseWriter, tmpl string, data interface{}) {
 	template := template.Must(template.ParseFiles(
 		filepath.Join("../../template", "index.html"),

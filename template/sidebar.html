@@ -1,15 +1,12 @@
 {{ define "sidebar"}}
 <div class="sidebar">
 	<h4>Post Categories:</h4>
+
+	{{range .Categories}}
 	<ul>
-		<li>Horror</li>
-		<li>Sci-Fi</li>
-		<li>Action</li>
-		<li>Adventure</li>
-		<li>Romance</li>
-		<li>Kids</li>
-		<li>Miscellaneous</li>
+		<li>{{.Category}}</li>
 	</ul>
+	{{end}}
 
 	{{if .IsLoggedIn}}
 	<h4>Site Navigation:</h4>
@@ -41,6 +38,5 @@
 		<li>Your Posts</li>
 	</ul>
 	{{end}}
-
 </div>
 {{ end }}

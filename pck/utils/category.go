@@ -18,14 +18,13 @@ func GetActiveCategories() []models.Category {
 		log.Fatal(err)
 	}
 	defer db.Close()
-	query := "SELECT * FROM category WHERE active = ?"
+	query := "SELECT * FROM categories WHERE active = ? ORDER BY category ASC" // Used to the the result in ascending order.
 	rows, err := db.Query(query, config.ACTIVE)
 	if err != nil {
 		fmt.Printf("there is an error getting rows %v \n", err)
 		return []models.Category{}
 	}
 	defer rows.Close()
-
 	for rows.Next() {
 		var category models.Category
 		err := rows.Scan(&category.ID, &category.Category, &category.Active, &category.CreatedAt)
@@ -40,7 +39,8 @@ func GetActiveCategories() []models.Category {
 		fmt.Printf("error occurred during rows iteration %v \n", err)
 		return activeCategories
 	}
-
 	return activeCategories
 }
-//TODO CreateCategory
+
+
+//TODO OPTIONAL CreateCategory

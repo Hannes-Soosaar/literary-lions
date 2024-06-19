@@ -6,11 +6,6 @@ Login
 
 Landing page--
 
-
-
-
-
-
 Has user
 Has user roles 
 Has user posts

@@ -20,6 +20,11 @@ func main() {
 	http.HandleFunc("/profile", handle.ProfileHandler)
 	http.HandleFunc("/like/", handle.LikeHandler)
 	http.HandleFunc("/dislike/", handle.DislikeHandler)
+	//TODO handle update profile 
+	//TODO handle filter by category 
+	//TODO handle search by post Title/Content
+	//TODO handle order by post-time 
+	//TODO handle order by category by name
 	err := http.ListenAndServe(config.PORT, nil)
 	if err != nil {
 		fmt.Printf("Error:%s", err)
