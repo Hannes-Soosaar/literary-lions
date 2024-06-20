@@ -47,14 +47,14 @@ func AddActiveUser(user models.User) error {
 	} else if UserWithUserNameExists(user.Username) {
 		err := fmt.Errorf("there is User registered with %s this username, pleas register with another username", user.Username)
 		return err
-	}else {
+	} else {
 		query := "INSERT INTO users (username,email,password,role,created_at,modified_at,active,uuid) VALUES (?,?,?,?,?,?,?,?)"
 		_, err := db.Exec(query, user.Username, user.Email, user.Password, user.Role, user.CreatedAt, user.ModifiedAt, user.Active, user.UUID)
 		if err != nil {
 			err := fmt.Errorf("error adding User: %v, Error: %v", user.Username, err)
 			return err
 		}
-	} 
+	}
 	return err
 }
 
@@ -125,7 +125,7 @@ func AddNewUser(username string, email string, password string) error {
 	}
 	user.UUID = userUuid
 	err = AddActiveUser(user)
-	fmt.Printf("Error from Add ActiveUser %v  \n",err)
+	fmt.Printf("Error from Add ActiveUser %v  \n", err)
 	if err != nil {
 		return err
 	}
@@ -147,7 +147,6 @@ func ValidateUser(userName string, password string) (string, bool, error) {
 	}
 	return uuid, false, nil
 }
-
 func ValidateRegistrationOfUser(userName string, email string) {
 
 }
@@ -160,7 +159,7 @@ func UserWithEmailExists(email string) bool {
 	}
 	defer db.Close()
 	query := `SELECT EXISTS (SELECT 1 FROM users WHERE email = ?);`
-		err = db.QueryRow(query, email).Scan(&exists)
+	err = db.QueryRow(query, email).Scan(&exists)
 	if exists {
 		return true
 	}
@@ -172,8 +171,7 @@ func UserWithEmailExists(email string) bool {
 	return false
 }
 
-
-func UserWithUserNameExists (userName string) bool {
+func UserWithUserNameExists(userName string) bool {
 	var exists bool
 	db, err := sql.Open("sqlite3", config.LION_DB)
 	if err != nil {
@@ -181,7 +179,7 @@ func UserWithUserNameExists (userName string) bool {
 	}
 	defer db.Close()
 	query := `SELECT EXISTS (SELECT 1 FROM users WHERE username = ?);`
-		err = db.QueryRow(query, userName).Scan(&exists)
+	err = db.QueryRow(query, userName).Scan(&exists)
 	if exists {
 		return true
 	}

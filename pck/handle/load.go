@@ -22,7 +22,6 @@ const userContextKey = contextKey("username")
 var sessionStore = map[string]string{} //!if we log out we need to empty this,  too I could login with a copied session ID form the previous login ?
 
 func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
-
 	sessionToken, err := r.Cookie("session_token")
 	isLoggedIn := err == nil && isValidSession(sessionToken.Value)
 	allPosts := utils.RetrieveAllPosts()
@@ -42,14 +41,12 @@ func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-
 	render.RenderLandingPage(w, "index.html", data)
 }
 
 func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	var errorMessage string
 	var successMessage string
-
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid Request method", http.StatusMethodNotAllowed)
 		return
@@ -125,7 +122,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	allPosts := utils.RetrieveAllPosts()
 	data := models.DefaultTemplateData()
 	categories := utils.GetActiveCategories()
-
 	data.Username = username
 	data.User = utils.FindUserByUserName(username)
 	data.Categories = categories
@@ -158,12 +154,14 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	render.RenderLandingPage(w, "index.html", data)
 }
-//TODO Is a Util
+
+// TODO Is a Util
 func isValidSession(sessionToken string) bool {
 	_, isValidSession := sessionStore[sessionToken]
 	return isValidSession
 }
-//TODO need to move to a different file
+
+// TODO need to move to a different file
 func AuthSessionToken(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("session_token")
@@ -215,7 +213,6 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 	data.Username = ctxUsername
 	data.ProfilePage = true
 	data.IsLoggedIn = true
-
 	if isLoggedIn {
 		render.RenderProfile(w, "index.html", data)
 	} else {
