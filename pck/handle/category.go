@@ -1,7 +1,6 @@
 package handle
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -35,7 +34,6 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 	data.IsLoggedIn = isLoggedIn
 	data.ProfilePage = false
 	data.Categories = categories
-	fmt.Println(len(parts))
 	if len(parts) == 2 {
 
 		data.FilteredPosts = utils.FilterPostsByCategoryID(allPosts, categoryID)
