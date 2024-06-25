@@ -1,6 +1,7 @@
 package handle
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -17,6 +18,9 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request", http.StatusBadRequest)
 	}
 	categoryIDstr := parts[1]
+	if len(categoryIDstr) != 1 {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	}
 	categoryID, err := strconv.Atoi(categoryIDstr)
 
 	if err != nil {
@@ -27,13 +31,15 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 	isLoggedIn := err == nil && isValidSession(sessionToken.Value)
 	allPosts := utils.RetrieveAllPosts()
 	categories := utils.GetActiveCategories()
-
+	data := models.DefaultTemplateData()
+	data.IsLoggedIn = isLoggedIn
+	data.ProfilePage = false
+	data.Categories = categories
+	fmt.Println(len(parts))
 	if len(parts) == 2 {
-		data := models.DefaultTemplateData()
-		data.IsLoggedIn = isLoggedIn
-		data.ProfilePage = false
+
 		data.FilteredPosts = utils.FilterPostsByCategoryID(allPosts, categoryID)
-		data.Categories = categories
+
 		if isLoggedIn {
 			if data.Username == "" {
 				data.Username = GetUsernameFromCookie(r)
@@ -46,6 +52,29 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(parts) == 3 {
-		//Send back a template with one post + comments
+
+		postIDstr := parts[2]
+		postID, err := strconv.Atoi(postIDstr)
+		if err != nil {
+			http.Error(w, "Invalid request", http.StatusBadRequest)
+		}
+
+		data.FilteredPosts = utils.FilterPostByID(allPosts, postID)
+		//TODO: Future necessity for showing comments only for single posts
+		//data.ShowComments = true
+
+		if isLoggedIn {
+			if data.Username == "" {
+				data.Username = GetUsernameFromCookie(r)
+				if data.Username == "" {
+					render.RenderCategoryPage(w, "categories.html", data)
+				}
+			}
+		}
+		render.RenderCategoryPage(w, "categories.html", data)
+	}
+
+	if len(parts) > 3 {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}
 }

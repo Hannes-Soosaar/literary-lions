@@ -335,6 +335,11 @@ h4 {
         margin-left: 0;
         width: 100vw;
     }
+
+    .filtered-post {
+        margin-left: 0;
+        width: 100vw;
+    }
 }
 
 @media (max-width: 550px) {
@@ -488,4 +493,19 @@ h4 {
     background-color: rgb(230, 230, 230);
     outline: none;
     border: 2px solid goldenrod;
+}
+
+.filtered-post {
+    padding: 20px;
+    box-sizing: border-box;
+    width: calc(100vw - 400px);
+    margin: auto;
+    margin-left: 200px;
+    margin-top: 0vw;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    word-wrap: break-word;
 }

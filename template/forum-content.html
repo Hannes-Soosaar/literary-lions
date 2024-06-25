@@ -1,7 +1,7 @@
 {{ define "forum-content"}}
 <div class="forum_content">
     {{ range .AllPosts.AllPosts}}
-    <a href="/{{.CategoryID}}/{{.ID}}">
+    <a href="/category/{{.CategoryID}}/{{.ID}}">
         <div class="post-container">
             <h1>{{.Title}}</h1>
             <p>{{.Body}}</p>

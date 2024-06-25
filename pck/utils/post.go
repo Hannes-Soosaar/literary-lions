@@ -48,6 +48,16 @@ func FilterPostsByCategoryID(posts models.Posts, categoryID int) models.Filtered
 	return filteredPosts
 }
 
+func FilterPostByID(posts models.Posts, postID int) models.FilteredPosts {
+	var filteredPost models.FilteredPosts
+	for _, post := range posts.AllPosts {
+		if post.ID == postID {
+			filteredPost.FilteredPosts = append(filteredPost.FilteredPosts, post)
+		}
+	}
+	return filteredPost
+}
+
 func FindPostsByUserName(userID string) models.Posts {
 	//TODO: GetPostFromUser
 	return models.Posts{}
