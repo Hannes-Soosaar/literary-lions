@@ -1,4 +1,4 @@
-<!-- index.html-->
+<!-- categories.html-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,7 +15,7 @@
     {{block "navbar" .}} {{end}}
     <div class="container">
         {{ block "sidebar" . }}{{ end }}
-        {{ block "forum-content" . }}{{ end }}
+        {{ block "filtered-posts" . }}{{ end }}
         {{if .ProfilePage}}
         {{ block "profile" .}}{{ end }}
         {{end}}

@@ -2,7 +2,7 @@
 <nav class="navbar">
 	<div class="logo">
 		<a href="/">
-			<img src="static/images/LionsLogo_Renewed.png" alt="Logo" />
+			<img src="{{ .StaticURL}}/images/LionsLogo_Renewed.png" alt="Logo" />
 		</a>
 		<a href="/">
 			<span class="logo-text"><b>Literary<br />Lions</b></span>
@@ -20,11 +20,11 @@
 		{{if .IsLoggedIn}}
 		<!--<span class="account-icon-text"><b>{{ .Username}}</b></span>-->
 		<a href="#logout">
-			<img src="static/images/AccountImage_53x53.png" alt="Account" />
+			<img src="{{ .StaticURL}}/images/AccountImage_53x53.png" alt="Account" />
 		</a>
 		{{ else }}
 		<a href="#login">
-			<img src="static/images/AccountImage_53x53.png" alt="Account" />
+			<img src="{{ .StaticURL}}/images/AccountImage_53x53.png" alt="Account" />
 		</a>
 		{{ end }}
 	</div>

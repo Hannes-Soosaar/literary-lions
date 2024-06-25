@@ -4,7 +4,9 @@
 
 	{{range .Categories}}
 	<ul>
-		<li>{{.Category}}</li>
+		<a href="/category/{{.ID}}">
+			<li>{{.Category}}</li>
+		</a>
 	</ul>
 	{{end}}
 

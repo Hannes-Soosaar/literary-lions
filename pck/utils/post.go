@@ -38,14 +38,23 @@ func RetrieveAllPosts() models.Posts {
 	return posts
 }
 
+func FilterPostsByCategoryID(posts models.Posts, categoryID int) models.FilteredPosts {
+	var filteredPosts models.FilteredPosts
+	for _, post := range posts.AllPosts {
+		if post.CategoryID == categoryID {
+			filteredPosts.FilteredPosts = append(filteredPosts.FilteredPosts, post)
+		}
+	}
+	return filteredPosts
+}
+
 func FindPostsByUserName(userID string) models.Posts {
-//TODO: GetPostFromUser
+	//TODO: GetPostFromUser
 	return models.Posts{}
 }
 
-
 func FindPostByCategory(categoryName string) models.Posts {
-//TODO: GetPostFromCategory
+	//TODO: GetPostFromCategory
 
 	return models.Posts{}
 }
@@ -54,8 +63,6 @@ func UpdatedComment(commentId int) {
 
 }
 
-
-
 func UpdateEmotes(emote string) {
 	//TODO: GetAllPostLikes
 	//TODO: GetAllPostDislikes no need to implement, if there is a counter you can just
@@ -63,12 +70,9 @@ func UpdateEmotes(emote string) {
 	//TODO: Add dislike and RemoveDisLike
 
 }
-func CreateNewPost(post string, userName string){
-//TODO: AddUserPost
+func CreateNewPost(post string, userName string) {
+	// TODO: AddUserPost
 }
-
-
-
 
 //TODO: FindPostContaining
 

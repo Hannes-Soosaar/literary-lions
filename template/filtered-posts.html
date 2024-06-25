@@ -1,6 +1,6 @@
-{{ define "forum-content"}}
+{{ define "filtered-posts"}}
 <div class="forum_content">
-    {{ range .AllPosts.AllPosts}}
+    {{ range .FilteredPosts.FilteredPosts}}
     <a href="/{{.CategoryID}}/{{.ID}}">
         <div class="post-container">
             <h1>{{.Title}}</h1>

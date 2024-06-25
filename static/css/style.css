@@ -25,6 +25,14 @@ a {
     color: #533ed9;
 }
 
+.post-container a {
+    color: black;
+}
+
+.sidebar a {
+    color: white;
+}
+
 h1 {
     color: #533ed9;
 }
