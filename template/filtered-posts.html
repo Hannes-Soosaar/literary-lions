@@ -17,49 +17,51 @@
             {{end}}
         {{end}}
         {{end}}
-    </a>
+
  <a>
-    <div class="flex-container">
-        <div class="post-likes-dislikes">
-            {{ if $.IsLoggedIn }}
-            <form action="/like/{{.ID}}" method="post">
-                {{ end }}
-                <button type="submit" class="like-icon">
-                    <img src="{{ $.StaticURL}}/images/thumbsup.png" alt="Like" />
-                    <span class="like-number">{{.Likes}}</span>
-                </button>
-            </form>
-            {{ if $.IsLoggedIn }}
-            <form action="/dislike/{{.ID}}" method="post">
-                {{ end }}
-                <button type="submit" class="dislike-icon">
-                    <img src="{{ $.StaticURL}}/images/thumbsdown.png" alt="Dislike" />
-                    <span class="dislike-number">{{.Dislikes}}</span>
-                </button>
-            </form>
+            <div class="flex-container">
+                <div class="post-likes-dislikes">
+                    {{ if $.IsLoggedIn }}
+                    <form action="/like/{{.ID}}" method="post">
+                        {{ end }}
+                        <button type="submit" class="like-icon">
+                            <img src="{{ $.StaticURL}}/images/thumbsup.png" alt="Like" />
+                            <span class="like-number">{{.Likes}}</span>
+                        </button>
+                    </form>
+                    {{ if $.IsLoggedIn }}
+                    <form action="/dislike/{{.ID}}" method="post">
+                        {{ end }}
+                        <button type="submit" class="dislike-icon">
+                            <img src="{{ $.StaticURL}}/images/thumbsdown.png" alt="Dislike" />
+                            <span class="dislike-number">{{.Dislikes}}</span>
+                        </button>
+                    </form>
+
+                </div>
+                {{ if $.IsLoggedIn }}
+                <div class="post-comment-amount">
+                    <a href="#comment">
+                        <div class="comments-icon">
+                            <img src="{{ $.StaticURL}}/images/CommentsIcon.png" alt="CommentsIcon" />
+                            <span class="comments-number">111</span>
+                        </div>
+                    </a>
+                </div>
+                {{end}}
+            </div>
 
         </div>
-         {{ if $.IsLoggedIn }}
-        <div class="post-comment-amount">
-            <a href="#comment">
-                <div class="comments-icon">
-                    <img src="{{ $.StaticURL}}/images/CommentsIcon.png" alt="CommentsIcon" />
-                    <span class="comments-number">111</span>
-                </div>
-            </a>
+        <div id="comment" class="popup">
+            <div class="popup-content">
+                <a href="#" class="close">&times;</a>
+                <form action="/postComment/{{.ID}}/" method="POST">
+                    <input type="text" placeholder="Comment*" id="comment" name="comment" />
+                    <button type="submit">Post</button>
+                </form>
+            </div>
         </div>
-        {{end}}
-    </div>
-</div>
-<div id="comment" class="popup">
-	<div class="popup-content">
-		<a href="#" class="close">&times;</a>
-		<form action="/postComment/{{.ID}}/" method="POST">
-            <input type="text" placeholder="Comment*" id="comment" name="comment" />
-			<button type="submit">Post</button>
-		</form>
-	</div>
-</div>
-<div class="post-container-separator"></div>
-{{end}}
-{{end}}
+    </a>
+    <div class="post-container-separator"></div>
+    {{ end }}
+    {{ end }}

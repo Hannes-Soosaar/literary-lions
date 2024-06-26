@@ -18,6 +18,7 @@ type TemplateData struct {
 	User                       User
 	FilteredPosts              FilteredPosts
 	StaticURL                  string
+	CreatePostPage             bool
 	ShowComments               bool
 }
 
@@ -32,6 +33,7 @@ func DefaultTemplateData() TemplateData {
 		IsLoggedIn:                 false,
 		ProfilePage:                false,
 		MainPage:                   false,
+		CreatePostPage:             false,
 		AllPosts:                   Posts{},
 		Categories:                 []Category{},
 		PostComments:               []PostComment{},

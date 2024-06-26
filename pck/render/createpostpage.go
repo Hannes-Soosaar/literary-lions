@@ -8,7 +8,7 @@ import (
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/utils"
 )
 
-func RenderLandingPage(w http.ResponseWriter, tmpl string, data interface{}) {
+func RenderPostPage(w http.ResponseWriter, tmpl string, data interface{}) {
 	funcMap := template.FuncMap{
 		"add": utils.Add,
 	}
@@ -18,7 +18,7 @@ func RenderLandingPage(w http.ResponseWriter, tmpl string, data interface{}) {
 		filepath.Join("../../template", "head.html"),
 		filepath.Join("../../template", "navbar.html"),
 		filepath.Join("../../template", "sidebar.html"),
-		filepath.Join("../../template", "forum-content.html"),
+		filepath.Join("../../template", "create-post.html"),
 	))
 	err := template.ExecuteTemplate(w, "index.html", data)
 	if err != nil {

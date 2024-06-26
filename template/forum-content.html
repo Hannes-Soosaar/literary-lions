@@ -4,7 +4,20 @@
     <a href="/category/{{.CategoryID}}/{{.ID}}">
         <div class="post-container">
             <h1>{{.Title}}</h1>
-            <p>{{.Body}}</p>       
+            <p>{{.Body}}</p>
+            {{$postID := .ID}}
+            {{$commentCount := 0 }}
+            {{range $.Comments}}
+            {{if eq .PostID $postID}}
+            {{if lt $commentCount 3}}
+            <div>
+                <a>a comment</a>
+                <p>{{.Body}}</p>
+            </div>
+            {{$commentCount = add $commentCount 1}}
+            {{end}}
+            {{end}}
+            {{end}}
     </a>
     <div class="flex-container">
         <div class="post-likes-dislikes">
@@ -39,13 +52,13 @@
     </div>
 </div>
 <div id="comment" class="popup">
-	<div class="popup-content">
-		<a href="#" class="close">&times;</a>
-		<form action="/postComment/{{.ID}}/" method="POST">
+    <div class="popup-content">
+        <a href="#" class="close">&times;</a>
+        <form action="/postComment/{{.ID}}/" method="POST">
             <input type="text" placeholder="Comment*" id="comment" name="comment" />
-			<button type="submit">Post</button>
-		</form>
-	</div>
+            <button type="submit">Post</button>
+        </form>
+    </div>
 </div>
 <div class="post-container-separator"></div>
 {{ end }}

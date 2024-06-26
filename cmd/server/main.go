@@ -22,6 +22,7 @@ func main() {
 	http.HandleFunc("/dislike/", handle.DislikeHandler)
 	http.HandleFunc("/category/", handle.CategoryHandler)
 	http.HandleFunc("/postComment/", handle.CommentHandler)
+	http.HandleFunc("/create-post", handle.CreatePostHandler)
 
 	//TODO handle update profile
 	//TODO handle filter by category

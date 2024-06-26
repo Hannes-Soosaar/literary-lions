@@ -19,7 +19,9 @@
         {{if .ProfilePage}}
         {{ block "profile" .}}{{ end }}
         {{end}}
-
+        {{if .CreatePostPage}}
+        {{block "create-post" .}}{{end}}
+        {{end}}
     </div>
 
     {{ if .ErrorMessage }}
