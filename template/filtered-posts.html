@@ -1,11 +1,24 @@
 {{ define "filtered-posts"}}
 <div class="filtered-post">
+
     {{ range .FilteredPosts.FilteredPosts}}
     <a href="/category/{{.CategoryID}}/{{.ID}}">
         <div class="post-container">
             <h1>{{.Title}}</h1>
             <p>{{.Body}}</p>
+            <a>{{$.ShowComments}}</a>
+        {{if $.ShowComments}}    
+        {{$postID := .ID}}
+        {{range $.Comments}}
+            {{if eq .PostID $postID}}
+                <div>
+                    <h2>{{.Body}}</h2>
+                </div>
+            {{end}}
+        {{end}}
+        {{end}}
     </a>
+ <a>
     <div class="flex-container">
         <div class="post-likes-dislikes">
             {{ if $.IsLoggedIn }}
@@ -48,5 +61,5 @@
 	</div>
 </div>
 <div class="post-container-separator"></div>
-{{ end }}
-{{ end }}
+{{end}}
+{{end}}

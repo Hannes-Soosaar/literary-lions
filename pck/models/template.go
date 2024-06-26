@@ -18,6 +18,7 @@ type TemplateData struct {
 	User                       User
 	FilteredPosts              FilteredPosts
 	StaticURL                  string
+	ShowComments               bool
 }
 
 // TODO migrate all user data fields to the user struct
@@ -38,5 +39,6 @@ func DefaultTemplateData() TemplateData {
 		User:                       User{},
 		FilteredPosts:              FilteredPosts{},
 		StaticURL:                  "http://localhost:8082/static",
+		ShowComments:               false,
 	}
 }

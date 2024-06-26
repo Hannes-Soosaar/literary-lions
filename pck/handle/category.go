@@ -31,6 +31,8 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 	allPosts := utils.RetrieveAllPosts()
 	categories := utils.GetActiveCategories()
 	data := models.DefaultTemplateData()
+	comments := utils.GetActiveComments()
+	data.Comments = comments
 	data.IsLoggedIn = isLoggedIn
 	data.ProfilePage = false
 	data.Categories = categories
@@ -56,11 +58,8 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(w, "Invalid request", http.StatusBadRequest)
 		}
-
 		data.FilteredPosts = utils.FilterPostByID(allPosts, postID)
-		//TODO: Future necessity for showing comments only for single posts
-		//data.ShowComments = true
-
+		data.ShowComments = true
 		if isLoggedIn {
 			if data.Username == "" {
 				data.Username = GetUsernameFromCookie(r)
@@ -71,7 +70,6 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		render.RenderCategoryPage(w, "categories.html", data)
 	}
-
 	if len(parts) > 3 {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}
