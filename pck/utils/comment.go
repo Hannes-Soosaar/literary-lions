@@ -12,8 +12,7 @@ import (
 //TODO: GetCommentsForPost
 //TODO: GetCommentsContaining
 
-
-//? HANDLED also with html template logic for all comments.
+// ? HANDLED also with html template logic for all comments.
 func GetActivePostComments(postId int) []models.Comment {
 	var activeComments []models.Comment
 	db, err := sql.Open("sqlite3", config.LION_DB)
@@ -106,25 +105,25 @@ func GetActiveUserComments(userId int) []models.Comment {
 	return activeComments
 }
 
-func PostComment(userId string, comment string, postId string) error{
+func PostComment(userId string, comment string, postId string) error {
+	_, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// _ := "INSERT INTO comments (username,email,password,role,created_at,modified_at,active,uuid) VALUES (?,?,?,?,?,?,?,?)"
 
 
-
-
-
-return nil
+	return nil
 }
 
-func LikeComment(commentID int){
+func LikeComment(commentID int) {
 
 }
 
-func DislikeComment(commentID int){
+func DislikeComment(commentID int) {
 
 }
 
 func RemoveComment(commentID int) {
 
 }
-
-
