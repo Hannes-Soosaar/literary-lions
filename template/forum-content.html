@@ -35,6 +35,7 @@
             </form>
 
         </div>
+        {{ if $.IsLoggedIn }}
         <div class="post-comment-amount">
             <a href="#comment">
                 <div class="comments-icon">
@@ -43,6 +44,7 @@
                 </div>
             </a>
         </div>
+        {{end}}
     </div>
 </div>
 <div id="comment" class="popup">
