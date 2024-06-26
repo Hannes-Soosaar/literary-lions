@@ -18,6 +18,7 @@ type TemplateData struct {
 	User                       User
 	FilteredPosts              FilteredPosts
 	StaticURL                  string
+	CreatePostPage             bool
 }
 
 // TODO migrate all user data fields to the user struct
@@ -31,6 +32,7 @@ func DefaultTemplateData() TemplateData {
 		IsLoggedIn:                 false,
 		ProfilePage:                false,
 		MainPage:                   false,
+		CreatePostPage:             false,
 		AllPosts:                   Posts{},
 		Categories:                 []Category{},
 		PostComments:               []PostComment{},

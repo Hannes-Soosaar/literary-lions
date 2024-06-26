@@ -38,6 +38,17 @@
 			{{ end }}
 		</a>
 		<li>Your Posts</li>
+		<a href="/create-post">
+			{{ if .CreatePostPage }}
+			<div class="sidebar-focused">
+				<li><b>Create Post</b></li>
+			</div>
+			{{ else }}
+			<div class="sidebar-unfocused">
+				<li>Create Post</li>
+			</div>
+			{{ end }}
+		</a>
 	</ul>
 	{{end}}
 </div>
