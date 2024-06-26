@@ -26,12 +26,13 @@ func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 	isLoggedIn := err == nil && isValidSession(sessionToken.Value)
 	allPosts := utils.RetrieveAllPosts()
 	categories := utils.GetActiveCategories()
-	// creates a new empty data model
+	comments := utils.GetActiveComments()
 	data := models.DefaultTemplateData()
 	data.IsLoggedIn = isLoggedIn
 	data.MainPage = true
 	data.ProfilePage = false
 	data.AllPosts = allPosts
+	data.Comments = comments
 	data.Categories = categories
 	if isLoggedIn {
 		if data.Username == "" {
@@ -122,6 +123,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	allPosts := utils.RetrieveAllPosts()
 	data := models.DefaultTemplateData()
 	categories := utils.GetActiveCategories()
+	comments := utils.GetActiveComments()
+	data.Comments = comments
 	data.Username = username
 	data.User = utils.FindUserByUserName(username)
 	data.Categories = categories
@@ -207,6 +210,9 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 	data := models.DefaultTemplateData()
 	user := utils.FindUserByUserName(username)
 	categories := utils.GetActiveCategories()
+	comments := utils.GetActiveComments()
+	data.Comments = comments
+	fmt.Printf( "All comments, %v \n ", data.Comments)
 	data.Categories = categories
 	data.User = user
 	data.Categories = categories
@@ -328,3 +334,5 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 	referer := r.Header.Get("Referer")
 	http.Redirect(w, r, referer, http.StatusSeeOther)
 }
+
+

@@ -5,6 +5,15 @@
         <div class="post-container">
             <h1>{{.Title}}</h1>
             <p>{{.Body}}</p>
+            {{$postID := .ID}}
+            {{range $.Comments}}
+                {{if eq .PostID $postID}}
+                <div>
+                    <a>a comment</a>
+                    <p>{{.Body}}</p>
+                </div>
+            {{end}}
+        {{end}}
     </a>
     <div class="flex-container">
         <div class="post-likes-dislikes">
@@ -27,7 +36,7 @@
 
         </div>
         <div class="post-comment-amount">
-            <a href="">
+            <a href="#comment">
                 <div class="comments-icon">
                     <img src="{{ $.StaticURL}}/images/CommentsIcon.png" alt="CommentsIcon" />
                     <span class="comments-number">111</span>
@@ -35,6 +44,15 @@
             </a>
         </div>
     </div>
+</div>
+<div id="comment" class="popup">
+	<div class="popup-content">
+		<a href="#" class="close">&times;</a>
+		<form action="/postComment/{{.ID}}/" method="POST">
+            <input type="text" placeholder="Comment*" id="comment" name="comment" />
+			<button type="submit">Post</button>
+		</form>
+	</div>
 </div>
 <div class="post-container-separator"></div>
 {{ end }}

@@ -77,7 +77,7 @@ func InactiveActiveUser(user models.User) error {
 	return nil
 }
 
-// Admin level function
+// TODO: Admin level function 
 func ActivateUser(user models.User) error {
 	db, err := sql.Open("sqlite3", config.LION_DB)
 	if err != nil {
@@ -147,6 +147,7 @@ func ValidateUser(userName string, password string) (string, bool, error) {
 	}
 	return uuid, false, nil
 }
+
 func ValidateRegistrationOfUser(userName string, email string) {
 
 }
@@ -191,4 +192,4 @@ func UserWithUserNameExists(userName string) bool {
 	return false
 }
 
-//TODO: updateUser
+//TODO: OPTIONAL  updateUser
