@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"gitea.kood.tech/hannessoosaar/literary-lions/intenal/config"
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/models"
@@ -42,12 +43,67 @@ func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
 	data.Username = ctxUsername
 	data.CreatePostPage = true
 	data.IsLoggedIn = true
+	data.Title = "Create Post"
+
 	if isLoggedIn {
 		render.RenderPostPage(w, "index.html", data)
 	} else {
 		data.ErrorMessage = "You need to be logged in to access your profile!"
 		render.RenderLandingPage(w, "index.html", data)
 	}
+}
+
+func SubmitPostHandler(w http.ResponseWriter, r *http.Request) {
+
+	cookie, err := r.Cookie("session_token")
+	if err != nil {
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+	sessionToken := cookie.Value
+	username, exists := sessionStore[sessionToken]
+	if !exists {
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+
+	user := utils.FindUserByUserName(username)
+
+	if r.Method != http.MethodPost {
+		http.Error(w, "Invalid Request method", http.StatusMethodNotAllowed)
+		return
+	} else {
+		err := r.ParseForm()
+		if err != nil {
+			http.Error(w, "Failed to parse form data", http.StatusBadRequest)
+			return
+		}
+	}
+
+	userID := user.ID
+	categoryIDstr := r.Form.Get("category")
+	categoryID, err := strconv.Atoi(categoryIDstr)
+	if err != nil {
+		http.Error(w, "Invalid category ID", http.StatusBadRequest)
+		return
+	}
+	title := r.Form.Get("title")
+	body := r.Form.Get("body")
+	err = utils.AddNewPost(categoryID, title, body, userID)
+
+	if err != nil {
+		http.Error(w, "Error creating post", http.StatusBadRequest)
+	}
+
+	data := models.DefaultTemplateData()
+	data.PostCreatedMessage = "Post was created successfully!"
+	categories := utils.GetActiveCategories()
+	data.Categories = categories
+	data.User = user
+	data.Username = user.Username
+	data.CreatePostPage = true
+	data.IsLoggedIn = true
+	render.RenderPostPage(w, "index.html", data)
 }
 
 func MarkPostAsLiked(userID, postID int) error {

@@ -39,16 +39,21 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 	if len(parts) == 2 {
 
 		data.FilteredPosts = utils.FilterPostsByCategoryID(allPosts, categoryID)
-
+		for _, cat := range data.Categories {
+			if cat.ID == categoryID {
+				data.Title = cat.Category
+			}
+		}
+		data.ShowComments = false
 		if isLoggedIn {
 			if data.Username == "" {
 				data.Username = GetUsernameFromCookie(r)
 				if data.Username == "" {
-					render.RenderCategoryPage(w, "categories.html", data)
+					render.RenderCategoryPage(w, "category-filtered-posts.html", data)
 				}
 			}
 		}
-		render.RenderCategoryPage(w, "categories.html", data)
+		render.RenderCategoryPage(w, "category-filtered-posts.html", data)
 	}
 
 	if len(parts) == 3 {
@@ -64,11 +69,11 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 			if data.Username == "" {
 				data.Username = GetUsernameFromCookie(r)
 				if data.Username == "" {
-					render.RenderCategoryPage(w, "categories.html", data)
+					render.RenderCategoryPage(w, "filtered-posts.html", data)
 				}
 			}
 		}
-		render.RenderCategoryPage(w, "categories.html", data)
+		render.RenderCategoryPage(w, "filtered-posts.html", data)
 	}
 	if len(parts) > 3 {
 		http.Redirect(w, r, "/", http.StatusSeeOther)

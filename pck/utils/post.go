@@ -9,6 +9,27 @@ import (
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/models"
 )
 
+func AddNewPost(categoryID int, title string, body string, userID int) error {
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		fmt.Println("error opening DB", err)
+		return err
+	}
+	defer db.Close()
+	statement, err := db.Prepare("INSERT INTO posts(title, body, likes, dislikes, user_id, category_id, created_at, modified_at, active) VALUES (?, ?, 0, 0, ?, ?, datetime('now'), datetime('now'), 1)")
+	if err != nil {
+		return err
+	}
+	defer statement.Close()
+
+	_, err = statement.Exec(title, body, userID, categoryID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func RetrieveAllPosts() models.Posts {
 	var posts models.Posts
 	db, err := sql.Open("sqlite3", config.LION_DB)

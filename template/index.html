@@ -15,7 +15,9 @@
     {{block "navbar" .}} {{end}}
     <div class="container">
         {{ block "sidebar" . }}{{ end }}
+        {{ if .MainPage}}
         {{ block "forum-content" . }}{{ end }}
+        {{end}}
         {{if .ProfilePage}}
         {{ block "profile" .}}{{ end }}
         {{end}}

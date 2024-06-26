@@ -535,6 +535,7 @@ h4 {
 .form-group input[type="text"],
 textarea {
     width: 40%;
+    min-width: 400px;
     padding: 0.5rem;
     background: whitesmoke;
     border: 2px solid goldenrod;

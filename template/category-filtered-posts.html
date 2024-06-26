@@ -53,25 +53,5 @@
         </div>
     </a>
 
-    <div class="post-container-separator">
-        <h1>Comments</h1>
-    </div>
-    <br>
-    <br>
-    <br>
-
-    {{if $.ShowComments}}
-    <div class="comment-container">
-        {{$postID := .ID}}
-        {{range $.Comments}}
-        {{if eq .PostID $postID}}
-        {{.Body}}
-        <div class="post-container-separator"></div>
-        <br>
-        {{end}}
-        {{end}}
-        {{end}}
-    </div>
-
     {{ end }}
     {{ end }}

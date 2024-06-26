@@ -23,6 +23,7 @@ func main() {
 	http.HandleFunc("/category/", handle.CategoryHandler)
 	http.HandleFunc("/postComment/", handle.CommentHandler)
 	http.HandleFunc("/create-post", handle.CreatePostHandler)
+	http.HandleFunc("/submit-post", handle.SubmitPostHandler)
 
 	//TODO handle update profile
 	//TODO handle filter by category

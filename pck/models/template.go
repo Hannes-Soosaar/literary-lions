@@ -20,6 +20,7 @@ type TemplateData struct {
 	StaticURL                  string
 	CreatePostPage             bool
 	ShowComments               bool
+	PostCreatedMessage         string
 }
 
 // TODO migrate all user data fields to the user struct
@@ -42,5 +43,6 @@ func DefaultTemplateData() TemplateData {
 		FilteredPosts:              FilteredPosts{},
 		StaticURL:                  "http://localhost:8082/static",
 		ShowComments:               false,
+		PostCreatedMessage:         "",
 	}
 }

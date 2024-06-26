@@ -10,14 +10,14 @@ import (
 
 func RenderCategoryPage(w http.ResponseWriter, tmpl string, data interface{}) {
 	funcMap := template.FuncMap{
-        "add": utils.Add,
-    }
+		"add": utils.Add,
+	}
 	template := template.Must(template.New("categories.html").Funcs(funcMap).ParseFiles(
 		filepath.Join("../../template", "categories.html"),
 		filepath.Join("../../template", "head.html"),
 		filepath.Join("../../template", "navbar.html"),
 		filepath.Join("../../template", "sidebar.html"),
-		filepath.Join("../../template", "filtered-posts.html"),
+		filepath.Join("../../template", tmpl),
 	))
 	err := template.ExecuteTemplate(w, "categories.html", data)
 	if err != nil {
