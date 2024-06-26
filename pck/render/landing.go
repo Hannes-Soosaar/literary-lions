@@ -5,10 +5,15 @@ import (
 	"net/http"
 	"path/filepath"
 
+	"gitea.kood.tech/hannessoosaar/literary-lions/pck/utils"
 )
 
 func RenderLandingPage(w http.ResponseWriter, tmpl string, data interface{}) {
-	template := template.Must(template.ParseFiles(
+		funcMap := template.FuncMap{
+        "add": utils.Add,
+    }
+	
+	template := template.Must(template.New("categories.html").Funcs(funcMap).ParseFiles(
 		filepath.Join("../../template", "index.html"),
 		filepath.Join("../../template", "head.html"),
 		filepath.Join("../../template", "navbar.html"),

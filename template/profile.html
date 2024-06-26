@@ -1,16 +1,22 @@
 {{ define "profile" }}
 <div class="profile-container">
-	<h1>This is your profile! WIP</h1>
+	<h1>Welcome {{.User username}}</h1>
+	
 	<a>
-		<div>USER NAME: {{ .User.Username}}</div>
-		
-
+		<form class="update_form" action="/" method="POST" >
+		<input type="text" placeholder="{{ .User.Email}}"/>
 		<div>EMAIL: {{ .User.Email}}</div>
 		<div>ROLE: {{ .User.Role}}</div>
 		<p>ACCOUNT STATUS: {{ .User.Active}}</p>
-		<p>ID: {{ .User.UUID}}</p>
 		<p>ACCOUNT CREATED ON: {{ .User.CreatedAt}}</p>
 		<p>ACCOUNT MODIFIED ON: {{ .User.ModifiedAt}}</p>
+
+
+		<input type="text" placeholder="Search..." />
+		<form >
+			<button type="submit"><b>updateProfile</b></button>
+		</form>
+	</form>
 	</a>
 </div>
 {{end}}
