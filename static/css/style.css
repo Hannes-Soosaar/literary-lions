@@ -145,11 +145,12 @@ h4 {
 }
 
 .post-container-separator {
-    width: calc(37% - 30px);
+    width: calc(37% - 50px);
     min-width: 400px;
     height: 1px;
     background-color: gray;
     margin: 5px 0;
+    text-align: left;
 }
 
 .navbar {
@@ -582,4 +583,16 @@ textarea:focus {
     outline: none;
     border: 2px solid goldenrod;
     background-color: rgb(230, 230, 230);
+}
+
+.comment-container {
+    width: calc(37% - 30px);
+    min-width: 400px;
+    margin: 20px;
+    height: auto;
+    border-width: 3px;
+    border-radius: 15px;
+    box-sizing: border-box;
+    text-align: left;
+    border: 10px solid transparent;
 }
