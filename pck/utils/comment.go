@@ -13,7 +13,7 @@ import (
 //TODO: GetCommentsContaining
 
 
-
+//? HANDLED also with html template logic for all comments.
 func GetActivePostComments(postId int) []models.Comment {
 	var activeComments []models.Comment
 	db, err := sql.Open("sqlite3", config.LION_DB)
@@ -108,6 +108,23 @@ func GetActiveUserComments(userId int) []models.Comment {
 
 func PostComment(userId string, comment string, postId string) error{
 
+
+
+
+
 return nil
 }
+
+func LikeComment(commentID int){
+
+}
+
+func DislikeComment(commentID int){
+
+}
+
+func RemoveComment(commentID int) {
+
+}
+
 

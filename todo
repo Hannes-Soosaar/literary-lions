@@ -19,16 +19,17 @@ DONE: Multiple browser sessions function correctly.
 DONE: Users have access to profile pages.
 DONE: Only registered users can like or dislike posts and comments.
 DONE: Posts cannot be liked and disliked simultaneously. // Try to handle on the FE if session if session id has done a POST... to the /like or /dislike handler don't let it be done again.
+DONE: Posts can be filtered by category. // the category menu on the left
+DONE: Posts can be associated with categories.
 
-
+VERIFY: The number of likes and dislikes is displayed and updated correctly. // Each post has the like dislike count
 
 ---Posts,likes and comments---
-TODO: Only registered users can create posts and comments.
-TODO: Empty posts and comments are not allowed.
+TODO: Only registered users can create  comments.
+TODO: Only registered users can create posts.
+TODO: Empty posts  are not allowed.
+TODO: Empty comments are not allowed.
 TODO: The number of likes and dislikes for comments is visible to all users. // a section is added to the 
-TODO: Posts can be filtered by category.
-TODO: Posts can be associated with categories.
-TODO: The number of likes and dislikes is displayed and updated correctly. // Each post has the like dislike count
 TODO: Registered users can view their created posts and liked posts. // each post has a user_id ref
 
 ---Server
@@ -40,21 +41,23 @@ TODO: The server uses appropriate HTTP response codes, 2XX, 4XX.
 TODO: The interface handles 5XX HTTP response codes gracefully.
 
 --- User friendliness---
-TODO: It is easy to respond to posts and comments.
+TODO: It is easy to respond to posts.
+TODO: It is easy to respond to comments.
 TODO: Categories are effective in organising discussions.
 TODO: Content has intuitive filtering.
 TODO: Error messages are informative and user-friendly.
 TODO: SQL queries are effective and efficient.
-TODO: The registration process is user-friendly and secure.
+TODO: The registration process is user-friendly.
+TODO: The registration process is  secure.
 TODO: The interface is clear, well set out and navigable.
 TODO: Design
-
 
 ---DOCKER---
 TODO: A Dockerfile is present in the project.
 TODO: A Docker image can be built successfully using the Dockerfile.
 TODO: The container runs successfully using the created image.
 TODO: The project has no unused Docker objects.
+
 --- FUNCTIONALITY ---
-TODO: The project has other bonus features that are not listed in the bonus part.
-TODO: Search functionality is implemented, with advanced search options.
+TODO: The project has other bonus features that are not listed in the bonus part. // update user
+TODO: Search functionality is implemented, with advanced search options. // search by body content
