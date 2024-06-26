@@ -5,19 +5,7 @@
         <div class="post-container">
             <h1>{{.Title}}</h1>
             <p>{{.Body}}</p>
-            {{$postID := .ID}}
-            {{$commentCount := 0 }}
-            {{range $.Comments}}
-            {{if eq .PostID $postID}}
-            {{if lt $commentCount 3}}
-            <div>
-                <a>a comment</a>
-                <p>{{.Body}}</p>
-            </div>
-            {{$commentCount = add $commentCount 1}}
-            {{end}}
-            {{end}}
-            {{end}}
+
     </a>
     <div class="flex-container">
         <div class="post-likes-dislikes">
