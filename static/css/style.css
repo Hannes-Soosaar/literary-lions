@@ -266,6 +266,7 @@ h4 {
     box-sizing: border-box;
     width: calc(100vw - 400px);
     margin: auto;
+    margin-top: 0vw;
     margin-left: 200px;
     text-align: center;
 }
@@ -508,4 +509,77 @@ h4 {
     justify-content: center;
     align-items: center;
     word-wrap: break-word;
+}
+
+.create-post-container {
+    height: 500px;
+    padding: 20px;
+    box-sizing: border-box;
+    width: calc(100vw - 400px);
+    min-width: 400px;
+    margin: auto;
+    margin-top: 0vw;
+    margin-left: 200px;
+    text-align: center;
+}
+
+.create-post-container h4 {
+    color: black;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group input[type="text"],
+textarea {
+    width: 40%;
+    padding: 0.5rem;
+    background: whitesmoke;
+    border: 2px solid goldenrod;
+    border-radius: 15px;
+    box-sizing: border-box;
+    resize: vertical;
+    overflow: auto;
+    height: auto;
+}
+
+.form-group textarea {
+    min-height: 150px;
+}
+
+.form-group select {
+    width: 100px;
+    height: 25px;
+    text-align: center;
+    background: whitesmoke;
+    border: 2px solid goldenrod;
+    border-radius: 15px;
+    font-weight: bold;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.create-post-container button {
+    background: whitesmoke;
+    border: 2px solid goldenrod;
+    border-radius: 15px;
+    height: 39px;
+    width: 100px;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.create-post-container button:hover {
+    background: rgb(230, 230, 230);
+    cursor: pointer;
+}
+
+.form-group input[type="text"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border: 2px solid goldenrod;
+    background-color: rgb(230, 230, 230);
 }
