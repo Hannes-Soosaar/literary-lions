@@ -105,7 +105,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 		}
-		sessionToken, err := utils.GenerateUUID()
+		sessionToken := uuid // Made it so the session has the same uuid as the user.
 		if err != nil {
 			errorMessage = errorMessage + " Failed to generate UUID"
 		}
@@ -120,6 +120,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		uuid = ""
 		errorMessage = "Not a valid user!"
 	}
+
 	allPosts := utils.RetrieveAllPosts()
 	data := models.DefaultTemplateData()
 	categories := utils.GetActiveCategories()
@@ -145,6 +146,8 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		Expires: time.Now().Add(-1 * time.Hour),
 		Path:    "/",
 	})
+
+	//TODO need to restart the sessionStore
 	allPosts := utils.RetrieveAllPosts() //! RenamedToGet  use GET if you are certain you will get data and use FIND if you are not sure if the data exists.
 	data := models.DefaultTemplateData()
 	data.Title = "Logout"

@@ -106,5 +106,3 @@ func CreateNewPost(post string, userName string) {
 }
 
 //TODO: FindPostContaining
-
-//? which rout should we go.

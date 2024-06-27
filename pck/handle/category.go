@@ -36,6 +36,8 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 	data.IsLoggedIn = isLoggedIn
 	data.ProfilePage = false
 	data.Categories = categories
+	data.ShowComments = false
+	
 	if len(parts) == 2 {
 
 		data.FilteredPosts = utils.FilterPostsByCategoryID(allPosts, categoryID)

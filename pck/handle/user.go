@@ -50,7 +50,7 @@ func GetUsernameFromCookie(r *http.Request) string {
 		return ""
 	}
 	sessionToken := cookie.Value
-	username, exists := sessionStore[sessionToken]
+	username, exists := sessionStore[sessionToken] //!The session storage is funky
 	if !exists {
 		return ""
 	}

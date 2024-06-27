@@ -94,10 +94,10 @@ func FindUserByUUID(userUuid string) models.User {
 		fmt.Println("error opening DB", err)
 	}
 	defer db.Close()
-	query := "SELECT id,username,email,password,role,created_at,modified_at,active,uuid FROM users  WHERE username = ?" // can be simplified with using * instead of specfing the columns
+	query := "SELECT id,username,email,password,role,created_at,modified_at,active,uuid FROM users  WHERE uuid = ?" // can be simplified with using * instead of specfing the columns
 	row := db.QueryRow(query, userUuid)
 	var user models.User
-	err = row.Scan(&user.ID, &user.Username, &user.Email, &user.Role, &user.Password, &user.Role, &user.CreatedAt, &user.ModifiedAt, &user.Active, &user.UUID)
+	err = row.Scan(&user.ID, &user.Username, &user.Email,&user.Password, &user.Role, &user.CreatedAt, &user.ModifiedAt, &user.Active, &user.UUID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			fmt.Printf("There is no user with the UUID  %s, was not found \n", userUuid)

@@ -21,14 +21,17 @@ DONE: Only registered users can like or dislike posts and comments.
 DONE: Posts cannot be liked and disliked simultaneously. // Try to handle on the FE if session if session id has done a POST... to the /like or /dislike handler don't let it be done again.
 DONE: Posts can be filtered by category. // the category menu on the left
 DONE: Posts can be associated with categories.
+DONE: Only registered users can create posts.
 
 VERIFY: The number of likes and dislikes is displayed and updated correctly. // Each post has the like dislike count
 
+
 ---Posts,likes and comments---
 TODO: Only registered users can create  comments.
-TODO: Only registered users can create posts.
+
 TODO: Empty posts  are not allowed.
 TODO: Empty comments are not allowed.
+
 TODO: The number of likes and dislikes for comments is visible to all users. // a section is added to the 
 TODO: Registered users can view their created posts and liked posts. // each post has a user_id ref
 
