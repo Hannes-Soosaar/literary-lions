@@ -22,15 +22,14 @@ DONE: Posts cannot be liked and disliked simultaneously. // Try to handle on the
 DONE: Posts can be filtered by category. // the category menu on the left
 DONE: Posts can be associated with categories.
 DONE: Only registered users can create posts.
+DONE:Only registered users can create  comments.
+DONE: Empty posts  are not allowed.
+DONE: Empty comments are not allowed.
 
 VERIFY: The number of likes and dislikes is displayed and updated correctly. // Each post has the like dislike count
 
 
 ---Posts,likes and comments---
-TODO: Only registered users can create  comments.
-
-TODO: Empty posts  are not allowed.
-TODO: Empty comments are not allowed.
 
 TODO: The number of likes and dislikes for comments is visible to all users. // a section is added to the 
 TODO: Registered users can view their created posts and liked posts. // each post has a user_id ref
@@ -54,6 +53,7 @@ TODO: The registration process is user-friendly.
 TODO: The registration process is  secure.
 TODO: The interface is clear, well set out and navigable.
 TODO: Design
+TODO: Get all queries back sorted by the latest post
 
 ---DOCKER---
 TODO: A Dockerfile is present in the project.
@@ -62,5 +62,12 @@ TODO: The container runs successfully using the created image.
 TODO: The project has no unused Docker objects.
 
 --- FUNCTIONALITY ---
-TODO: The project has other bonus features that are not listed in the bonus part. // update user
+TODO: The project has other bonus features that are not listed in the bonus part.
+    TODO: Extras update user profile
+    TODO: Get all queries back sorted by the latest post
+
+
 TODO: Search functionality is implemented, with advanced search options. // search by body content
+
+
+
