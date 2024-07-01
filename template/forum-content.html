@@ -1,5 +1,10 @@
 {{ define "forum-content"}}
 <div class="forum_content">
+    {{if .QueryNoResult}}
+    <div class="post-container-message">
+        <h1>{{.QueryNoResult}}</h1>
+    </div>
+    {{end}}
     {{ range .AllPosts.AllPosts}}
     <a href="/category/{{.CategoryID}}/{{.ID}}">
         <div class="post-container">

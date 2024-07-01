@@ -22,6 +22,7 @@ type TemplateData struct {
 	ShowComments               bool
 	PostCreatedMessage         string
 	DisplayCatID               int
+	QueryNoResult              string
 }
 
 // TODO migrate all user data fields to the user struct
@@ -46,5 +47,6 @@ func DefaultTemplateData() TemplateData {
 		ShowComments:               false,
 		PostCreatedMessage:         "",
 		DisplayCatID:               0,
+		QueryNoResult:              "",
 	}
 }

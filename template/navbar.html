@@ -8,12 +8,17 @@
 			<span class="logo-text"><b>Literary<br />Lions</b></span>
 		</a>
 	</div>
-	{{ if not .ProfilePage}}
-	<form class="search-form">
-		<input type="text" placeholder="Search..." />
-		<form action="/search" method="GET">
-			<button type="submit"><b>Search</b></button>
-		</form>
+	{{ if .MainPage}}
+	<form class="search-form" action="/search" method="GET">
+		<select id="filter-type" name="filter-type">
+			<option value="keyword" selected>No filter</option>
+			<option value="likes">Likes</option>
+			<option value="dislikes">Dislikes</option>
+			<option value="time_new">Newest</option>
+			<option value="time_old">Oldest</option>
+		</select>
+		<input type="text" name="search-query" placeholder="Search..." />
+		<button type="submit"><b>Search</b></button>
 	</form>
 	{{ end }}
 	<div class="account-icon">
