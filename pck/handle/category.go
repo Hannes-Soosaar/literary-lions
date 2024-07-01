@@ -37,7 +37,7 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 	data.ProfilePage = false
 	data.Categories = categories
 	data.ShowComments = false
-	
+
 	if len(parts) == 2 {
 
 		data.FilteredPosts = utils.FilterPostsByCategoryID(allPosts, categoryID)
@@ -47,6 +47,7 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		data.ShowComments = false
+		data.DisplayCatID = categoryID
 		if isLoggedIn {
 			if data.Username == "" {
 				data.Username = GetUsernameFromCookie(r)
@@ -59,7 +60,7 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(parts) == 3 {
-
+		data.DisplayCatID = categoryID
 		postIDstr := parts[2]
 		postID, err := strconv.Atoi(postIDstr)
 		if err != nil {

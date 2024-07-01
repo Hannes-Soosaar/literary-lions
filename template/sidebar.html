@@ -1,15 +1,26 @@
 {{ define "sidebar"}}
 <div class="sidebar">
 	<h4>Post Categories:</h4>
-
-	{{range .Categories}}
 	<ul>
-		<a href="/category/{{.ID}}">
-			<li>{{.Category}}</li>
-		</a>
-	</ul>
-	{{end}}
+		{{range .Categories}}
 
+		<a href="/category/{{.ID}}">
+			{{ if eq .ID $.DisplayCatID}}
+			<div class="sidebar-focused">
+				<li><b>{{.Category}}</b></li>
+			</div>
+			{{else}}
+			<div class="sidebar-unfocused">
+				<li>{{.Category}}</li>
+			</div>
+			{{end}}
+			<div class="sidebar-border">
+
+			</div>
+		</a>
+
+		{{end}}
+	</ul>
 	{{if .IsLoggedIn}}
 	<h4>Site Navigation:</h4>
 
@@ -25,7 +36,9 @@
 			</div>
 			{{ end }}
 		</a>
+		<div class="sidebar-border">
 
+		</div>
 		<a href="/profile">
 			{{ if .ProfilePage }}
 			<div class="sidebar-focused">
@@ -37,7 +50,13 @@
 			</div>
 			{{ end }}
 		</a>
+		<div class="sidebar-border">
+
+		</div>
 		<li>Your Posts</li>
+		<div class="sidebar-border">
+
+		</div>
 		<a href="/create-post">
 			{{ if .CreatePostPage }}
 			<div class="sidebar-focused">

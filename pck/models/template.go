@@ -21,6 +21,7 @@ type TemplateData struct {
 	CreatePostPage             bool
 	ShowComments               bool
 	PostCreatedMessage         string
+	DisplayCatID               int
 }
 
 // TODO migrate all user data fields to the user struct
@@ -44,5 +45,6 @@ func DefaultTemplateData() TemplateData {
 		StaticURL:                  "http://localhost:8082/static",
 		ShowComments:               false,
 		PostCreatedMessage:         "",
+		DisplayCatID:               0,
 	}
 }

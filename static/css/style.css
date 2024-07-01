@@ -20,6 +20,10 @@ body {
     text-align: right;
 }
 
+.sidebar {
+    min-width: 210px;
+}
+
 a {
     text-decoration: none;
     color: #533ed9;
@@ -41,7 +45,8 @@ h3 {
     color: #533ed9;
 }
 
-h4 {
+.sidebar h4 {
+    margin: 10px 0;
     color: gold;
 }
 
@@ -357,22 +362,12 @@ h4 {
 
 .sidebar ul li {
     padding: 10px 0;
-    border-bottom: 1px solid #555;
     text-align: center;
-    border: 1px solid rgb(161, 0, 0);
-    border-radius: 10px;
+    margin-top: 2px;
 }
 
 .sidebar h4 {
     text-align: center;
-}
-
-.sidebar ul li:hover {
-    cursor: pointer;
-    border: 1px solid crimson;
-    background-color: crimson;
-    border-radius: 10px;
-    font-weight: bold;
 }
 
 .sidebar-focused {
@@ -380,10 +375,35 @@ h4 {
     background-color: crimson;
     color: white;
     border-radius: 10px;
+    line-height: 11px;
 }
 
 .sidebar-unfocused {
     color: white;
+    line-height: 15px;
+}
+
+.sidebar-focused li:hover {
+    cursor: pointer;
+    border: 1px solid crimson;
+    background-color: crimson;
+    border-radius: 10px;
+    font-weight: bold;
+    line-height: 9px;
+}
+
+.sidebar-unfocused li:hover {
+    cursor: pointer;
+    border: 1px solid crimson;
+    background-color: crimson;
+    border-radius: 10px;
+    font-weight: bold;
+    line-height: 13px;
+}
+
+.sidebar-border {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .popup {
