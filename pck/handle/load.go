@@ -338,3 +338,19 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 	referer := r.Header.Get("Referer")
 	http.Redirect(w, r, referer, http.StatusSeeOther)
 }
+<<<<<<< HEAD
+=======
+
+
+func GetGetUserPostHistoryHandler(w http.ResponseWriter, r *http.Request){
+fmt.Println("Get user activity activated")
+LandingPageHandler(w,r)
+}
+
+
+func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request){
+	fmt.Println("Update user profile activated")
+	LandingPageHandler(w,r)
+}
+
+>>>>>>> 3bb688e2fc4d7a6d23ad81fa7f4f5db458d45a4d

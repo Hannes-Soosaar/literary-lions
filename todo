@@ -25,13 +25,15 @@ DONE: Only registered users can create posts.
 DONE:Only registered users can create  comments.
 DONE: Empty posts  are not allowed.
 DONE: Empty comments are not allowed.
+DONE: Registered users can view their created posts and liked posts. // each post has a user_id ref
+DONE: Search functionality is implemented, with advanced search options. // search by body content
+DONE: The project has other bonus features that are not listed in the bonus part.
+DONE: Get all queries back sorted by the latest post
 
 VERIFY: The number of likes and dislikes is displayed and updated correctly. // Each post has the like dislike count
 
-
 ---Posts,likes and comments---
-TODO: The number of likes and dislikes for comments is visible to all users. // a section is added to the 
-TODO: Registered users can view their created posts and liked posts. // each post has a user_id ref
+TODO: The number of likes and dislikes for comments is visible to all users. 
 
 ---Server
 TODO: The project handles HTTP status 400 and 500 errors gracefully.
@@ -54,6 +56,7 @@ TODO: The interface is clear, well set out and navigable.
 TODO: Design
 TODO: Get all queries back sorted by the latest post
 
+
 ---DOCKER---
 TODO: A Dockerfile is present in the project.
 TODO: A Docker image can be built successfully using the Dockerfile.
@@ -62,10 +65,7 @@ TODO: The project has no unused Docker objects.
 
 
 --- FUNCTIONALITY ---
-TODO: The project has other bonus features that are not listed in the bonus part.
-    TODO: Extras update user profile
-    TODO: Get all queries back sorted by the latest post
-TODO: Search functionality is implemented, with advanced search options. // search by body content
+TODO: Extras update user profile
 
 
 

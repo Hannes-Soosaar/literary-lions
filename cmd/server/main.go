@@ -28,13 +28,9 @@ func main() {
 	http.HandleFunc("/your-posts", handle.UserPostsHandler)
 	http.HandleFunc("/liked-posts", handle.LikedAndDislikedPostsHandler)
 	http.HandleFunc("/disliked-posts", handle.LikedAndDislikedPostsHandler)
+	http.HandleFunc("/userPostHistory", handle.GetGetUserPostHistoryHandler)
+	http.HandleFunc("/updateUserProfile", handle.UpdateUserProfileHandler) 
 
-	//TODO handle update profile
-	//TODO handle filter by category
-	//TODO handle search by post Title/Content
-	//TODO handle order by post-time
-	//TODO handle order by category by name
-	//TODO handle /postComment
 
 	err := http.ListenAndServe(config.PORT, nil)
 	if err != nil {

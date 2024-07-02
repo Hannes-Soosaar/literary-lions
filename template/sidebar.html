@@ -3,7 +3,6 @@
 	<h4>Post Categories:</h4>
 	<ul>
 		{{range .Categories}}
-
 		<a href="/category/{{.ID}}">
 			{{ if eq .ID $.DisplayCatID}}
 			<div class="sidebar-focused">
@@ -15,15 +14,12 @@
 			</div>
 			{{end}}
 			<div class="sidebar-border">
-
 			</div>
 		</a>
-
 		{{end}}
 	</ul>
 	{{if .IsLoggedIn}}
 	<h4>Site Navigation:</h4>
-
 	<ul>
 		<a href="/">
 			{{ if .MainPage }}
@@ -37,7 +33,6 @@
 			{{ end }}
 		</a>
 		<div class="sidebar-border">
-
 		</div>
 		<a href="/profile">
 			{{ if .ProfilePage }}
@@ -50,6 +45,11 @@
 			</div>
 			{{ end }}
 		</a>
+		<div class="sidebar-border">
+
+		</div>
+
+		<a href="/userPostHistory"  >
 		<div class="sidebar-border">
 
 		</div>
@@ -95,6 +95,8 @@
 		<div class="sidebar-border">
 
 		</div>
+
+
 		<a href="/create-post">
 			{{ if .CreatePostPage }}
 			<div class="sidebar-focused">

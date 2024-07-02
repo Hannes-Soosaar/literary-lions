@@ -179,8 +179,37 @@ func FindUserDislikedPosts(posts models.Posts, userID int) models.Posts {
 	return dislikedPosts
 }
 
-func FindPostsByUserName(userID string) models.Posts {
-	//TODO: GetPostFromUser
+func FindPostsByUserName(userName string) models.Posts {
+	var posts models.Posts
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		fmt.Println("error opening DB", err)
+		return posts
+	}
+	defer db.Close()
+		statement, err := db.Prepare("SELECT id, title, body, likes, dislikes, user_id, category_id, created_at, modified_at, active FROM posts WHERE user_name = ? ORDER BY created_at DESC")
+	if err != nil {
+		return posts
+	}
+	defer statement.Close()
+	rows, err := statement.Query(userName)
+	if err != nil {
+		fmt.Println("Error querying DB:", err)
+		return posts
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var post models.Post
+		err := rows.Scan(&post.ID, &post.Title, &post.Body, &post.Likes, &post.Dislikes, &post.UserId, &post.CategoryID, &post.CreatedAt, &post.ModifiedAt, &post.Active)
+		if err != nil {
+			fmt.Println("Error scanning row:", err)
+			continue
+		}
+		posts.AllPosts = append(posts.AllPosts, post)
+	}
+	if err = rows.Err(); err != nil {
+		fmt.Println("Error during rows iteration:", err)
+	}
 	return models.Posts{}
 }
 
@@ -205,4 +234,3 @@ func CreateNewPost(post string, userName string) {
 	// TODO: AddUserPost
 }
 
-//TODO: FindPostContaining
