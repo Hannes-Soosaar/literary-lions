@@ -270,6 +270,7 @@ func UserPostsHandler(w http.ResponseWriter, r *http.Request) {
 	data.UserPostsPage = true
 	data.IsLoggedIn = true
 	if isLoggedIn {
+		data.Title = "Your Posts"
 		render.RenderUserPosts(w, "posts-by-user.html", data)
 	} else {
 		data.ErrorMessage = "You need to be logged in to access your profile!"
@@ -291,7 +292,6 @@ func LikedAndDislikedPostsHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 	}
-	fmt.Println(path)
 	// Check session token
 	cookie, err := r.Cookie("session_token")
 	if err != nil {
@@ -331,11 +331,13 @@ func LikedAndDislikedPostsHandler(w http.ResponseWriter, r *http.Request) {
 				{
 					data.AllPosts = utils.FindUserLikedPosts(allPosts, data.User.ID)
 					data.LikedPostsPage = true
+					data.Title = "Liked Posts"
 				}
 			case disliked:
 				{
 					data.AllPosts = utils.FindUserDislikedPosts(allPosts, data.User.ID)
 					data.DislikedPostsPage = true
+					data.Title = "Disliked Posts"
 				}
 			}
 			render.RenderUserPosts(w, "posts-by-user.html", data)

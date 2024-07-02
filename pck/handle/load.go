@@ -215,12 +215,13 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 	categories := utils.GetActiveCategories()
 	comments := utils.GetActiveComments()
 	data.Comments = comments
-	fmt.Printf( "All comments, %v \n ", data.Comments)
+	fmt.Printf("All comments, %v \n ", data.Comments)
 	data.Categories = categories
 	data.User = user
 	data.Categories = categories
 	data.Username = ctxUsername
 	data.ProfilePage = true
+	data.Title = "Your Profile"
 	data.IsLoggedIn = true
 	if isLoggedIn {
 		render.RenderProfile(w, "index.html", data)
@@ -337,5 +338,3 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 	referer := r.Header.Get("Referer")
 	http.Redirect(w, r, referer, http.StatusSeeOther)
 }
-
-
