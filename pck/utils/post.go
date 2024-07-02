@@ -179,106 +179,6 @@ func FindUserDislikedPosts(posts models.Posts, userID int) models.Posts {
 	return dislikedPosts
 }
 
-func UserPostsFinder(posts models.Posts, userID int) models.Posts {
-	var userPosts models.Posts
-	for _, post := range posts.AllPosts {
-		if post.UserId == userID {
-			userPosts.AllPosts = append(userPosts.AllPosts, post)
-		}
-	}
-	return userPosts
-}
-
-func FindUserLikedPosts(posts models.Posts, userID int) models.Posts {
-	db, err := sql.Open("sqlite3", config.LION_DB)
-	if err != nil {
-		fmt.Println("error opening DB", err)
-		return posts
-	}
-	defer db.Close()
-	rows, err := db.Query("SELECT user_id, post_id, like_activity FROM user_activity")
-	if err != nil {
-		fmt.Println("Error querying DB:", err)
-		return posts
-	}
-	defer rows.Close()
-
-	var likedPostIDs []int
-	for rows.Next() {
-		var userIDfromDB int
-		var postID int
-		var likeActivity bool
-		err := rows.Scan(&userIDfromDB, &postID, &likeActivity)
-		if err != nil {
-			fmt.Println("Error scanning row:", err)
-			continue
-		}
-		if userIDfromDB == userID && likeActivity {
-			likedPostIDs = append(likedPostIDs, postID)
-		}
-	}
-	if err = rows.Err(); err != nil {
-		fmt.Println("Error during rows iteration:", err)
-	}
-
-	var likedPosts models.Posts
-	for _, post := range posts.AllPosts {
-		for _, postID := range likedPostIDs {
-			if postID == post.ID {
-				likedPosts.AllPosts = append(likedPosts.AllPosts, post)
-				continue
-			}
-		}
-	}
-
-	return likedPosts
-}
-
-func FindUserDislikedPosts(posts models.Posts, userID int) models.Posts {
-	db, err := sql.Open("sqlite3", config.LION_DB)
-	if err != nil {
-		fmt.Println("error opening DB", err)
-		return posts
-	}
-	defer db.Close()
-	rows, err := db.Query("SELECT user_id, post_id, dislike_activity FROM user_activity")
-	if err != nil {
-		fmt.Println("Error querying DB:", err)
-		return posts
-	}
-	defer rows.Close()
-
-	var dislikedPostIDs []int
-	for rows.Next() {
-		var userIDfromDB int
-		var postID int
-		var dislikeActivity bool
-		err := rows.Scan(&userIDfromDB, &postID, &dislikeActivity)
-		if err != nil {
-			fmt.Println("Error scanning row:", err)
-			continue
-		}
-		if userIDfromDB == userID && dislikeActivity {
-			dislikedPostIDs = append(dislikedPostIDs, postID)
-		}
-	}
-	if err = rows.Err(); err != nil {
-		fmt.Println("Error during rows iteration:", err)
-	}
-
-	var dislikedPosts models.Posts
-	for _, post := range posts.AllPosts {
-		for _, postID := range dislikedPostIDs {
-			if postID == post.ID {
-				dislikedPosts.AllPosts = append(dislikedPosts.AllPosts, post)
-				continue
-			}
-		}
-	}
-
-	return dislikedPosts
-}
-
 func FindPostsByUserName(userName string) models.Posts {
 	var posts models.Posts
 	db, err := sql.Open("sqlite3", config.LION_DB)
@@ -287,7 +187,7 @@ func FindPostsByUserName(userName string) models.Posts {
 		return posts
 	}
 	defer db.Close()
-		statement, err := db.Prepare("SELECT id, title, body, likes, dislikes, user_id, category_id, created_at, modified_at, active FROM posts WHERE user_id = ? ORDER BY created_at DESC")
+		statement, err := db.Prepare("SELECT id, title, body, likes, dislikes, user_id, category_id, created_at, modified_at, active FROM posts WHERE user_name = ? ORDER BY created_at DESC")
 	if err != nil {
 		return posts
 	}
