@@ -1,26 +1,34 @@
 {{ define "profile" }}
 <div class="profile-container">
-	<h1>Welcome {{.User.Username}}</h1>
-	<div> This is your profile page, here you can change any of profile details or delete your account.</div>
-	<div> To make changes just enter new details in  </div>
+	<h1>{{.User.Username}}'s Profile</h1>
+	<div class="flex-container">
+	<div > This is your profile page, here you can change any of profile details or delete your account.</div>
+	<div> To make changes just enter new details in the text fields and click update Profile at the bottom </div>
+	</div>
 	<a>
-		<form class="update_form" action="/" method="POST">
-			<p>You Email:</p>
-			<input type="text" placeholder="{{ .User.Email}}" /><br>
-			<p>Your Username:</p>
-			<input type="text" placeholder="{{ .User.Username}}" /><br>
-			<p>Your Role:</p>
-			<input type="text" placeholder="{{ .User.Role}}" /><br>
-			<p>Change Password</p>
-			<input type="text" placeholder="New Password" /><br>
-			<input type="text" placeholder="New Password again " /><br>
-			<p>Delete account</p>
-			<input type="checkbox" placeholder="{{ .User.Active}}" /><br>
-			<p class="text">User since: {{ .User.CreatedAt}}</p>
-			<p class="text" >LAST CHANGED: {{ .User.ModifiedAt}}</p>
+		<p class="text">Member since: {{ .User.CreatedAt}}</p>
+
+		<form class="update_form" action="/updateUserProfile" method="POST">
+			<div>You Email:</div>
+			<input type="text" name ="email" placeholder="{{ .User.Email}}" /><br>
+			<div>Your Username:</div>
+			<input type="text" name ="username"  placeholder="{{ .User.Username}}" /><br>
+			<div>Your Role:</div>
+			<input type="text" name = "role" placeholder="{{ .User.Role}}" /><br>
+			<div>Change Password</div>
+			<input type="text" name="newPassword" placeholder="New Password" /><br>
+			<input type="text" name="newPasswordAgain" placeholder="New Password again " /><br>
+			
+			<p class="text" >Last activity: {{ .User.ModifiedAt}}</p>
 			<input type="text" placeholder="Search..." />
-			<button class="button" type="submit"><b>updateProfile</b></button>
+			<button class="button" type="submit"><b>update</b></button>
 		</form>
+		<form class="update_form" action="/updateUserProfile" method="POST">
+			<div>Delete account</div>
+			<input type="checkbox" name="active"/><br>
+			<button class="button" type="submit"><b>Delete Account</b></button>
+		</form>
+
 	</a>
 </div>
 {{end}}

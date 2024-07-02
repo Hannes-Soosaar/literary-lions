@@ -29,11 +29,16 @@ DONE: Registered users can view their created posts and liked posts. // each pos
 DONE: Search functionality is implemented, with advanced search options. // search by body content
 DONE: The project has other bonus features that are not listed in the bonus part.
 DONE: Get all queries back sorted by the latest post
+DONE: Get all queries back sorted by the latest post
+DONE: It is easy to respond to posts.
 
 VERIFY: The number of likes and dislikes is displayed and updated correctly. // Each post has the like dislike count
 
+
 ---Posts,likes and comments---
-TODO: The number of likes and dislikes for comments is visible to all users. 
+TODO: The number of likes and dislikes for comments is visible to all users. Hs task
+TODO: It is easy to respond to comments. HS task
+TODO: Extras update user profile. HS task
 
 ---Server
 TODO: The project handles HTTP status 400 and 500 errors gracefully.
@@ -44,8 +49,7 @@ TODO: The server uses appropriate HTTP response codes, 2XX, 4XX.
 TODO: The interface handles 5XX HTTP response codes gracefully.
 
 --- User friendliness---
-TODO: It is easy to respond to posts.
-TODO: It is easy to respond to comments.
+
 TODO: Categories are effective in organising discussions.
 TODO: Content has intuitive filtering.
 TODO: Error messages are informative and user-friendly.
@@ -54,18 +58,9 @@ TODO: The registration process is user-friendly.
 TODO: The registration process is  secure.
 TODO: The interface is clear, well set out and navigable.
 TODO: Design
-TODO: Get all queries back sorted by the latest post
-
 
 ---DOCKER---
 TODO: A Dockerfile is present in the project.
 TODO: A Docker image can be built successfully using the Dockerfile.
 TODO: The container runs successfully using the created image.
 TODO: The project has no unused Docker objects.
-
-
---- FUNCTIONALITY ---
-TODO: Extras update user profile
-
-
-
