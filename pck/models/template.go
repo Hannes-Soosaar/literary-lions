@@ -11,6 +11,9 @@ type TemplateData struct {
 	IsLoggedIn                 bool
 	ProfilePage                bool
 	MainPage                   bool
+	UserPostsPage              bool
+	LikedPostsPage             bool
+	DislikedPostsPage          bool
 	AllPosts                   Posts
 	Categories                 []Category
 	PostComments               []PostComment
@@ -36,6 +39,9 @@ func DefaultTemplateData() TemplateData {
 		IsLoggedIn:                 false,
 		ProfilePage:                false,
 		MainPage:                   false,
+		UserPostsPage:              false,
+		LikedPostsPage:             false,
+		DislikedPostsPage:          false,
 		CreatePostPage:             false,
 		AllPosts:                   Posts{},
 		Categories:                 []Category{},

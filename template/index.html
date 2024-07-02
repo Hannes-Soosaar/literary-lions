@@ -24,6 +24,15 @@
         {{if .CreatePostPage}}
         {{block "create-post" .}}{{end}}
         {{end}}
+        {{if .UserPostsPage }}
+        {{block "posts-by-user" .}}{{end}}
+        {{end}}
+        {{if .LikedPostsPage }}
+        {{block "posts-by-user" .}}{{end}}
+        {{end}}
+        {{if .DislikedPostsPage }}
+        {{block "posts-by-user" .}}{{end}}
+        {{end}}
     </div>
 
     {{ if .ErrorMessage }}
