@@ -51,12 +51,10 @@ func FilterPostForSearch(FilterType string, SearchQuery string) models.Posts {
 
 func FilterPostByKeyword(SearchQuery string, allPosts []models.Post) []models.Post {
 	var filteredPosts []models.Post
-
 	for _, post := range allPosts {
 		if strings.Contains(post.Title, SearchQuery) || strings.Contains(post.Body, SearchQuery) {
 			filteredPosts = append(filteredPosts, post)
 		}
-
 	}
 	return filteredPosts
 }

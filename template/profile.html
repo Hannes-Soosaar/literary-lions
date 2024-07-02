@@ -1,20 +1,25 @@
 {{ define "profile" }}
 <div class="profile-container">
 	<h1>Welcome {{.User.Username}}</h1>
-
+	<div> This is your profile page, here you can change any of profile details or delete your account.</div>
+	<div> To make changes just enter new details in  </div>
 	<a>
 		<form class="update_form" action="/" method="POST">
-			<input type="text" placeholder="{{ .User.Email}}" />
-			<div>EMAIL: {{ .User.Email}}</div>
-			<div>ROLE: {{ .User.Role}}</div>
-			<p>ACCOUNT STATUS: {{ .User.Active}}</p>
-			<p>ACCOUNT CREATED ON: {{ .User.CreatedAt}}</p>
-			<p>ACCOUNT MODIFIED ON: {{ .User.ModifiedAt}}</p>
-
+			<p>You Email:</p>
+			<input type="text" placeholder="{{ .User.Email}}" /><br>
+			<p>Your Username:</p>
+			<input type="text" placeholder="{{ .User.Username}}" /><br>
+			<p>Your Role:</p>
+			<input type="text" placeholder="{{ .User.Role}}" /><br>
+			<p>Change Password</p>
+			<input type="text" placeholder="New Password" /><br>
+			<input type="text" placeholder="New Password again " /><br>
+			<p>Delete account</p>
+			<input type="checkbox" placeholder="{{ .User.Active}}" /><br>
+			<p class="text">User since: {{ .User.CreatedAt}}</p>
+			<p class="text" >LAST CHANGED: {{ .User.ModifiedAt}}</p>
 			<input type="text" placeholder="Search..." />
-			<form>
-				<button type="submit"><b>updateProfile</b></button>
-			</form>
+			<button class="button" type="submit"><b>updateProfile</b></button>
 		</form>
 	</a>
 </div>

@@ -38,7 +38,7 @@ func RetrieveAllPosts() models.Posts {
 		return posts
 	}
 	defer db.Close()
-	rows, err := db.Query("SELECT id, title, body, likes, dislikes, user_id, category_id, created_at, modified_at, active FROM posts")
+	rows, err := db.Query("SELECT id, title, body, likes, dislikes, user_id, category_id, created_at, modified_at, active FROM posts ORDER BY created_at DESC")
 	if err != nil {
 		fmt.Println("Error querying DB:", err)
 		return posts
