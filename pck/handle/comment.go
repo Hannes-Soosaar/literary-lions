@@ -19,7 +19,6 @@ func CommentHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	sessionUser := utils.FindUserByUserName(verifiedUserName)
 	postId := r.FormValue("postID")
-	fmt.Println("POST ID", postId)
 	if postId == "" {
 		http.Error(w, "Invalid post ID", http.StatusBadRequest)
 		return

@@ -56,3 +56,4 @@ func GetUsernameFromCookie(r *http.Request) string {
 	}
 	return username
 }
+

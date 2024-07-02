@@ -339,3 +339,14 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 
+func GetGetUserPostHistoryHandler(w http.ResponseWriter, r *http.Request){
+fmt.Println("Get user activity activated")
+LandingPageHandler(w,r)
+}
+
+
+func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request){
+	fmt.Println("Update user profile activated")
+	LandingPageHandler(w,r)
+}
+
