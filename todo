@@ -30,7 +30,6 @@ VERIFY: The number of likes and dislikes is displayed and updated correctly. // 
 
 
 ---Posts,likes and comments---
-
 TODO: The number of likes and dislikes for comments is visible to all users. // a section is added to the 
 TODO: Registered users can view their created posts and liked posts. // each post has a user_id ref
 
@@ -61,12 +60,11 @@ TODO: A Docker image can be built successfully using the Dockerfile.
 TODO: The container runs successfully using the created image.
 TODO: The project has no unused Docker objects.
 
+
 --- FUNCTIONALITY ---
 TODO: The project has other bonus features that are not listed in the bonus part.
     TODO: Extras update user profile
     TODO: Get all queries back sorted by the latest post
-
-
 TODO: Search functionality is implemented, with advanced search options. // search by body content
 
 
