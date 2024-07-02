@@ -233,3 +233,118 @@ func MarkPostAsUndisliked(userID, postID int) error {
 
 	return nil
 }
+
+func UserPostsHandler(w http.ResponseWriter, r *http.Request) {
+	// Check session token
+	cookie, err := r.Cookie("session_token")
+	if err != nil {
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+	sessionToken := cookie.Value
+	username, exists := sessionStore[sessionToken]
+	if !exists {
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+	// Retrieve username from session token
+	ctx := context.WithValue(r.Context(), userContextKey, username)
+	// Proceed with handling the request
+	ctxUsername, ok := ctx.Value(userContextKey).(string)
+	if !ok {
+		http.Error(w, "Unable to retrieve username from context", http.StatusInternalServerError)
+		return
+	}
+	isLoggedIn := true
+	data := models.DefaultTemplateData()
+	user := utils.FindUserByUserName(username)
+	categories := utils.GetActiveCategories()
+	comments := utils.GetActiveComments()
+	data.Comments = comments
+	data.Categories = categories
+	data.User = user
+	allPosts := utils.RetrieveAllPosts()
+	data.AllPosts = utils.UserPostsFinder(allPosts, data.User.ID)
+	data.Categories = categories
+	data.Username = ctxUsername
+	data.UserPostsPage = true
+	data.IsLoggedIn = true
+	if isLoggedIn {
+		render.RenderUserPosts(w, "posts-by-user.html", data)
+	} else {
+		data.ErrorMessage = "You need to be logged in to access your profile!"
+		render.RenderLandingPage(w, "index.html", data)
+	}
+}
+
+func LikedAndDislikedPostsHandler(w http.ResponseWriter, r *http.Request) {
+	var liked, disliked bool = false, false
+	path := r.URL.Path
+	switch path {
+	case "/liked-posts":
+		{
+			liked = true
+		}
+	case "/disliked-posts":
+		{
+			disliked = true
+		}
+
+	}
+	fmt.Println(path)
+	// Check session token
+	cookie, err := r.Cookie("session_token")
+	if err != nil {
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+	sessionToken := cookie.Value
+	username, exists := sessionStore[sessionToken]
+	if !exists {
+		http.Redirect(w, r, "/", http.StatusFound)
+		return
+	}
+	// Retrieve username from session token
+	ctx := context.WithValue(r.Context(), userContextKey, username)
+	// Proceed with handling the request
+	ctxUsername, ok := ctx.Value(userContextKey).(string)
+	if !ok {
+		http.Error(w, "Unable to retrieve username from context", http.StatusInternalServerError)
+		return
+	}
+	isLoggedIn := true
+	data := models.DefaultTemplateData()
+	user := utils.FindUserByUserName(username)
+	categories := utils.GetActiveCategories()
+	comments := utils.GetActiveComments()
+	data.Comments = comments
+	data.Categories = categories
+	data.User = user
+	allPosts := utils.RetrieveAllPosts()
+	data.Categories = categories
+	data.Username = ctxUsername
+	data.IsLoggedIn = true
+	if liked || disliked {
+		if isLoggedIn {
+			switch {
+			case liked:
+				{
+					data.AllPosts = utils.FindUserLikedPosts(allPosts, data.User.ID)
+					data.LikedPostsPage = true
+				}
+			case disliked:
+				{
+					data.AllPosts = utils.FindUserDislikedPosts(allPosts, data.User.ID)
+					data.DislikedPostsPage = true
+				}
+			}
+			render.RenderUserPosts(w, "posts-by-user.html", data)
+		} else {
+			data.ErrorMessage = "You need to be logged in to access your profile!"
+			render.RenderLandingPage(w, "index.html", data)
+		}
+	} else {
+		http.Error(w, "Invalid request", http.StatusBadRequest)
+		return
+	}
+}

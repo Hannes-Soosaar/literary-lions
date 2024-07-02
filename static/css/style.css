@@ -312,6 +312,8 @@ h3 {
     border: 10px solid transparent;
 }
 
+.user-post-container .post-container {}
+
 .post-container-welcome {
     width: calc(100% - 30px);
     min-width: 600px;

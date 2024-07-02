@@ -53,7 +53,45 @@
 		<div class="sidebar-border">
 
 		</div>
-		<li>Your Posts</li>
+		<a href="/your-posts">
+			{{ if .UserPostsPage }}
+			<div class="sidebar-focused">
+				<li><b>Your Posts</b></li>
+			</div>
+			{{ else }}
+			<div class="sidebar-unfocused">
+				<li>Your Posts</li>
+			</div>
+			{{ end }}
+		</a>
+		<div class="sidebar-border">
+
+		</div>
+		<a href="/liked-posts">
+			{{ if .LikedPostsPage }}
+			<div class="sidebar-focused">
+				<li><b>Liked Posts</b></li>
+			</div>
+			{{ else }}
+			<div class="sidebar-unfocused">
+				<li>Liked Posts</li>
+			</div>
+			{{ end }}
+		</a>
+		<div class="sidebar-border">
+
+		</div>
+		<a href="/disliked-posts">
+			{{ if .DislikedPostsPage }}
+			<div class="sidebar-focused">
+				<li><b>Disliked Posts</b></li>
+			</div>
+			{{ else }}
+			<div class="sidebar-unfocused">
+				<li>Disliked Posts</li>
+			</div>
+			{{ end }}
+		</a>
 		<div class="sidebar-border">
 
 		</div>

@@ -25,6 +25,9 @@ func main() {
 	http.HandleFunc("/create-post", handle.CreatePostHandler)
 	http.HandleFunc("/submit-post", handle.SubmitPostHandler)
 	http.HandleFunc("/search", handle.SearchHandler)
+	http.HandleFunc("/your-posts", handle.UserPostsHandler)
+	http.HandleFunc("/liked-posts", handle.LikedAndDislikedPostsHandler)
+	http.HandleFunc("/disliked-posts", handle.LikedAndDislikedPostsHandler)
 
 	//TODO handle update profile
 	//TODO handle filter by category
