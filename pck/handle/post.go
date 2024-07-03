@@ -263,7 +263,7 @@ func UserPostsHandler(w http.ResponseWriter, r *http.Request) {
 	data.Comments = comments
 	data.Categories = categories
 	data.User = user
-	allPosts := utils.RetrieveAllPosts()
+	allPosts := utils.GetAllPosts()
 	data.AllPosts = utils.UserPostsFinder(allPosts, data.User.ID)
 	data.Categories = categories
 	data.Username = ctxUsername
@@ -320,7 +320,7 @@ func LikedAndDislikedPostsHandler(w http.ResponseWriter, r *http.Request) {
 	data.Comments = comments
 	data.Categories = categories
 	data.User = user
-	allPosts := utils.RetrieveAllPosts()
+	allPosts := utils.GetAllPosts()
 	data.Categories = categories
 	data.Username = ctxUsername
 	data.IsLoggedIn = true

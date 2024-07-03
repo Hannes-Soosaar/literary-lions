@@ -41,6 +41,3 @@ func GetActiveCategories() []models.Category {
 	}
 	return activeCategories
 }
-
-
-//TODO OPTIONAL CreateCategory

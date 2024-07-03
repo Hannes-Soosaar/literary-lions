@@ -2,33 +2,45 @@
 <div class="profile-container">
 	<h1>{{.User.Username}}'s Profile</h1>
 	<div class="flex-container">
-	<div > This is your profile page, here you can change any of profile details or delete your account.</div>
-	<div> To make changes just enter new details in the text fields and click update Profile at the bottom </div>
+		<div>
+			This is your profile page, here you can change any of profile details or
+			delete your account.
+		</div>
+		<div>
+			To make changes just enter new details in the text fields and click update
+			Profile at the bottom
+		</div>
 	</div>
 	<a>
 		<p class="text">Member since: {{ .User.CreatedAt}}</p>
-
 		<form class="update_form" action="/updateUserProfile" method="POST">
 			<div>You Email:</div>
-			<input type="text" name ="email" placeholder="{{ .User.Email}}" /><br>
+			<input type="text" name="email" placeholder="{{ .User.Email}}" /><br />
 			<div>Your Username:</div>
-			<input type="text" name ="username"  placeholder="{{ .User.Username}}" /><br>
+			<input
+				type="text"
+				name="username"
+				placeholder="{{ .User.Username}}"
+			/><br />
 			<div>Your Role:</div>
-			<input type="text" name = "role" placeholder="{{ .User.Role}}" /><br>
+			<input type="text" name="role" placeholder="{{ .User.Role}}" /><br />
 			<div>Change Password</div>
-			<input type="text" name="newPassword" placeholder="New Password" /><br>
-			<input type="text" name="newPasswordAgain" placeholder="New Password again " /><br>
-			
-			<p class="text" >Last activity: {{ .User.ModifiedAt}}</p>
-			<input type="text" placeholder="Search..." />
+			<input type="text" name="newPassword" placeholder="New Password" /><br />
+			<input
+				type="text"
+				name="newPasswordAgain"
+				placeholder="New Password again "
+			/><br />
+			<input type="hidden" name="ID" value="{{ .User.ID}}" />
+			<p class="text">Last activity: {{ .User.ModifiedAt}}</p>
 			<button class="button" type="submit"><b>update</b></button>
 		</form>
 		<form class="update_form" action="/updateUserProfile" method="POST">
 			<div>Delete account</div>
-			<input type="checkbox" name="active"/><br>
+			<input type="hidden" name="ID" value="{{ .User.ID}}" />
+			<input class="checkbox" type="checkbox" name="active" /><br />
 			<button class="button" type="submit"><b>Delete Account</b></button>
 		</form>
-
 	</a>
 </div>
 {{end}}

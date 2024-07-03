@@ -19,12 +19,12 @@ type contextKey string
 
 const userContextKey = contextKey("username")
 
-var sessionStore = map[string]string{} //!if we log out we need to empty this,  too I could login with a copied session ID form the previous login ?
+var sessionStore = map[string]string{}
 
 func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 	sessionToken, err := r.Cookie("session_token")
 	isLoggedIn := err == nil && isValidSession(sessionToken.Value)
-	allPosts := utils.RetrieveAllPosts()
+	allPosts := utils.GetAllPosts()
 	categories := utils.GetActiveCategories()
 	comments := utils.GetActiveComments()
 	data := models.DefaultTemplateData()
@@ -70,7 +70,7 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		successMessage = fmt.Sprintf("%s was added with the email %s", username, email)
 	}
 	fmt.Println(successMessage)
-	allPosts := utils.RetrieveAllPosts()
+	allPosts := utils.GetAllPosts()
 	data := models.DefaultTemplateData()
 	categories := utils.GetActiveCategories()
 	data.Categories = categories
@@ -121,7 +121,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		errorMessage = "Not a valid user!"
 	}
 
-	allPosts := utils.RetrieveAllPosts()
+	allPosts := utils.GetAllPosts()
 	data := models.DefaultTemplateData()
 	categories := utils.GetActiveCategories()
 	comments := utils.GetActiveComments()
@@ -146,9 +146,8 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		Expires: time.Now().Add(-1 * time.Hour),
 		Path:    "/",
 	})
-
-	//TODO need to restart the sessionStore
-	allPosts := utils.RetrieveAllPosts() //! RenamedToGet  use GET if you are certain you will get data and use FIND if you are not sure if the data exists.
+	sessionStore = map[string]string{} //! empties the sessions storage variable on logout.
+	allPosts := utils.GetAllPosts()
 	data := models.DefaultTemplateData()
 	data.Title = "Logout"
 	data.AllPosts = allPosts
@@ -161,13 +160,11 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	render.RenderLandingPage(w, "index.html", data)
 }
 
-// TODO Is a Util
 func isValidSession(sessionToken string) bool {
 	_, isValidSession := sessionStore[sessionToken]
 	return isValidSession
 }
 
-// TODO need to move to a different file
 func AuthSessionToken(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		cookie, err := r.Cookie("session_token")
@@ -196,7 +193,7 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	sessionToken := cookie.Value
-	username, exists := sessionStore[sessionToken]
+	username, exists := sessionStore[sessionToken] //! Only works in this file as sessionStore is stored as a global variable.
 	if !exists {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
@@ -215,7 +212,6 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 	categories := utils.GetActiveCategories()
 	comments := utils.GetActiveComments()
 	data.Comments = comments
-	fmt.Printf("All comments, %v \n ", data.Comments)
 	data.Categories = categories
 	data.User = user
 	data.Categories = categories
@@ -338,19 +334,66 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 	referer := r.Header.Get("Referer")
 	http.Redirect(w, r, referer, http.StatusSeeOther)
 }
-<<<<<<< HEAD
-=======
 
-
-func GetGetUserPostHistoryHandler(w http.ResponseWriter, r *http.Request){
-fmt.Println("Get user activity activated")
-LandingPageHandler(w,r)
+func GetGetUserPostHistoryHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Get user activity activated")
+	LandingPageHandler(w, r)
 }
 
-
-func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request){
+func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Update user profile activated")
-	LandingPageHandler(w,r)
-}
+	if !verifyPostMethod(w, r) {
+		return
+	}
+	verifiedUserName := verifySession(r)
+	if verifiedUserName == "" {
+		fmt.Printf("not a user log in")
+		LandingPageHandler(w, r)
+	}
+	sessionUser := utils.FindUserByUserName(verifiedUserName)
+	var updatedUser models.User
 
->>>>>>> 3bb688e2fc4d7a6d23ad81fa7f4f5db458d45a4d
+	updatedUser.Password = r.FormValue("newPassword")
+	passwordAgain := r.FormValue("newPasswordAgain")
+
+	if updatedUser.Password != passwordAgain {
+		ProfileHandler(w, r)
+	}
+
+	//TODO figure out how to update the password.
+
+	if (r.FormValue("email")) == "" {
+		updatedUser.Email = sessionUser.Email
+	} else {
+		updatedUser.Email = r.FormValue("email")
+	}
+	if (r.FormValue("username")) == "" {
+		updatedUser.Username = sessionUser.Username
+	} else {
+		updatedUser.Username = r.FormValue("username")
+	}
+	if (r.FormValue("role")) == "" {
+		updatedUser.Role = sessionUser.Role
+	} else {
+		updatedUser.Role = r.FormValue("role")
+	}
+	userId := r.FormValue("ID")
+	parsedInt, err := strconv.Atoi(userId)
+	fmt.Printf("The parsed number is %d , \n", parsedInt)
+	if err != nil {
+		fmt.Println("Unable to get user ID")
+	}
+	updatedUser.ID = int(parsedInt)
+
+	fmt.Printf("the values from the form %v \n", updatedUser)
+	fmt.Printf("the values from the Original user %v \n", sessionUser)
+
+	if sessionUser.ID == updatedUser.ID {
+		utils.UpdateUserProfile(updatedUser)
+	} else {
+		fmt.Println("Not a user")
+	}
+
+	// http.Redirect(w, r, referer, http.StatusFound)
+	ProfileHandler(w, r)
+}

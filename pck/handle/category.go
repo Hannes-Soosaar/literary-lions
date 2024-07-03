@@ -28,7 +28,7 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 
 	sessionToken, err := r.Cookie("session_token")
 	isLoggedIn := err == nil && isValidSession(sessionToken.Value)
-	allPosts := utils.RetrieveAllPosts()
+	allPosts := utils.GetAllPosts()
 	categories := utils.GetActiveCategories()
 	data := models.DefaultTemplateData()
 	comments := utils.GetActiveComments()

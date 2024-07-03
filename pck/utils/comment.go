@@ -9,10 +9,6 @@ import (
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/models"
 )
 
-//TODO: GetCommentsForPost
-//TODO: GetCommentsContaining
-
-// ? HANDLED also with html template logic for all comments.
 func GetActivePostComments(postId int) []models.Comment {
 	var activeComments []models.Comment
 	db, err := sql.Open("sqlite3", config.LION_DB)

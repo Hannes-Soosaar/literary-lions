@@ -32,7 +32,7 @@ DONE: Get all queries back sorted by the latest post
 DONE: Get all queries back sorted by the latest post
 DONE: It is easy to respond to posts.
 
-VERIFY: The number of likes and dislikes is displayed and updated correctly. // Each post has the like dislike count
+VERIFY: The number ofOD likes and dislikes is displayed and updated correctly. // Each post has the like dislike count
 
 
 ---Posts,likes and comments---

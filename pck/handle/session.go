@@ -7,7 +7,7 @@ import (
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/utils"
 )
 
-func verifySession(r *http.Request) string {
+func verifySession(r *http.Request) (sessionUserName string) {
 	cookie, err := r.Cookie("session_token")
 	if err != nil {
 		err = fmt.Errorf("error %v \n", err)
@@ -15,7 +15,8 @@ func verifySession(r *http.Request) string {
 	}
 	sessionUser := utils.FindUserByUUID(cookie.Value)
 	if sessionUser.Username != "" {
-		return sessionUser.Username
+			sessionUserName = sessionUser.Username
+		return sessionUserName
 	}
 	return ""
 }

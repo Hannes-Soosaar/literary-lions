@@ -11,7 +11,7 @@ import (
 func FilterPostForSearch(FilterType string, SearchQuery string) models.Posts {
 	var SortedPosts models.Posts
 	var allPosts []models.Post
-	allPosts = RetrieveAllPosts().AllPosts
+	allPosts = GetAllPosts().AllPosts
 	if SearchQuery != "" {
 		allPosts = FilterPostByKeyword(SearchQuery, allPosts)
 	}

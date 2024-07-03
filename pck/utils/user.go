@@ -33,6 +33,28 @@ func FindUserByUserName(userName string) models.User {
 	}
 	return user
 }
+func FindUserByUserID(ID int) models.User {
+	var user models.User
+	// See if we can make the open db into a separate function so we do not need to open close the DB for every request
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		fmt.Println("error opening DB", err)
+		return user // should return an empty use
+	}
+	defer db.Close()
+	query := "SELECT id, username,email,password,role,created_at,modified_at,active,uuid FROM users  WHERE ID = ?"
+	row := db.QueryRow(query, ID)
+	err = row.Scan(&user.ID, &user.Username, &user.Email, &user.Password, &user.Role, &user.CreatedAt, &user.ModifiedAt, &user.Active, &user.UUID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			fmt.Printf("user with %d,  was not found \n", ID)
+			return models.User{} // Consider returning an error too
+		}
+		fmt.Printf("error scanning rows: %v", err)
+		return models.User{} // consider returning an error too
+	}
+	return user
+}
 
 func AddActiveUser(user models.User) error {
 	db, err := sql.Open("sqlite3", config.LION_DB)
@@ -77,7 +99,7 @@ func InactiveActiveUser(user models.User) error {
 	return nil
 }
 
-// TODO: Admin level function 
+// ! not implemented Admin level function 
 func ActivateUser(user models.User) error {
 	db, err := sql.Open("sqlite3", config.LION_DB)
 	if err != nil {
@@ -171,6 +193,25 @@ func UserWithEmailExists(email string) bool {
 	}
 	return false
 }
+func OtherUserWithEmailExists(email string, id int) bool {
+	var exists bool
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		fmt.Println("error opening DB", err)
+	}
+	defer db.Close()
+	query := `SELECT * FROM users WHERE username = ? AND id != ?);`
+	err = db.QueryRow(query, email,id).Scan(&exists)
+	if exists {
+		return true
+	}
+	fmt.Printf("The query gives us the following result %v ", exists)
+	if err != nil {
+		fmt.Errorf("error in the query to finding the mail from users", err)
+		return true
+	}
+	return false
+}
 
 func UserWithUserNameExists(userName string) bool {
 	var exists bool
@@ -192,4 +233,68 @@ func UserWithUserNameExists(userName string) bool {
 	return false
 }
 
-//TODO: OPTIONAL  updateUser
+func OtherUserWithUserNameExists(userName string, id int) bool {
+	var exists bool
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		fmt.Println("error opening DB", err)
+	}
+	defer db.Close()
+	query := `SELECT EXISTS (SELECT 1 FROM users WHERE username = ? and id !=?);`
+	err = db.QueryRow(query, userName, id ).Scan(&exists)
+	if exists {
+		return true
+	}
+	fmt.Printf("The query gives us the following result %v ", exists)
+	if err != nil {
+		fmt.Errorf("error in the query to finding the username from users", err)
+		return true
+	}
+	return false
+}
+
+
+
+func UpdateUserProfile(updatedUser models.User)(string,error){
+	var oldUser models.User
+	var successMessage string
+	var errorMessage error
+	oldUser =  FindUserByUserID(updatedUser.ID)
+
+	if (updatedUser.Password == "") {
+		fmt.Println("don't update pw")
+	} else {
+		fmt.Println("update pw!")
+	}
+
+	fmt.Printf("The old user",oldUser)
+	fmt.Printf("The new data",updatedUser)
+
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		fmt.Println("error opening DB", err)
+	}
+	defer db.Close()
+
+	if !OtherUserWithEmailExists(updatedUser.Email, oldUser.ID){
+		fmt.Println("User with Email does not exists")
+	} else {  
+		fmt.Println("User with Email  exists")
+	}
+
+	if !OtherUserWithUserNameExists( updatedUser.Username, oldUser.ID){
+			fmt.Println("User with same name does not  Exists ")
+	} else {
+			fmt.Println("User with same name Exists ")
+	}
+
+
+	
+	if (UserWithEmailExists(updatedUser.Email)) {
+		fmt.Errorf("A user with the same email exist, pleas login with that username")
+		return successMessage,errorMessage 
+	}
+	
+	return successMessage,errorMessage
+}
+

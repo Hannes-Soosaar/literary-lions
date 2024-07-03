@@ -28,7 +28,6 @@ type TemplateData struct {
 	QueryNoResult              string
 }
 
-// TODO migrate all user data fields to the user struct
 func DefaultTemplateData() TemplateData {
 	return TemplateData{
 		Username:                   "",
@@ -49,7 +48,7 @@ func DefaultTemplateData() TemplateData {
 		Comments:                   []Comment{},
 		User:                       User{},
 		FilteredPosts:              FilteredPosts{},
-		StaticURL:                  "http://localhost:8082/static",
+		StaticURL:                  "http://localhost:8082/static", //? what does this do ?
 		ShowComments:               false,
 		PostCreatedMessage:         "",
 		DisplayCatID:               0,

@@ -30,7 +30,7 @@ func AddNewPost(categoryID int, title string, body string, userID int) error {
 	return nil
 }
 
-func RetrieveAllPosts() models.Posts {
+func GetAllPosts() models.Posts {
 	var posts models.Posts
 	db, err := sql.Open("sqlite3", config.LION_DB)
 	if err != nil {
@@ -187,7 +187,7 @@ func FindPostsByUserName(userName string) models.Posts {
 		return posts
 	}
 	defer db.Close()
-		statement, err := db.Prepare("SELECT id, title, body, likes, dislikes, user_id, category_id, created_at, modified_at, active FROM posts WHERE user_name = ? ORDER BY created_at DESC")
+	statement, err := db.Prepare("SELECT id, title, body, likes, dislikes, user_id, category_id, created_at, modified_at, active FROM posts WHERE user_name = ? ORDER BY created_at DESC")
 	if err != nil {
 		return posts
 	}
@@ -233,4 +233,3 @@ func UpdateEmotes(emote string) {
 func CreateNewPost(post string, userName string) {
 	// TODO: AddUserPost
 }
-
