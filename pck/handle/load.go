@@ -341,7 +341,7 @@ func GetGetUserPostHistoryHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Update user profile activated")
+
 	if !verifyPostMethod(w, r) {
 		return
 	}
@@ -356,11 +356,10 @@ func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	updatedUser.Password = r.FormValue("newPassword")
 	passwordAgain := r.FormValue("newPasswordAgain")
 
-	if updatedUser.Password != passwordAgain {
-		ProfileHandler(w, r)
+	if  (updatedUser.Password == passwordAgain ) || updatedUser.Password ==""{
+	} else {
+		updatedUser.Password="0"
 	}
-
-	//TODO figure out how to update the password.
 
 	if (r.FormValue("email")) == "" {
 		updatedUser.Email = sessionUser.Email
@@ -379,14 +378,11 @@ func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	userId := r.FormValue("ID")
 	parsedInt, err := strconv.Atoi(userId)
-	fmt.Printf("The parsed number is %d , \n", parsedInt)
 	if err != nil {
 		fmt.Println("Unable to get user ID")
 	}
-	updatedUser.ID = int(parsedInt)
 
-	fmt.Printf("the values from the form %v \n", updatedUser)
-	fmt.Printf("the values from the Original user %v \n", sessionUser)
+	updatedUser.ID = int(parsedInt)
 
 	if sessionUser.ID == updatedUser.ID {
 		utils.UpdateUserProfile(updatedUser)

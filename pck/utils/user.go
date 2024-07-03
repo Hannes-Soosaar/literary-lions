@@ -99,7 +99,7 @@ func InactiveActiveUser(user models.User) error {
 	return nil
 }
 
-// ! not implemented Admin level function 
+// ! not implemented Admin level function
 func ActivateUser(user models.User) error {
 	db, err := sql.Open("sqlite3", config.LION_DB)
 	if err != nil {
@@ -119,7 +119,7 @@ func FindUserByUUID(userUuid string) models.User {
 	query := "SELECT id,username,email,password,role,created_at,modified_at,active,uuid FROM users  WHERE uuid = ?" // can be simplified with using * instead of specfing the columns
 	row := db.QueryRow(query, userUuid)
 	var user models.User
-	err = row.Scan(&user.ID, &user.Username, &user.Email,&user.Password, &user.Role, &user.CreatedAt, &user.ModifiedAt, &user.Active, &user.UUID)
+	err = row.Scan(&user.ID, &user.Username, &user.Email, &user.Password, &user.Role, &user.CreatedAt, &user.ModifiedAt, &user.Active, &user.UUID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			fmt.Printf("There is no user with the UUID  %s, was not found \n", userUuid)
@@ -201,7 +201,7 @@ func OtherUserWithEmailExists(email string, id int) bool {
 	}
 	defer db.Close()
 	query := `SELECT * FROM users WHERE username = ? AND id != ?);`
-	err = db.QueryRow(query, email,id).Scan(&exists)
+	err = db.QueryRow(query, email, id).Scan(&exists)
 	if exists {
 		return true
 	}
@@ -241,7 +241,7 @@ func OtherUserWithUserNameExists(userName string, id int) bool {
 	}
 	defer db.Close()
 	query := `SELECT EXISTS (SELECT 1 FROM users WHERE username = ? and id !=?);`
-	err = db.QueryRow(query, userName, id ).Scan(&exists)
+	err = db.QueryRow(query, userName, id).Scan(&exists)
 	if exists {
 		return true
 	}
@@ -253,22 +253,46 @@ func OtherUserWithUserNameExists(userName string, id int) bool {
 	return false
 }
 
-
-
-func UpdateUserProfile(updatedUser models.User)(string,error){
+func UpdateUserProfile(updatedUser models.User) (string, error) {
 	var oldUser models.User
 	var successMessage string
 	var errorMessage error
-	oldUser =  FindUserByUserID(updatedUser.ID)
 
-	if (updatedUser.Password == "") {
-		fmt.Println("don't update pw")
+	oldUser = FindUserByUserID(updatedUser.ID)
+
+	//TODO check what needs to be checked her
+	if updatedUser.Password == "" {
+		updatedUser.Password = oldUser.Password
 	} else {
-		fmt.Println("update pw!")
+		updatedUser.Password = HashString(updatedUser.Password)
+		successMessage += "Your password has been updated. \n"
+		fmt.Println(updatedUser.Password)
 	}
 
-	fmt.Printf("The old user",oldUser)
-	fmt.Printf("The new data",updatedUser)
+	fmt.Printf("The old user %v \n", oldUser)
+	fmt.Printf("The new data %v \n ", updatedUser)
+
+	if !OtherUserWithEmailExists(updatedUser.Email, oldUser.ID) {
+		fmt.Println("User with Email does not exists \n")
+		if updatedUser.Email != oldUser.Email {
+			successMessage += "Your email has been updated. \n"
+		}
+	} else {
+		errorMessage = fmt.Errorf("there is a user with the same email")
+	}
+
+	if !OtherUserWithUserNameExists(updatedUser.Username, oldUser.ID) {
+		fmt.Println("User with same name does not  Exists ")
+		if updatedUser.Username != oldUser.Username {
+			successMessage += "Your username has been updated. \n"
+		}
+	} else {
+		errorMessage = fmt.Errorf("there is another user with the same username")
+	}
+
+	if updatedUser.Role != oldUser.Role{
+		successMessage += "Your Role has been updated. \n"
+	} 
 
 	db, err := sql.Open("sqlite3", config.LION_DB)
 	if err != nil {
@@ -276,25 +300,21 @@ func UpdateUserProfile(updatedUser models.User)(string,error){
 	}
 	defer db.Close()
 
-	if !OtherUserWithEmailExists(updatedUser.Email, oldUser.ID){
-		fmt.Println("User with Email does not exists")
-	} else {  
-		fmt.Println("User with Email  exists")
+	updatedUser.ModifiedAt = time.Now().Format("02/01/06,15/04")
+
+	updatedUser.Active = 1
+
+	fmt.Println(updatedUser.Password)
+
+	query := "UPDATE users SET username=? ,email=?, password=?, role=?, active = ?, modified_at = CURRENT_TIMESTAMP WHERE id = ?"
+	_, err = db.Exec(query, updatedUser.Username, updatedUser.Email, updatedUser.Password, updatedUser.Role,updatedUser.Active,updatedUser.ID)
+	if err != nil {
+		fmt.Println("Error, updating user ", err)
+		errorMessage = fmt.Errorf(err.Error()) 
+		return successMessage , errorMessage
 	}
 
-	if !OtherUserWithUserNameExists( updatedUser.Username, oldUser.ID){
-			fmt.Println("User with same name does not  Exists ")
-	} else {
-			fmt.Println("User with same name Exists ")
-	}
+	fmt.Println(successMessage)
 
-
-	
-	if (UserWithEmailExists(updatedUser.Email)) {
-		fmt.Errorf("A user with the same email exist, pleas login with that username")
-		return successMessage,errorMessage 
-	}
-	
-	return successMessage,errorMessage
+	return successMessage, errorMessage
 }
-
