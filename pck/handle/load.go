@@ -389,7 +389,6 @@ func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Println("Not a user")
 	}
-
-	// http.Redirect(w, r, referer, http.StatusFound)
-	ProfileHandler(w, r)
+	LogoutHandler(w,r)
+	// ProfileHandler(w,r)
 }

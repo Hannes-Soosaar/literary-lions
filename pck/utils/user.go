@@ -260,7 +260,7 @@ func UpdateUserProfile(updatedUser models.User) (string, error) {
 
 	oldUser = FindUserByUserID(updatedUser.ID)
 
-	//TODO check what needs to be checked her
+
 	if updatedUser.Password == "" {
 		updatedUser.Password = oldUser.Password
 	} else {
