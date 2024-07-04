@@ -157,7 +157,8 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		delete(sessionStore, key)
 		break
 	}
-	render.RenderLandingPage(w, "index.html", data)
+	// render.RenderLandingPage(w, "index.html", data)
+	LandingPageHandler(w,r)
 }
 
 func isValidSession(sessionToken string) bool {
@@ -384,5 +385,4 @@ func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Not a user")
 	}
 	LogoutHandler(w,r)
-	// ProfileHandler(w,r)
 }

@@ -7,6 +7,8 @@ import (
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/utils"
 )
 
+
+
 func CommentHandler(w http.ResponseWriter, r *http.Request) {
 	referer := r.Header.Get("Referer")
 	if !verifyPostMethod(w, r) {

@@ -9,7 +9,7 @@ DONE: Posts are stored in the database. // there is a post table
 DONE: Comments are stored in the database. // each comment can be 
 DONE: Only allowed packages are used.
 DONE: The code uses at least one CREATE query.// in the db sql setup uses create you can not use create to modify the existing schema when the program is running.
-DONE: Passwords are secured and encrypted using bcrypt or other strong algorithms. // REGULAR hash ATM
+DONE: Passwords are secured and encrypted using bcrypt or other strong algorithms. 
 DONE: Users can register successfully. // can create a new user
 DONE: The forum detects duplicate email or username during registration. // Check on the backend two function get user by Name and Get user by email
 DONE: Registered users can log in and access features.  
@@ -31,14 +31,24 @@ DONE: The project has other bonus features that are not listed in the bonus part
 DONE: Get all queries back sorted by the latest post
 DONE: Get all queries back sorted by the latest post
 DONE: It is easy to respond to posts.
+DONE: Extras update user profile. HS task
 
 VERIFY: The number ofOD likes and dislikes is displayed and updated correctly. // Each post has the like dislike count
+
+
+---BUGS/Design---
+TODO: time zone, is wrong will remove from display on the profile page.
+TODO: the search bar is not visible one other pages.
+TODO: the wrong password does not give a proper error
+TODO: empty Categories have no indication that they are empty
+TODO: No all tab under Post Categories.
+TODO: Site navigation has the Homepage button why, move to categories all?
 
 
 ---Posts,likes and comments---
 TODO: The number of likes and dislikes for comments is visible to all users. Hs task
 TODO: It is easy to respond to comments. HS task
-TODO: Extras update user profile. HS task
+
 
 ---Server
 TODO: The project handles HTTP status 400 and 500 errors gracefully.

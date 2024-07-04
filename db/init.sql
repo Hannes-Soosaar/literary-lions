@@ -112,3 +112,9 @@ CREATE TABLE IF NOT EXISTS user_activity (
     dislike_activity BOOLEAN DEFAULT FALSE,
     UNIQUE(user_id, post_id)
 );
+
+CREATE TABLE IF NOT EXISTS comment_relations(
+    id INTEGER PRIMARY KEY,
+    parent_comment_id INTEGER
+    child_comment_id INTEGER
+);
