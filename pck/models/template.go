@@ -26,6 +26,8 @@ type TemplateData struct {
 	PostCreatedMessage         string
 	DisplayCatID               int
 	QueryNoResult              string
+	SearchQuery                string
+	FilterType                 string
 }
 
 func DefaultTemplateData() TemplateData {
@@ -53,5 +55,7 @@ func DefaultTemplateData() TemplateData {
 		PostCreatedMessage:         "",
 		DisplayCatID:               0,
 		QueryNoResult:              "",
+		SearchQuery:                "",
+		FilterType:                 "",
 	}
 }

@@ -27,6 +27,8 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	data.Title = "Search results"
 	data.ProfilePage = false
 	data.AllPosts = allPosts
+	data.SearchQuery = SearchQuery
+	data.FilterType = FilterType
 	if (len(data.AllPosts.AllPosts)) == 0 {
 		var message string = "No results for keyword \"" + SearchQuery + "\""
 		switch FilterType {
