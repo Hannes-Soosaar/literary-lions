@@ -7,7 +7,6 @@
         <div class="post-container">
             <h1>{{.Title}}</h1>
             <p>{{.Body}}</p>
-
             <a>
                 <div class="flex-container">
                     <div class="post-likes-dislikes">
@@ -27,16 +26,14 @@
                                 <span class="dislike-number">{{.Dislikes}}</span>
                             </button>
                         </form>
-
                     </div>
-
                     {{if $.ShowComments}}
                     {{if $.IsLoggedIn }}
                     <div class="post-comment-amount">
                         <a href="#comment">
                             <div class="comments-icon">
                                 <img src="{{ $.StaticURL}}/images/CommentsIcon.png" alt="CommentsIcon" />
-                                <span class="comments-number">111</span>
+                                <span class="comments-number">Comment Post</span>
                             </div>
                         </a>
                     </div>
@@ -58,14 +55,12 @@
             </form>
         </div>
     </div>
-
     <div class="post-container-separator">
         <h1>Comments</h1>
     </div>
     <br>
     <br>
     <br>
-
     {{if $.ShowComments}}
     <div class="comment-container">
         {{$postID := .ID}}
@@ -78,6 +73,5 @@
         {{end}}
         {{end}}
     </div>
-
     {{ end }}
     {{ end }}

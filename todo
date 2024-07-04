@@ -22,7 +22,7 @@ DONE: Posts cannot be liked and disliked simultaneously. // Try to handle on the
 DONE: Posts can be filtered by category. // the category menu on the left
 DONE: Posts can be associated with categories.
 DONE: Only registered users can create posts.
-DONE:Only registered users can create  comments.
+DONE: Only registered users can create  comments.
 DONE: Empty posts  are not allowed.
 DONE: Empty comments are not allowed.
 DONE: Registered users can view their created posts and liked posts. // each post has a user_id ref
@@ -37,15 +37,16 @@ VERIFY: The number ofOD likes and dislikes is displayed and updated correctly. /
 
 
 ---BUGS/Design---
-TODO: time zone, is wrong will remove from display on the profile page.
+DONE: time zone, is wrong will remove from display on the profile page.--> will not display only user for sorting.
 TODO: the search bar is not visible one other pages.
 TODO: the wrong password does not give a proper error
 TODO: empty Categories have no indication that they are empty
-TODO: No all tab under Post Categories.
+TODO: No "all" selection under Post Categories.
 TODO: Site navigation has the Homepage button why, move to categories all?
 
 
 ---Posts,likes and comments---
+TODO: Be able to add child comments to parent comments. 
 TODO: The number of likes and dislikes for comments is visible to all users. Hs task
 TODO: It is easy to respond to comments. HS task
 
