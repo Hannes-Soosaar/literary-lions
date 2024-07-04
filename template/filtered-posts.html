@@ -1,78 +1,102 @@
-{{ define "filtered-posts"}}
-<div class="filtered-post">
-
-    {{ range .AllPosts.AllPosts}}
-
-    <a href="/category/{{.CategoryID}}/{{.ID}}">
-        <div class="post-container">
-            <h1>{{.Title}}</h1>
-            <p>{{.Body}}</p>
-            <a>
-                <div class="flex-container">
-                    <div class="post-likes-dislikes">
-                        {{ if $.IsLoggedIn }}
-                        <form action="/like/{{.ID}}" method="post">
-                            {{ end }}
-                            <button type="submit" class="like-icon">
-                                <img src="{{ $.StaticURL}}/images/thumbsup.png" alt="Like" />
-                                <span class="like-number">{{.Likes}}</span>
-                            </button>
-                        </form>
-                        {{ if $.IsLoggedIn }}
-                        <form action="/dislike/{{.ID}}" method="post">
-                            {{ end }}
-                            <button type="submit" class="dislike-icon">
-                                <img src="{{ $.StaticURL}}/images/thumbsdown.png" alt="Dislike" />
-                                <span class="dislike-number">{{.Dislikes}}</span>
-                            </button>
-                        </form>
+ {{ define "filtered-posts"}}
+    <div class="filtered-post">
+         {{ range .AllPosts.AllPosts}}
+        <a href="/category/{{.CategoryID}}/{{.ID}}">
+            <div class="post-container">
+                <h1>{{.Title}}</h1>
+                <p>{{.Body}}</p>
+                    <div class="flex-container">
+                        <div class="post-likes-dislikes">
+                             {{ if $.IsLoggedIn }}
+                            <form action="/like/{{.ID}}" method="post">
+                                <button type="submit" class="like-icon">
+                                    <img src="{{ $.StaticURL}}/images/thumbsup.png" alt="Like" />
+                                    <span class="like-number">{{.Likes}}</span>
+                                </button>
+                            </form>  
+                            <form action="/dislike/{{.ID}}" method="post">      
+                                <button type="submit" class="dislike-icon">
+                                    <img src="{{ $.StaticURL}}/images/thumbsdown.png" alt="Dislike" />
+                                    <span class="dislike-number">{{.Dislikes}}</span>
+                                </button>
+                            </form>
+                            
+                        </div>
+                         {{ end }}
+                         
+                         {{if $.ShowComments}}
+                         {{if $.IsLoggedIn }}
+                        <div class="post-comment-amount">
+                            <a href="#comment">
+                                <div class="comments-icon">
+                                    <img src="{{ $.StaticURL}}/images/CommentsIcon.png" alt="CommentsIcon" />
+                                    <span class="comments-number">Comment Post</span>
+                                </div>
+                            </a>
+                        </div>
+                         {{end}}
+                         {{end}}
                     </div>
-                    {{if $.ShowComments}}
-                    {{if $.IsLoggedIn }}
-                    <div class="post-comment-amount">
-                        <a href="#comment">
-                            <div class="comments-icon">
-                                <img src="{{ $.StaticURL}}/images/CommentsIcon.png" alt="CommentsIcon" />
-                                <span class="comments-number">Comment Post</span>
-                            </div>
-                        </a>
-                    </div>
-                    {{end}}
-                    {{end}}
-                </div>
-        </div>
-    </a>
-
-    <div id="comment" class="popup">
-        <div class="popup-content">
-            <a href="#" class="close">&times;</a>
-            <form action="/postComment/{{.ID}}/" method="POST">
-                {{.ID}}
-                <input type="hidden" id="postID" name="postID" value="{{.ID}}" />
-                <input type="text" placeholder="Comment*" id="comment" name="comment" required />
-                <button type="submit">Post</button>
-            </form>
-        </div>
-    </div>
-
+            </div>
+        </a>
 
     <div class="post-container-separator">
         <h2>Comments</h2>
     </div>
-    <br>
-    <br>
-    <br>
-    {{if $.ShowComments}}
-    <div class="comment-container">
-        {{$postID := .ID}}
-        {{range $.Comments}}
-        {{if eq .PostID $postID}}
-        {{.Body}}
-        <div class="post-container-separator"></div>
-        <br>
-        {{end}}
-        {{end}}
-        {{end}}
+        
+         {{if $.ShowComments}}
+        <div class="comment-container">
+            {{$postID := .ID}}
+            <div>
+             {{range $.Comments}}
+             {{if eq .PostID $postID}}
+                <div class="post-container">
+                    <div id="comment" class="popup">
+                        <div class="popup-content">
+                            <a href="#" class="close">&times;</a>       
+                            <form action="/postComment/{{.ID}}/" method="POST">
+                                {{.ID}}
+                                <input type="hidden" id="postID" name="postID" value="{{$postID}}" />
+                                <input type="hidden" id="commentID" name="commentID" value="{{.ID}}" />
+                                <input type="text" placeholder="Comment*" id="comment" name="comment" required />
+                                <button type="submit">Post</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                    <div id="comment_reply_{{.ID}}" class="popup">
+                            <div class="popup-content">
+                                <a href="#" class="close">&times;</a>
+                                    <form action="/postComment/{{.ID}}/" method="POST"> 
+                                        <!-- the above handler action needs to be changed -->
+                                        {{$postID}}
+                                        {{.ID}}
+                                        {{.Body}}
+                                    <input type="hidden" id="postID" name="postID" value="{{$postID}}" />
+                                    <input type="hidden" id="commentID" name="commentID" value="{{.ID}}" />
+                                        <input type="text" placeholder="Comment*" id="comment" name="comment" required />
+                                        <button type="submit">Post</button>
+                                    </form>
+                            </div>
+                    </div>
+                 {{if $.IsLoggedIn }}
+                <div class="post-comment-amount flex-container">
+                    <div>
+                        <a href="#comment_reply_{{.ID}}">
+                            <div class="comments-icon">
+                                <img src="{{ $.StaticURL}}/images/CommentsIcon.png" alt="CommentsIcon" />
+                                <span class="comments-number">Reply to comment</span>
+                            </div>
+                        </a>
+                    </div>
+                    </div>
+                 {{end}}
+                </div>
+            <div class="post-container-separator"></div>
+             {{end}}
+             {{end}}
+             {{end}}
+            
+     {{ end }} 
     </div>
-    {{ end }}
-    {{ end }}
+ {{ end }}

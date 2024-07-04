@@ -32,15 +32,16 @@ DONE: Get all queries back sorted by the latest post
 DONE: Get all queries back sorted by the latest post
 DONE: It is easy to respond to posts.
 DONE: Extras update user profile. HS task
-
+DONE: the search bar is not visible one other pages.
+DONE: time zone, is wrong will remove from display on the profile page.--> will not display only user for sorting
+DONE: empty Categories have no indication that they are empty
 VERIFY: The number ofOD likes and dislikes is displayed and updated correctly. // Each post has the like dislike count
 
 
 ---BUGS/Design---
-DONE: time zone, is wrong will remove from display on the profile page.--> will not display only user for sorting.
-DONE: the search bar is not visible one other pages.
+.
+
 TODO: the wrong password does not give a proper error
-DONE: empty Categories have no indication that they are empty
 TODO: No "all" selection under Post Categories.
 TODO: Site navigation has the Homepage button why, move to categories all?
 
