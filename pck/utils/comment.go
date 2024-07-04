@@ -139,7 +139,7 @@ func PostComment(userId int, comment string, postId string) error {
 		log.Fatal(err)
 		return err
 	}
-	 query := "INSERT INTO comments(body,user_id,likes,dislikes,post_id,created_at,modified_at,active) VALUES (?,?,0,0,?,datetime('now'),datetime('now'),1)"
+	query := "INSERT INTO comments(body,user_id,likes,dislikes,post_id,created_at,modified_at,active) VALUES (?,?,0,0,?,datetime('now'),datetime('now'),1)"
 	_,err = db.Exec(query,comment,userId,postId)
 	if err != nil {
 	log.Fatal(err)

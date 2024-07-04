@@ -26,8 +26,8 @@ func main() {
 	http.HandleFunc("/submit-post", handle.SubmitPostHandler)
 	http.HandleFunc("/search", handle.SearchHandler)
 	http.HandleFunc("/your-posts", handle.UserPostsHandler)
-	http.HandleFunc("/liked-posts", handle.LikedAndDislikedPostsHandler)
-	http.HandleFunc("/disliked-posts", handle.LikedAndDislikedPostsHandler)
+	http.HandleFunc("/liked-posts", handle.LikedAndDislikedPostsHandler) //TODO: make copy for comments
+	http.HandleFunc("/disliked-posts", handle.LikedAndDislikedPostsHandler) // TODO: make copy for comments
 	http.HandleFunc("/userPostHistory", handle.GetGetUserPostHistoryHandler)
 	http.HandleFunc("/updateUserProfile", handle.UpdateUserProfileHandler) 
 
