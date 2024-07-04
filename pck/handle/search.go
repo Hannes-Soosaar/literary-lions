@@ -2,6 +2,8 @@ package handle
 
 import (
 	"net/http"
+	"strconv"
+	"strings"
 
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/models"
 	"gitea.kood.tech/hannessoosaar/literary-lions/pck/render"
@@ -15,18 +17,48 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	FilterType := r.Form.Get("filter-type")
 	SearchQuery := r.Form.Get("search-query")
-
 	sessionToken, err := r.Cookie("session_token")
 	isLoggedIn := err == nil && isValidSession(sessionToken.Value)
-	allPosts := utils.FilterPostForSearch(FilterType, SearchQuery)
 	categories := utils.GetActiveCategories()
 	comments := utils.GetActiveComments()
 	data := models.DefaultTemplateData()
+	data.Categories = categories
+	path := r.URL.Path
+	parts := strings.Split(strings.Trim(path, "/"), "/")
+	if len(parts) == 3 && parts[2] == "search" {
+		categoryIDstr := parts[1]
+		if len(categoryIDstr) != 1 {
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+		}
+		categoryID, err := strconv.Atoi(categoryIDstr)
+
+		if err != nil {
+			http.Error(w, "Invalid request", http.StatusBadRequest)
+		}
+		data.CategoryPage = true
+		data.DisplayCatID = categoryID
+		allPosts := utils.FilterPostForSearch(FilterType, SearchQuery, categoryID)
+		data.AllPosts = allPosts
+		for _, cat := range data.Categories {
+			if cat.ID == categoryID {
+				data.Title = cat.Category
+				if len(data.AllPosts.AllPosts) == 0 {
+					message := "The \"" + cat.Category + "\" category currently has no posts."
+					data.EmptyMessage = message
+				}
+			}
+		}
+	} else {
+		allPosts := utils.FilterPostForSearch(FilterType, SearchQuery, 0)
+		data.AllPosts = allPosts
+		data.MainPage = true
+	}
+
 	data.IsLoggedIn = isLoggedIn
-	data.MainPage = true
 	data.Title = "Search results"
 	data.ProfilePage = false
-	data.AllPosts = allPosts
+	data.SearchQuery = SearchQuery
+	data.FilterType = FilterType
 	if (len(data.AllPosts.AllPosts)) == 0 {
 		var message string = "No results for keyword \"" + SearchQuery + "\""
 		switch FilterType {
@@ -55,9 +87,23 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		if data.Username == "" {
 			data.Username = GetUsernameFromCookie(r)
 			if data.Username == "" {
-				render.RenderLandingPage(w, "index.html", data)
+				if len(parts) >= 3 && parts[2] == "search" {
+					render.RenderCategoryPage(w, "category-filtered-posts.html", data)
+					return
+
+				} else {
+					render.RenderLandingPage(w, "index.html", data)
+					return
+				}
+
 			}
 		}
 	}
-	render.RenderLandingPage(w, "index.html", data)
+	if len(parts) >= 3 && parts[2] == "search" {
+		render.RenderCategoryPage(w, "category-filtered-posts.html", data)
+		return
+	} else {
+		render.RenderLandingPage(w, "index.html", data)
+		return
+	}
 }

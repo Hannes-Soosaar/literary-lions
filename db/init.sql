@@ -77,14 +77,14 @@ CREATE TABLE IF NOT EXISTS categories (
 );
 
 INSERT INTO categories (category,active,created_at) VALUES
-('comedy',1,CURRENT_TIMESTAMP),
-('horror',1,CURRENT_TIMESTAMP),
-('sci-fi',1,CURRENT_TIMESTAMP),
-('action',1,CURRENT_TIMESTAMP),
-('adventure',1,CURRENT_TIMESTAMP),
-('romance',1,CURRENT_TIMESTAMP),
-('misc',1,CURRENT_TIMESTAMP),
-('kids',1,CURRENT_TIMESTAMP);
+('Comedy',1,CURRENT_TIMESTAMP),
+('Horror',1,CURRENT_TIMESTAMP),
+('Sci-Fi',1,CURRENT_TIMESTAMP),
+('Action',1,CURRENT_TIMESTAMP),
+('Adventure',1,CURRENT_TIMESTAMP),
+('Romance',1,CURRENT_TIMESTAMP),
+('Miscellaneous',1,CURRENT_TIMESTAMP),
+('Kids',1,CURRENT_TIMESTAMP);
 -- a table to tie posts and comments 
 CREATE TABLE IF NOT EXISTS post_comments(
    id INTEGER PRIMARY  KEY,

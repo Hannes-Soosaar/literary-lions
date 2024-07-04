@@ -1,9 +1,11 @@
 {{ define "filtered-posts"}}
 <div class="filtered-post">
-
-    {{ range .FilteredPosts.FilteredPosts}}
-
-                   
+    {{if .EmptyMessage}}
+    <div class="post-container-message">
+        <h1>{{.EmptyMessage}}</h1>
+    </div>
+    {{end}}
+    {{ range .AllPosts.AllPosts}}
 
     <a href="/category/{{.CategoryID}}/{{.ID}}">
         <div class="post-container">
@@ -45,14 +47,14 @@
                 </div>
 
         </div>
-        {{if  $.ShowComments}}
+        {{if $.ShowComments}}
         <div id="comment" class="popup">
             <div class="popup-content">
                 <a href="#" class="close">&times;</a>
                 <form action="/postComment/{{.ID}}/" method="POST">
                     {{.ID}}
                     <input type="hidden" id="postID" name="postID" value="{{.ID}}" />
-                    <input type="text" placeholder="comment*" id="comment" name="comment"  required/>
+                    <input type="text" placeholder="comment*" id="comment" name="comment" required />
                     <button type="submit">Post</button>
                 </form>
             </div>

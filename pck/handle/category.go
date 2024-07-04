@@ -38,14 +38,18 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 	data.Categories = categories
 	data.ShowComments = false
 
-	if len(parts) == 2 {
-
-		data.FilteredPosts = utils.FilterPostsByCategoryID(allPosts, categoryID)
+	if len(parts) == 2 || (len(parts) == 3 && parts[2] == "search") {
+		data.AllPosts = utils.FilterPostsByCategoryID(allPosts, categoryID)
 		for _, cat := range data.Categories {
 			if cat.ID == categoryID {
 				data.Title = cat.Category
+				if len(data.AllPosts.AllPosts) == 0 {
+					message := "The \"" + cat.Category + "\" category currently has no posts."
+					data.EmptyMessage = message
+				}
 			}
 		}
+		data.CategoryPage = true
 		data.ShowComments = false
 		data.DisplayCatID = categoryID
 		if isLoggedIn {
@@ -53,10 +57,12 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 				data.Username = GetUsernameFromCookie(r)
 				if data.Username == "" {
 					render.RenderCategoryPage(w, "category-filtered-posts.html", data)
+					return
 				}
 			}
 		}
 		render.RenderCategoryPage(w, "category-filtered-posts.html", data)
+		return
 	}
 
 	if len(parts) == 3 {
@@ -66,7 +72,7 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(w, "Invalid request", http.StatusBadRequest)
 		}
-		data.FilteredPosts = utils.FilterPostByID(allPosts, postID)
+		data.AllPosts = utils.FilterPostByID(allPosts, postID)
 		data.ShowComments = true
 		if isLoggedIn {
 			if data.Username == "" {

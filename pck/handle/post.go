@@ -271,6 +271,9 @@ func UserPostsHandler(w http.ResponseWriter, r *http.Request) {
 	data.IsLoggedIn = true
 	if isLoggedIn {
 		data.Title = "Your Posts"
+		if len(data.AllPosts.AllPosts) == 0 {
+			data.EmptyMessage = "You have not created any posts!"
+		}
 		render.RenderUserPosts(w, "posts-by-user.html", data)
 	} else {
 		data.ErrorMessage = "You need to be logged in to access your profile!"
@@ -331,12 +334,18 @@ func LikedAndDislikedPostsHandler(w http.ResponseWriter, r *http.Request) {
 				{
 					data.AllPosts = utils.FindUserLikedPosts(allPosts, data.User.ID)
 					data.LikedPostsPage = true
+					if (len(data.AllPosts.AllPosts)) == 0 {
+						data.EmptyMessage = "You have not liked any posts!"
+					}
 					data.Title = "Liked Posts"
 				}
 			case disliked:
 				{
 					data.AllPosts = utils.FindUserDislikedPosts(allPosts, data.User.ID)
 					data.DislikedPostsPage = true
+					if (len(data.AllPosts.AllPosts)) == 0 {
+						data.EmptyMessage = "You have not disliked any posts!"
+					}
 					data.Title = "Disliked Posts"
 				}
 			}

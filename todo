@@ -38,9 +38,9 @@ VERIFY: The number ofOD likes and dislikes is displayed and updated correctly. /
 
 ---BUGS/Design---
 DONE: time zone, is wrong will remove from display on the profile page.--> will not display only user for sorting.
-TODO: the search bar is not visible one other pages.
+DONE: the search bar is not visible one other pages.
 TODO: the wrong password does not give a proper error
-TODO: empty Categories have no indication that they are empty
+DONE: empty Categories have no indication that they are empty
 TODO: No "all" selection under Post Categories.
 TODO: Site navigation has the Homepage button why, move to categories all?
 
@@ -61,7 +61,7 @@ TODO: The interface handles 5XX HTTP response codes gracefully.
 
 --- User friendliness---
 
-TODO: Categories are effective in organising discussions.
+TODO: Categories are effective in organizing discussions.
 TODO: Content has intuitive filtering.
 TODO: Error messages are informative and user-friendly.
 TODO: SQL queries are effective and efficient.

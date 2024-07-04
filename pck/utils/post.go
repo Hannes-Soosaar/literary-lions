@@ -59,21 +59,21 @@ func GetAllPosts() models.Posts {
 	return posts
 }
 
-func FilterPostsByCategoryID(posts models.Posts, categoryID int) models.FilteredPosts {
-	var filteredPosts models.FilteredPosts
+func FilterPostsByCategoryID(posts models.Posts, categoryID int) models.Posts {
+	var filteredPosts models.Posts
 	for _, post := range posts.AllPosts {
 		if post.CategoryID == categoryID {
-			filteredPosts.FilteredPosts = append(filteredPosts.FilteredPosts, post)
+			filteredPosts.AllPosts = append(filteredPosts.AllPosts, post)
 		}
 	}
 	return filteredPosts
 }
 
-func FilterPostByID(posts models.Posts, postID int) models.FilteredPosts {
-	var filteredPost models.FilteredPosts
+func FilterPostByID(posts models.Posts, postID int) models.Posts {
+	var filteredPost models.Posts
 	for _, post := range posts.AllPosts {
 		if post.ID == postID {
-			filteredPost.FilteredPosts = append(filteredPost.FilteredPosts, post)
+			filteredPost.AllPosts = append(filteredPost.AllPosts, post)
 		}
 	}
 	return filteredPost

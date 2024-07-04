@@ -8,16 +8,17 @@
 			<span class="logo-text"><b>Literary<br />Lions</b></span>
 		</a>
 	</div>
-	{{ if .MainPage}}
-	<form class="search-form" action="/search" method="GET">
-		<select id="filter-type" name="filter-type">
-			<option value="keyword" selected>No filter</option>
-			<option value="likes">Likes</option>
-			<option value="dislikes">Dislikes</option>
-			<option value="time_new">Newest</option>
-			<option value="time_old">Oldest</option>
+	{{ if or .MainPage .CategoryPage }}
+	<form id="search-form" class="search-form"
+		action="{{ if .CategoryPage }}/category/{{.DisplayCatID}}/search{{ else }}/search{{ end }}" method="GET">
+		<select id="filter-type" name="filter-type" onchange="document.getElementById('search-form').submit();">
+			<option value="time_new" {{if eq .FilterType "time_new" }} selected {{end}}>Newest</option>
+			<option value="time_old" {{if eq .FilterType "time_old" }} selected {{end}}>Oldest</option>
+			<option value="likes" {{if eq .FilterType "likes" }} selected {{end}}>Likes</option>
+			<option value="dislikes" {{if eq .FilterType "dislikes" }} selected {{end}}>Dislikes</option>
 		</select>
-		<input type="text" name="search-query" placeholder="Search..." />
+		<input type="text" name="search-query" {{if not .SearchQuery}}placeholder="Search..."
+			{{else}}value="{{.SearchQuery}}" {{end}} />
 		<button type="submit"><b>Search</b></button>
 	</form>
 	{{ end }}
