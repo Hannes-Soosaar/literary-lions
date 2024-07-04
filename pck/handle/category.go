@@ -43,6 +43,10 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 		for _, cat := range data.Categories {
 			if cat.ID == categoryID {
 				data.Title = cat.Category
+				if len(data.AllPosts.AllPosts) == 0 {
+					message := "The \"" + cat.Category + "\" category currently has no posts."
+					data.EmptyMessage = message
+				}
 			}
 		}
 		data.CategoryPage = true

@@ -22,6 +22,7 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 	categories := utils.GetActiveCategories()
 	comments := utils.GetActiveComments()
 	data := models.DefaultTemplateData()
+	data.Categories = categories
 	path := r.URL.Path
 	parts := strings.Split(strings.Trim(path, "/"), "/")
 	if len(parts) == 3 && parts[2] == "search" {
@@ -38,6 +39,15 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		data.DisplayCatID = categoryID
 		allPosts := utils.FilterPostForSearch(FilterType, SearchQuery, categoryID)
 		data.AllPosts = allPosts
+		for _, cat := range data.Categories {
+			if cat.ID == categoryID {
+				data.Title = cat.Category
+				if len(data.AllPosts.AllPosts) == 0 {
+					message := "The \"" + cat.Category + "\" category currently has no posts."
+					data.EmptyMessage = message
+				}
+			}
+		}
 	} else {
 		allPosts := utils.FilterPostForSearch(FilterType, SearchQuery, 0)
 		data.AllPosts = allPosts

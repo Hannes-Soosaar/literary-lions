@@ -1,5 +1,10 @@
 {{ define "posts-by-user" }}
 <div class="forum_content">
+    {{if .EmptyMessage}}
+    <div class="post-container-message">
+        <h1>{{.EmptyMessage}}</h1>
+    </div>
+    {{end}}
     {{ range .AllPosts.AllPosts}}
     <a href="/category/{{.CategoryID}}/{{.ID}}">
         <div class="post-container">

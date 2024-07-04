@@ -28,6 +28,7 @@ type TemplateData struct {
 	QueryNoResult              string
 	SearchQuery                string
 	FilterType                 string
+	EmptyMessage               string
 }
 
 func DefaultTemplateData() TemplateData {
@@ -57,5 +58,6 @@ func DefaultTemplateData() TemplateData {
 		QueryNoResult:              "",
 		SearchQuery:                "",
 		FilterType:                 "",
+		EmptyMessage:               "",
 	}
 }
