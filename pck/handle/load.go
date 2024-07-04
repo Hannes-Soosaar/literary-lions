@@ -341,7 +341,6 @@ func GetGetUserPostHistoryHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
-
 	if !verifyPostMethod(w, r) {
 		return
 	}
@@ -352,15 +351,12 @@ func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	sessionUser := utils.FindUserByUserName(verifiedUserName)
 	var updatedUser models.User
-
 	updatedUser.Password = r.FormValue("newPassword")
 	passwordAgain := r.FormValue("newPasswordAgain")
-
 	if  (updatedUser.Password == passwordAgain ) || updatedUser.Password ==""{
 	} else {
 		updatedUser.Password="0"
 	}
-
 	if (r.FormValue("email")) == "" {
 		updatedUser.Email = sessionUser.Email
 	} else {
@@ -381,9 +377,7 @@ func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("Unable to get user ID")
 	}
-
 	updatedUser.ID = int(parsedInt)
-
 	if sessionUser.ID == updatedUser.ID {
 		utils.UpdateUserProfile(updatedUser)
 	} else {

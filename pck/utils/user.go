@@ -257,10 +257,7 @@ func UpdateUserProfile(updatedUser models.User) (string, error) {
 	var oldUser models.User
 	var successMessage string
 	var errorMessage error
-
 	oldUser = FindUserByUserID(updatedUser.ID)
-
-
 	if updatedUser.Password == "" {
 		updatedUser.Password = oldUser.Password
 	} else {
@@ -268,10 +265,8 @@ func UpdateUserProfile(updatedUser models.User) (string, error) {
 		successMessage += "Your password has been updated. \n"
 		fmt.Println(updatedUser.Password)
 	}
-
-	fmt.Printf("The old user %v \n", oldUser)
-	fmt.Printf("The new data %v \n ", updatedUser)
-
+	// fmt.Printf("The old user %v \n", oldUser)
+	// fmt.Printf("The new data %v \n ", updatedUser)
 	if !OtherUserWithEmailExists(updatedUser.Email, oldUser.ID) {
 		fmt.Println("User with Email does not exists \n")
 		if updatedUser.Email != oldUser.Email {
@@ -280,7 +275,6 @@ func UpdateUserProfile(updatedUser models.User) (string, error) {
 	} else {
 		errorMessage = fmt.Errorf("there is a user with the same email")
 	}
-
 	if !OtherUserWithUserNameExists(updatedUser.Username, oldUser.ID) {
 		fmt.Println("User with same name does not  Exists ")
 		if updatedUser.Username != oldUser.Username {
@@ -289,23 +283,16 @@ func UpdateUserProfile(updatedUser models.User) (string, error) {
 	} else {
 		errorMessage = fmt.Errorf("there is another user with the same username")
 	}
-
 	if updatedUser.Role != oldUser.Role{
 		successMessage += "Your Role has been updated. \n"
 	} 
-
 	db, err := sql.Open("sqlite3", config.LION_DB)
 	if err != nil {
 		fmt.Println("error opening DB", err)
 	}
 	defer db.Close()
-
-	updatedUser.ModifiedAt = time.Now().Format("02/01/06,15/04")
-
-	updatedUser.Active = 1
-
+	updatedUser.Active = 1 // sets account to active can hardcode
 	fmt.Println(updatedUser.Password)
-
 	query := "UPDATE users SET username=? ,email=?, password=?, role=?, active = ?, modified_at = CURRENT_TIMESTAMP WHERE id = ?"
 	_, err = db.Exec(query, updatedUser.Username, updatedUser.Email, updatedUser.Password, updatedUser.Role,updatedUser.Active,updatedUser.ID)
 	if err != nil {
@@ -313,8 +300,6 @@ func UpdateUserProfile(updatedUser models.User) (string, error) {
 		errorMessage = fmt.Errorf(err.Error()) 
 		return successMessage , errorMessage
 	}
-
 	fmt.Println(successMessage)
-
 	return successMessage, errorMessage
 }
