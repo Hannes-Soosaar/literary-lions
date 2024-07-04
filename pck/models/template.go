@@ -8,6 +8,7 @@ type TemplateData struct {
 	ErrorMessage               string
 	Title                      string
 	Uuid                       string
+	CategoryPage               bool
 	IsLoggedIn                 bool
 	ProfilePage                bool
 	MainPage                   bool
@@ -19,7 +20,6 @@ type TemplateData struct {
 	PostComments               []PostComment
 	Comments                   []Comment
 	User                       User
-	FilteredPosts              FilteredPosts
 	StaticURL                  string
 	CreatePostPage             bool
 	ShowComments               bool
@@ -37,6 +37,7 @@ func DefaultTemplateData() TemplateData {
 		ErrorMessage:               "",
 		Title:                      "Lions",
 		Uuid:                       "",
+		CategoryPage:               false,
 		IsLoggedIn:                 false,
 		ProfilePage:                false,
 		MainPage:                   false,
@@ -49,7 +50,6 @@ func DefaultTemplateData() TemplateData {
 		PostComments:               []PostComment{},
 		Comments:                   []Comment{},
 		User:                       User{},
-		FilteredPosts:              FilteredPosts{},
 		StaticURL:                  "http://localhost:8082/static", //? what does this do ?
 		ShowComments:               false,
 		PostCreatedMessage:         "",

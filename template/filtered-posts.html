@@ -1,7 +1,7 @@
 {{ define "filtered-posts"}}
 <div class="filtered-post">
 
-    {{ range .FilteredPosts.FilteredPosts}}
+    {{ range .AllPosts.AllPosts}}
 
     <a href="/category/{{.CategoryID}}/{{.ID}}">
         <div class="post-container">

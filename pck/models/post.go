@@ -16,7 +16,3 @@ type Post struct {
 type Posts struct {
 	AllPosts []Post
 }
-
-type FilteredPosts struct {
-	FilteredPosts []Post
-}
