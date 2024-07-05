@@ -35,6 +35,7 @@ DONE: Extras update user profile. HS task
 DONE: the search bar is not visible one other pages.
 DONE: time zone, is wrong will remove from display on the profile page.--> will not display only user for sorting
 DONE: empty Categories have no indication that they are empty
+DONE: It is easy to respond to comments. HS task
 VERIFY: The number ofOD likes and dislikes is displayed and updated correctly. // Each post has the like dislike count
 
 
@@ -49,7 +50,7 @@ TODO: Site navigation has the Homepage button why, move to categories all?
 ---Posts,likes and comments---
 TODO: Be able to add child comments to parent comments. 
 TODO: The number of likes and dislikes for comments is visible to all users. Hs task
-TODO: It is easy to respond to comments. HS task
+
 
 
 ---Server

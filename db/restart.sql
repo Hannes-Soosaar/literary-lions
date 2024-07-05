@@ -6,3 +6,4 @@ DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS post_comments;
 DROP TABLE IF EXISTS user_activity;
+DROP TABLE IF EXISTS comment_replies;

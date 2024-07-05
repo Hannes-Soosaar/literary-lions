@@ -117,11 +117,11 @@ func PostComment(userId int, comment string, postId int) error {
 	}
 	return nil
 }
-
+//TODO: start work on liking comments
 func LikeComment(commentID int) {
 
 }
-
+//TODO: start work on liking comments
 func DislikeComment(commentID int) {
 
 }
@@ -144,24 +144,22 @@ func DislikeComment(commentID int) {
 
 
 
-//TODO just switch the comment to not active
-func RemoveCommentById(commentID int) (string, error) {
-	var successMessage string
-
-	db, err := sql.Open("sqlite3", config.LION_DB)
-	if err != nil {
-		log.Fatal(err)
-		return successMessage, err
-	}
-	 query := "DELETE FROM comments WHERE id = ?"
-	_,err = db.Exec(query,commentID)
-	if err != nil {
-	log.Fatal(err)
-		return successMessage, err
-	}
-	return successMessage, err
-
-}
+//! discontinued logic 
+// func RemoveCommentById(commentID int) (string, error) {
+// 	var successMessage string
+// 	db, err := sql.Open("sqlite3", config.LION_DB)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 		return successMessage, err
+// 	}
+// 	query := "DELETE FROM comments WHERE id = ?"
+// 	_,err = db.Exec(query,commentID)
+// 	if err != nil {
+// 	log.Fatal(err)
+// 		return successMessage, err
+// 	}
+// 	return successMessage, err
+// }
 
 func CommentReply(reply string, userId, CommentId, postId int) error {
 	db, err := sql.Open("sqlite3", config.LION_DB)
@@ -177,8 +175,7 @@ func CommentReply(reply string, userId, CommentId, postId int) error {
 	} 
 	return nil
 }
-
-
+// NOT USED ON THE SITE YET
 func GetCommentRepliesById (CommentId int) []models.CommentReply {
 	var commentReplies []models.CommentReply
 	db, err := sql.Open("sqlite3", config.LION_DB)

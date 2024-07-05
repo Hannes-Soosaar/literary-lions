@@ -10,9 +10,7 @@ import (
 )
 
 func GetActiveCategories() []models.Category {
-
 	var activeCategories []models.Category
-
 	db, err := sql.Open("sqlite3", config.LION_DB)
 	if err != nil {
 		log.Fatal(err)

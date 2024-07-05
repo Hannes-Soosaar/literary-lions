@@ -62,6 +62,7 @@
 	<h2>Comments</h2>
 
 	{{if $.ShowComments}} {{range $.Comments}}
+        {{$commentID:= .ID}}
 	<!-- Need to redefine the comment .ID as commentId -->
 
 	<div>
@@ -69,7 +70,8 @@
 			{{if eq .PostID $postID}}
 
         <div class="post-container">
-			<div class="bodyText">{{.ID}} {{.Body}}</div>
+			<div class="bodyText">             
+                {{.ID}} {{.Body}}</div>
 			<div class="post-comment-amount">
 				<a href="#comment_reply_{{.ID}}">
 					<div class="comments-icon">
@@ -84,12 +86,13 @@
 
             --------
             <!-- Add loop for getting and displaying comments  -->
-        
+            {{range $.CommentReplies}} {{if eq .CommentId $commentID}}
             <div class="post-container">
-                        <div class="replyText">reply is here</div>
+                        {{.Body}}
             </div>
 			<!-- Repeat what is done with Comments with replies one more loop here -->
-
+            {{end}}
+            {{end}}
 			<div>
                 <!-- the popup class need to be modified a bit -->
 				<div id="comment_reply_{{.ID}}" class="popup">
