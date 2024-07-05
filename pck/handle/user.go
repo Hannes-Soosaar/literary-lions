@@ -39,8 +39,34 @@ func CheckUserActivity(postID int, r *http.Request) (bool, bool) {
 		fmt.Println("Database error:", err)
 		return false, false
 	}
-
 	// Update HasLiked and HasDisliked based on user activity
+	return activity.HasLiked, activity.HasDisliked
+}
+
+func CheckUserReplyActivity(commentID int, r *http.Request) (bool, bool) {
+	type UserActivity struct {
+		HasLiked    bool
+		HasDisliked bool
+	}
+	username := GetUsernameFromCookie(r)
+	user := utils.FindUserByUserName(username)
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		fmt.Println("Database error:", err)
+		return false, false
+	}
+	defer db.Close()
+	query := "SELECT like_activity, dislike_activity FROM user_reply_activity WHERE user_id = ? AND comment_id = ?"
+	row := db.QueryRow(query, user.ID, commentID)
+	var activity UserActivity
+	err = row.Scan(&activity.HasLiked, &activity.HasDisliked)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return false, false
+		}
+		fmt.Println("Database error:", err)
+		return false, false
+	}
 	return activity.HasLiked, activity.HasDisliked
 }
 
@@ -56,4 +82,3 @@ func GetUsernameFromCookie(r *http.Request) string {
 	}
 	return username
 }
-

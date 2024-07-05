@@ -113,6 +113,15 @@ CREATE TABLE IF NOT EXISTS user_activity (
     UNIQUE(user_id, post_id)
 );
 
+CREATE TABLE IF NOT EXISTS user_reply_activity (
+    id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    comment_id INT NOT NULL,
+    like_activity BOOLEAN DEFAULT FALSE,
+    dislike_activity BOOLEAN DEFAULT FALSE,
+    UNIQUE(user_id, comment_id)
+);
+
 
 CREATE TABLE IF NOT EXISTS comment_replies (
     id INTEGER PRIMARY  KEY,
