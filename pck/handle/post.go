@@ -233,6 +233,62 @@ func MarkPostAsUndisliked(userID, postID int) error {
 
 	return nil
 }
+func MarkCommentAsDisliked(userID, commentID int) error {
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+	var dislikeActivity bool
+	err = db.QueryRow("SELECT dislike_activity FROM user_reply_activity WHERE user_id = ? AND comment_id = ?", userID, commentID).Scan(&dislikeActivity)
+	switch {
+	case err == sql.ErrNoRows:
+		_, err := db.Exec("INSERT INTO user_reply_activity (user_id, comment_id, dislike_activity) VALUES (?, ?, 1)", userID, commentID)
+		if err != nil {
+			return err
+		}
+	case err != nil:
+		return err
+	default:
+		if !dislikeActivity {
+			_, err := db.Exec("UPDATE user_reply_activity SET dislike_activity = 1 WHERE user_id = ? AND comment_id = ?", userID, commentID)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func MarkCommentAsUndisliked(userID, commentID int) error {
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+	var dislikeActivity bool
+	err = db.QueryRow("SELECT dislike_activity FROM user_reply_activity WHERE user_id = ? AND comment_id = ?", userID, commentID).Scan(&dislikeActivity)
+	switch {
+	case err == sql.ErrNoRows:
+		fmt.Println("No existing entry?")
+		_, err := db.Exec("INSERT INTO user_reply_activity  (user_id, comment_id, dislike_activity) VALUES (?, ?, 0)", userID, commentID)
+		if err != nil {
+			fmt.Println("error", err)
+			return err
+		}
+	case err != nil:
+		return err
+	default:
+		if dislikeActivity {
+			_, err := db.Exec("UPDATE user_reply_activity SET dislike_activity = 0 WHERE user_id = ? AND comment_id = ?", userID, commentID)
+			if err != nil {
+				fmt.Println("Disiking set to 0")
+				return err
+			}
+		}
+	}
+	return nil
+}
 
 func UserPostsHandler(w http.ResponseWriter, r *http.Request) {
 	// Check session token
