@@ -113,8 +113,13 @@ CREATE TABLE IF NOT EXISTS user_activity (
     UNIQUE(user_id, post_id)
 );
 
-CREATE TABLE IF NOT EXISTS comment_relations(
-    id INTEGER PRIMARY KEY,
-    parent_comment_id INTEGER
-    child_comment_id INTEGER
+
+CREATE TABLE IF NOT EXISTS comment_replies (
+    id INTEGER PRIMARY  KEY,
+    body   TEXT NOT NULL,
+    user_id INTEGER NOT NULL,
+    comment_id INTEGER NOT NULL, 
+    post_id INTEGER NOT NULL,  -- dunno if we will need this.
+    created_at TEXT NOT NULL,
+    active INTEGER NOT NULL
 );

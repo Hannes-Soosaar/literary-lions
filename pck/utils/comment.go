@@ -133,7 +133,7 @@ func GetActiveChildComments(parentCommentId int) []models.Comment {
 	return childComments
 }
 
-func PostComment(userId int, comment string, postId string) error {
+func PostComment(userId int, comment string, postId int) error {
 	db, err := sql.Open("sqlite3", config.LION_DB)
 	if err != nil {
 		log.Fatal(err)
@@ -189,4 +189,19 @@ func RemoveCommentById(commentID int) (string, error) {
 	}
 	return successMessage, err
 
+}
+
+func CommentReply(reply string, userId, CommentId, postId int) error {
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		log.Fatal(err)
+		return err
+	}
+	query := "INSERT INTO comment_replies(body,user_id,comment_id,post_id,created_at, active) VALUES (?,?,?,?,datetime('now'),1)"
+	_,err = db.Exec(query,reply,userId,CommentId,postId)
+	if err != nil {
+	log.Fatal(err)
+		return err
+	} 
+	return nil
 }

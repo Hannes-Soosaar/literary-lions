@@ -9,6 +9,13 @@ body {
     overflow: hidden;
 }
 
+.commentText {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 30px;
+    color: red;
+    text-align: left
+}
+
 .usernameText {
     position: fixed;
     z-index: 1001;
