@@ -97,7 +97,7 @@ func CommentLikeHandler(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				http.Error(w, "Database error", http.StatusInternalServerError)
 			}
-			MarkPostAsUnliked(user.ID, postID)
+			MarkCommentAsUnliked(user.ID, postID)
 		}
 	}
 	referer := r.Header.Get("Referer")
@@ -144,7 +144,7 @@ func CommentDislikeHandler(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				http.Error(w, "Database error", http.StatusInternalServerError)
 			}
-			MarkPostAsDisliked(user.ID, commentID) // TODO mod this function for comments
+			MarkCommentAsDisliked(user.ID, commentID) // TODO mod this function for comments
 		} else {
 			db, err := sql.Open("sqlite3", config.LION_DB)
 			if err != nil {
@@ -156,7 +156,7 @@ func CommentDislikeHandler(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				http.Error(w, "Database error", http.StatusInternalServerError)
 			}
-			MarkPostAsUndisliked(user.ID, commentID)
+			MarkCommentAsUndisliked(user.ID, commentID)
 		}
 	}
 	referer := r.Header.Get("Referer")
