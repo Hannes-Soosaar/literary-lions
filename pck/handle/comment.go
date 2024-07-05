@@ -34,11 +34,6 @@ func CommentHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid post ID", http.StatusBadRequest)
 		return
 	}
-
-	fmt.Printf("the Comment we want to reply to is: %d \n ", commentId)
-	fmt.Printf("the Post we want to comment on is: %d \n ", postId)
-	fmt.Printf("the comment we want to add to is: %s \n ", comment)
-
 	if commentIdString == "" {
 		fmt.Printf("Posting comment \n")
 		utils.PostComment(sessionUser.ID, comment, postId)
@@ -55,22 +50,22 @@ func CommentLikeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	var postIDstr string
+	var commentIDstr string
 	path := r.URL.Path
 	parts := strings.Split(path, "/")
 	for _, part := range parts {
 		// Check if the part is a numeric string
 		_, err := strconv.Atoi(part)
-		if err == nil { // Found the numeric part which is the postID
-			postIDstr = part
+		if err == nil { // Found the numeric part which is the ! commentID
+			commentIDstr = part
 			break
 		}
 	}
-	if postIDstr == "" {
+	if commentIDstr == "" {
 		http.Error(w, "Invalid URL", http.StatusBadRequest)
 	}
-	postID, _ := strconv.Atoi(postIDstr)
-	HasLiked, HasDisliked := CheckUserActivity(postID, r)
+	commentID, _ := strconv.Atoi(commentIDstr)
+	HasLiked, HasDisliked := CheckUserReplyActivity(commentID, r)
 	username := GetUsernameFromCookie(r)
 	user := utils.FindUserByUserName(username)
 	if !HasDisliked {
@@ -81,11 +76,11 @@ func CommentLikeHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			defer db.Close()
-			_, err = db.Exec("UPDATE posts SET likes = likes + 1 WHERE id = ?", postIDstr)
+			_, err = db.Exec("UPDATE comments SET likes = likes + 1 WHERE id = ?", commentIDstr)
 			if err != nil {
 				http.Error(w, "Database error", http.StatusInternalServerError)
 			}
-			MarkPostAsLiked(user.ID, postID)
+			MarkCommentAsLiked(user.ID, commentID)
 		} else {
 			db, err := sql.Open("sqlite3", config.LION_DB)
 			if err != nil {
@@ -93,11 +88,11 @@ func CommentLikeHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			defer db.Close()
-			_, err = db.Exec("UPDATE posts SET likes = likes - 1 WHERE id = ?", postIDstr)
+			_, err = db.Exec("UPDATE comments SET likes = likes - 1 WHERE id = ?", commentIDstr)
 			if err != nil {
 				http.Error(w, "Database error", http.StatusInternalServerError)
 			}
-			MarkCommentAsUnliked(user.ID, postID)
+			MarkCommentAsUnliked(user.ID, commentID)
 		}
 	}
 	referer := r.Header.Get("Referer")
@@ -109,29 +104,27 @@ func CommentDislikeHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	// TODO: migrate to r.FromValue ?
-
 	var commentIDstr string
-
 	path := r.URL.Path
 	parts := strings.Split(path, "/")
+
+	fmt.Println(parts)
 	for _, part := range parts {
-		// Check if the part is a numeric string
 		_, err := strconv.Atoi(part)
-		if err == nil { // Found the numeric part which is the postID
+		if err == nil {
 			commentIDstr = part
 			break
 		}
 	}
+
 	if commentIDstr == "" {
 		http.Error(w, "Invalid URL", http.StatusBadRequest)
 	}
 	commentID, _ := strconv.Atoi(commentIDstr)
+	HasLiked, HasDisliked := CheckUserReplyActivity(commentID, r)
 
-	HasLiked, HasDisliked := CheckUserActivity(commentID, r) // ? OK
-
-	username := GetUsernameFromCookie(r)       // ? OK
-	user := utils.FindUserByUserName(username) // ? OK
+	username := GetUsernameFromCookie(r)
+	user := utils.FindUserByUserName(username)
 	if !HasLiked {
 		if !HasDisliked {
 			db, err := sql.Open("sqlite3", config.LION_DB)
@@ -140,11 +133,11 @@ func CommentDislikeHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			defer db.Close()
-			_, err = db.Exec("UPDATE posts SET dislikes = dislikes + 1 WHERE id = ?", commentIDstr)
+			_, err = db.Exec("UPDATE comments SET dislikes = dislikes + 1 WHERE id = ?", commentIDstr)
 			if err != nil {
 				http.Error(w, "Database error", http.StatusInternalServerError)
 			}
-			MarkCommentAsDisliked(user.ID, commentID) // TODO mod this function for comments
+			MarkCommentAsDisliked(user.ID, commentID)
 		} else {
 			db, err := sql.Open("sqlite3", config.LION_DB)
 			if err != nil {
@@ -152,7 +145,7 @@ func CommentDislikeHandler(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			defer db.Close()
-			_, err = db.Exec("UPDATE posts SET dislikes = dislikes - 1 WHERE id = ?", commentIDstr)
+			_, err = db.Exec("UPDATE comments SET dislikes = dislikes - 1 WHERE id = ?", commentIDstr)
 			if err != nil {
 				http.Error(w, "Database error", http.StatusInternalServerError)
 			}

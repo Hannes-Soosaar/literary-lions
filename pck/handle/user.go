@@ -39,10 +39,10 @@ func CheckUserActivity(postID int, r *http.Request) (bool, bool) {
 		fmt.Println("Database error:", err)
 		return false, false
 	}
+
 	// Update HasLiked and HasDisliked based on user activity
 	return activity.HasLiked, activity.HasDisliked
 }
-
 func CheckUserReplyActivity(commentID int, r *http.Request) (bool, bool) {
 	type UserActivity struct {
 		HasLiked    bool
@@ -67,6 +67,8 @@ func CheckUserReplyActivity(commentID int, r *http.Request) (bool, bool) {
 		fmt.Println("Database error:", err)
 		return false, false
 	}
+
+	fmt.Println(activity)
 	return activity.HasLiked, activity.HasDisliked
 }
 

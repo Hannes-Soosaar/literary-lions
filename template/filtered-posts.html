@@ -66,7 +66,6 @@
 
 	{{if $.ShowComments}} {{range $.Comments}}
         {{$commentID:= .ID}}
-	<!-- Need to redefine the comment .ID as commentId -->
 
 	<div>
 		<div>
@@ -80,7 +79,7 @@
 			<div class="flex-container">
 				<div class="post-likes-dislikes">
 					{{if $.IsLoggedIn }}
-					<form action="/like/{{.ID}}" method="post">
+					<form action="/comment-like/{{$commentID}}" method="post">
 					{{end}}
 						<button type="submit" class="like-icon">
 							<img src="{{ $.StaticURL}}/images/thumbsup.png" alt="Like" />
@@ -88,7 +87,7 @@
 						</button>
 					</form>
 					{{if $.IsLoggedIn }}
-					<form action="/dislike/{{.ID}}" method="post">
+					<form action="/comment-dislike/{{$commentID}}" method="post">
 					{{end}}
 						<button type="submit" class="dislike-icon">
 							<img src="{{ $.StaticURL}}/images/thumbsdown.png" alt="Dislike" />
@@ -121,8 +120,6 @@
             {{end}}
             {{end}}
 			<div>
-
-
 
                 <!-- the popup class need to be modified a bit -->
 				<div id="comment_reply_{{.ID}}" class="popup">
