@@ -32,11 +32,13 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 	categories := utils.GetActiveCategories()
 	data := models.DefaultTemplateData()
 	comments := utils.GetActiveComments()
+	replies := utils.GetAllReplies()
 	data.Comments = comments
 	data.IsLoggedIn = isLoggedIn
 	data.ProfilePage = false
 	data.Categories = categories
 	data.ShowComments = false
+	data.CommentReplies = replies
 
 	if len(parts) == 2 || (len(parts) == 3 && parts[2] == "search") {
 		data.AllPosts = utils.FilterPostsByCategoryID(allPosts, categoryID)

@@ -28,6 +28,8 @@ func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 	categories := utils.GetActiveCategories()
 	comments := utils.GetActiveComments()
 	data := models.DefaultTemplateData()
+	replies := utils.GetAllReplies()
+	data.CommentReplies = replies
 	data.IsLoggedIn = isLoggedIn
 	data.MainPage = true
 	data.ProfilePage = false
@@ -73,6 +75,8 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	allPosts := utils.GetAllPosts()
 	data := models.DefaultTemplateData()
 	categories := utils.GetActiveCategories()
+	replies := utils.GetAllReplies()
+	data.CommentReplies=replies
 	data.Categories = categories
 	data.AllPosts = allPosts
 	data.ErrorMessage = errorMessage
@@ -125,6 +129,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	data := models.DefaultTemplateData()
 	categories := utils.GetActiveCategories()
 	comments := utils.GetActiveComments()
+	replies := utils.GetAllReplies()
 	data.Comments = comments
 	data.Username = username
 	data.User = utils.FindUserByUserName(username)
@@ -133,6 +138,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	data.Uuid = uuid
 	data.AllPosts = allPosts
 	data.Title = "Login"
+	data.CommentReplies=replies
 	if isActiveUser {
 		data.IsLoggedIn = true
 	}
@@ -212,6 +218,7 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 	user := utils.FindUserByUserName(username)
 	categories := utils.GetActiveCategories()
 	comments := utils.GetActiveComments()
+	replies := utils.GetAllReplies()
 	data.Comments = comments
 	data.Categories = categories
 	data.User = user
@@ -220,6 +227,7 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 	data.ProfilePage = true
 	data.Title = "Your Profile"
 	data.IsLoggedIn = true
+	data.CommentReplies=replies
 	if isLoggedIn {
 		render.RenderProfile(w, "index.html", data)
 	} else {
