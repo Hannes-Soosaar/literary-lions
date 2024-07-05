@@ -36,21 +36,16 @@ DONE: the search bar is not visible one other pages.
 DONE: time zone, is wrong will remove from display on the profile page.--> will not display only user for sorting
 DONE: empty Categories have no indication that they are empty
 DONE: It is easy to respond to comments. HS task
+DONE: Be able to add child comments to parent comments. 
+DONE: Be able to add child comments to parent comments.
 VERIFY: The number ofOD likes and dislikes is displayed and updated correctly. // Each post has the like dislike count
+VERIFY: The number of likes and dislikes for comments is visible to all users. Hs task
 
 
 ---BUGS/Design---
-.
-
 TODO: the wrong password does not give a proper error
 TODO: No "all" selection under Post Categories.
 TODO: Site navigation has the Homepage button why, move to categories all?
-
-
----Posts,likes and comments---
-TODO: Be able to add child comments to parent comments. 
-TODO: The number of likes and dislikes for comments is visible to all users. Hs task
-
 
 
 ---Server
