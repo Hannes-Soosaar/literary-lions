@@ -102,36 +102,6 @@ func GetActiveUserComments(userId int) []models.Comment {
 }
 
 
-func GetActiveChildComments(parentCommentId int) []models.Comment {
-	var childComments []models.Comment
-	db, err := sql.Open("sqlite3", config.LION_DB)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-	query := "SELECT * FROM comment_relations WHERE AND parent_comment_id = ?"
-	rows, err := db.Query(query,parentCommentId)
-	if err != nil {
-		fmt.Printf("there is an error getting rows %v \n", err)
-		return []models.Comment{}
-	}
-	defer rows.Close()
-	for rows.Next() {
-		var comment models.Comment
-		err := rows.Scan(&comment.ID, &comment.Body, &comment.UserId, &comment.Likes, &comment.Dislikes, &comment.PostID, &comment.CreatedAt, &comment.ModifiedAt, &comment.Active)
-		if err != nil {
-			fmt.Printf("error reading from a row %v  \n", err)
-			return childComments
-		}
-		childComments = append(childComments, comment)
-	}
-	err = rows.Err()
-	if err != nil {
-		fmt.Printf("error occurred during rows iteration %v \n", err)
-		return childComments
-	}
-	return childComments
-}
 
 func PostComment(userId int, comment string, postId int) error {
 	db, err := sql.Open("sqlite3", config.LION_DB)
@@ -148,22 +118,6 @@ func PostComment(userId int, comment string, postId int) error {
 	return nil
 }
 
-// This will be handled such that there is an existing comment, from where the ID gets commented on, then we create a new comment for the same post, but mark it a child! 
-func PostChildComment(parentCommentId int, childCommentId int) error {
-	db, err := sql.Open("sqlite3", config.LION_DB)
-	if err != nil {
-		log.Fatal(err)
-		return err
-	}
-	query := "INSERT INTO comment_relations (parent_comment_id,child_comment_id)"
-	_,err = db.Exec(query,parentCommentId,childCommentId)
-	if err != nil {
-	log.Fatal(err)
-		return err
-	}
-	return nil
-}
-
 func LikeComment(commentID int) {
 
 }
@@ -171,6 +125,24 @@ func LikeComment(commentID int) {
 func DislikeComment(commentID int) {
 
 }
+
+//! discontinued logic.
+// func PostChildComment(parentCommentId int, childCommentId int) error {
+// 	db, err := sql.Open("sqlite3", config.LION_DB)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 		return err
+// 	}
+// 	query := "INSERT INTO comment_relations (parent_comment_id,child_comment_id)"
+// 	_,err = db.Exec(query,parentCommentId,childCommentId)
+// 	if err != nil {
+// 	log.Fatal(err)
+// 		return err
+// 	}
+// 	return nil
+// }
+
+
 
 //TODO just switch the comment to not active
 func RemoveCommentById(commentID int) (string, error) {
@@ -204,4 +176,68 @@ func CommentReply(reply string, userId, CommentId, postId int) error {
 		return err
 	} 
 	return nil
+}
+
+
+func GetCommentRepliesById (CommentId int) []models.CommentReply {
+	var commentReplies []models.CommentReply
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+	query := "SELECT * FROM comment_replies WHERE  comment_id = ?"
+	rows, err := db.Query(query,CommentId)
+	if err != nil {
+		fmt.Printf("there is an error getting rows %v \n", err)
+		return []models.CommentReply{}
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var CommentReply models.CommentReply
+		err := rows.Scan(&CommentReply.ID,&CommentReply.Body,&CommentReply.UserId,&CommentReply.CommentId, &CommentReply.PostId, &CommentReply.CreatedAt, &CommentReply.CreatedAt )
+		if err != nil {
+			fmt.Printf("error reading from a row %v  \n", err)
+			return commentReplies
+		}
+		commentReplies = append(commentReplies, CommentReply)
+	}
+	err = rows.Err()
+	if err != nil {
+		fmt.Printf("error occurred during rows iteration %v \n", err)
+		return commentReplies
+	}
+	return commentReplies
+}
+
+// Gets all replies 
+func GetAllReplies () []models.CommentReply {
+	var commentReplies []models.CommentReply
+	db, err := sql.Open("sqlite3", config.LION_DB)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+	query := "SELECT * FROM comment_replies"
+	rows, err := db.Query(query)
+	if err != nil {
+		fmt.Printf("there is an error getting rows %v \n", err)
+		return []models.CommentReply{}
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var CommentReply models.CommentReply
+		err := rows.Scan(&CommentReply.ID,&CommentReply.Body,&CommentReply.UserId,&CommentReply.CommentId, &CommentReply.PostId, &CommentReply.CreatedAt, &CommentReply.CreatedAt )
+		if err != nil {
+			fmt.Printf("error reading from a row %v  \n", err)
+			return commentReplies
+		}
+		commentReplies = append(commentReplies, CommentReply)
+	}
+	err = rows.Err()
+	if err != nil {
+		fmt.Printf("error occurred during rows iteration %v \n", err)
+		return commentReplies
+	}
+	return commentReplies
 }

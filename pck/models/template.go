@@ -19,6 +19,7 @@ type TemplateData struct {
 	Categories                 []Category
 	PostComments               []PostComment
 	Comments                   []Comment
+	CommentReplies             []CommentReply
 	User                       User
 	StaticURL                  string
 	CreatePostPage             bool
@@ -50,6 +51,7 @@ func DefaultTemplateData() TemplateData {
 		Categories:                 []Category{},
 		PostComments:               []PostComment{},
 		Comments:                   []Comment{},
+		CommentReplies:             []CommentReply{},
 		User:                       User{},
 		StaticURL:                  "http://localhost:8082/static", //? what does this do ?
 		ShowComments:               false,
