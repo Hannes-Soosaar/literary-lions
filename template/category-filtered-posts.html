@@ -26,15 +26,14 @@
                         </form>
                         {{ if $.IsLoggedIn }}
                         <form action="/dislike/{{.ID}}" method="post">
-                            {{ end }}
+                        {{ end }}
                             <button type="submit" class="dislike-icon">
                                 <img src="{{ $.StaticURL}}/images/thumbsdown.png" alt="Dislike" />
                                 <span class="dislike-number">{{.Dislikes}}</span>
                             </button>
                         </form>
-
                     </div>
-                    {{ if $.IsLoggedIn }}
+                    <!-- {{ if $.IsLoggedIn }}
                     <div class="post-comment-amount">
                         <a href="#comment">
                             <div class="comments-icon">
@@ -43,7 +42,7 @@
                             </div>
                         </a>
                     </div>
-                    {{end}}
+                    {{end}} -->
                 </div>
 
         </div>

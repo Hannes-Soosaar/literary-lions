@@ -7,21 +7,24 @@
 			<p>{{.Body}}</p>
 			<div class="flex-container">
 				<div class="post-likes-dislikes">
-					{{ if $.IsLoggedIn }}
+					{{if $.IsLoggedIn }}
 					<form action="/like/{{.ID}}" method="post">
+					{{end}}
 						<button type="submit" class="like-icon">
 							<img src="{{ $.StaticURL}}/images/thumbsup.png" alt="Like" />
 							<span class="like-number">{{.Likes}}</span>
 						</button>
 					</form>
+					{{if $.IsLoggedIn }}
 					<form action="/dislike/{{.ID}}" method="post">
+					{{end}}
 						<button type="submit" class="dislike-icon">
 							<img src="{{ $.StaticURL}}/images/thumbsdown.png" alt="Dislike" />
 							<span class="dislike-number">{{.Dislikes}}</span>
 						</button>
 					</form>
 				</div>
-				{{ end }} {{if $.ShowComments}} {{if $.IsLoggedIn }}
+				{{if $.ShowComments}} {{if $.IsLoggedIn }}
 				<div class="post-comment-amount">
 					<a href="#comment">
 						<div class="comments-icon">
@@ -68,10 +71,11 @@
 	<div>
 		<div>
 			{{if eq .PostID $postID}}
-
+			
         <div class="post-container">
 			<div class="bodyText">             
                 {{.ID}} {{.Body}}</div>
+			{{if $.IsLoggedIn }}
 			<div class="post-comment-amount">
 				<a href="#comment_reply_{{.ID}}">
 					<div class="comments-icon">
@@ -81,11 +85,11 @@
 						/>
 						<span class="comments-number">Reply</span>
 					</div>
-			    </div>
+			</div>
+			{{end}}
         </div>
+		
 
-            --------
-            <!-- Add loop for getting and displaying comments  -->
             {{range $.CommentReplies}} {{if eq .CommentId $commentID}}
             <div class="post-container">
                         {{.Body}}
@@ -94,6 +98,9 @@
             {{end}}
             {{end}}
 			<div>
+
+
+				
                 <!-- the popup class need to be modified a bit -->
 				<div id="comment_reply_{{.ID}}" class="popup">
 					<div class="popup-content"> 
