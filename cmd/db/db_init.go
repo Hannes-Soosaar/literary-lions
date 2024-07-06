@@ -1,11 +1,11 @@
 package main
 
 import (
-	"bufio"
+	// "bufio"
 	"fmt"
-	"log"
-	"os"
-	"strings"
+	// "log"
+	// "os"
+	// "strings"
 
 	utils "gitea.kood.tech/hannessoosaar/literary-lions/pck/utils"
 )
@@ -20,39 +20,40 @@ It can be executed as a standalone
 
 func main() {
 	fmt.Println("Starting the DB initializer")
-	reader := bufio.NewReader(os.Stdin)
-	prompt := "Do you want to delete the database? (yes/no)"
-	var operation string
-	var err error
-	for i := 0; i < 2; i++ {
-		if i == 0 {
-			fmt.Println(prompt)
-			operation, err = reader.ReadString('\n')
-			operation = strings.TrimSpace(operation)
-			if err != nil {
-				log.Fatal(err)
-			}
-		}
+	// reader := bufio.NewReader(os.Stdin)
+	// prompt := "Do you want to delete the database? (yes/no)"
+	// var operation string
+	// var err error
+	// for i := 0; i < 2; i++ {
+	// 	if i == 0 {
+	// 		fmt.Println(prompt)
+	// 		operation, err = reader.ReadString('\n')
+	// 		operation = strings.TrimSpace(operation)
+	// 		if err != nil {
+	// 			log.Fatal(err)
+	// 		}
+	// 	}
 
-		if i == 1 && operation == "yes" {
-			prompt = "Are you sure? (yes/no)"
-			fmt.Println(prompt)
-			operation, err = reader.ReadString('\n')
-			if err != nil {
-				log.Fatal(err)
-			}
-			operation = strings.TrimSpace(operation)
+	// 	if i == 1 && operation == "yes" {
+	// 		prompt = "Are you sure? (yes/no)"
+	// 		fmt.Println(prompt)
+	// 		operation, err = reader.ReadString('\n')
+	// 		if err != nil {
+	// 			log.Fatal(err)
+	// 		}
+	// 		operation = strings.TrimSpace(operation)
 
-			if operation == "yes" {
-				utils.WipeDb()
-				fmt.Println("The database has been wiped!")
-			}
-		}
+	// 		if operation == "yes" {
+	// 			utils.WipeDb()
+	// 			fmt.Println("The database has been wiped!")
+	// 		}
+	// 	}
 
-		if i == 0 && operation != "yes" {
-			break
-		}
-	}
+	// 	if i == 0 && operation != "yes" {
+	// 		break
+	// 	}
+	// }
+	utils.WipeDb()
 	utils.CreateDatabase()
 	utils.InitiateDb()
 	utils.PasswordHashing()

@@ -53,7 +53,7 @@ func DefaultTemplateData() TemplateData {
 		Comments:                   []Comment{},
 		CommentReplies:             []CommentReply{},
 		User:                       User{},
-		StaticURL:                  "http://localhost:8082/static", //? what does this do ?
+		StaticURL:                  "http://localhost:8080/static", //? what does this do ?
 		ShowComments:               false,
 		PostCreatedMessage:         "",
 		DisplayCatID:               0,
