@@ -26,6 +26,8 @@ func main() {
 	http.HandleFunc("/postComment/", handle.CommentHandler)
 	http.HandleFunc("/create-post", handle.CreatePostHandler)
 	http.HandleFunc("/submit-post", handle.SubmitPostHandler)
+	http.HandleFunc("/liked-posts", handle.LikedAndDislikedPostsHandler)
+	http.HandleFunc("/disliked-posts", handle.LikedAndDislikedPostsHandler)
 	http.HandleFunc("/category/", handleCategoryOrSearch)
 	http.HandleFunc("/search", handle.SearchHandler)
 	http.HandleFunc("/your-posts", handle.UserPostsHandler)
