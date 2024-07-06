@@ -38,6 +38,11 @@ DONE: empty Categories have no indication that they are empty
 DONE: It is easy to respond to comments. HS task
 DONE: Be able to add child comments to parent comments. 
 DONE: Be able to add child comments to parent comments.
+DONE: A Dockerfile is present in the project.
+DONE: A Docker image can be built successfully using the Dockerfile.
+DONE: The container runs successfully using the created image.
+DONE: The project has no unused Docker objects.
+DONE: SQL queries are effective and efficient.
 VERIFY: The number ofOD likes and dislikes is displayed and updated correctly. // Each post has the like dislike count
 VERIFY: The number of likes and dislikes for comments is visible to all users. Hs task
 
@@ -57,18 +62,11 @@ TODO: The server uses appropriate HTTP response codes, 2XX, 4XX.
 TODO: The interface handles 5XX HTTP response codes gracefully.
 
 --- User friendliness---
-
 TODO: Categories are effective in organizing discussions.
 TODO: Content has intuitive filtering.
 TODO: Error messages are informative and user-friendly.
-TODO: SQL queries are effective and efficient.
+
 TODO: The registration process is user-friendly.
 TODO: The registration process is  secure.
 TODO: The interface is clear, well set out and navigable.
 TODO: Design
-
----DOCKER---
-TODO: A Dockerfile is present in the project.
-TODO: A Docker image can be built successfully using the Dockerfile.
-TODO: The container runs successfully using the created image.
-TODO: The project has no unused Docker objects.
