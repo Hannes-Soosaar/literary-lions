@@ -1,7 +1,31 @@
 {{ define "sidebar"}}
 <div class="sidebar">
+		<ul>
+			<a href="/">
+			{{ if .MainPage }}
+			<div class="sidebar-unfocused">
+				<li>Homepage</li>
+			</div>
+			{{ else }}
+			<div class="sidebar-unfocused">
+				<li>Homepage</li>
+			</div>
+			{{ end }}
+		</a>
+	</ul>	
 	<h4>Post Categories:</h4>
 	<ul>
+			<a href="/">
+			{{ if .MainPage }}
+			<div class="sidebar-focused">
+				<li><b>All Categories</b></li>
+			</div>
+			{{ else }}
+			<div class="sidebar-unfocused">
+				<li>All Categories</li>
+			</div>
+			{{ end }}
+		</a>
 		{{range .Categories}}
 		<a href="/category/{{.ID}}">
 			{{ if eq .ID $.DisplayCatID}}
@@ -21,17 +45,6 @@
 	{{if .IsLoggedIn}}
 	<h4>Site Navigation:</h4>
 	<ul>
-		<a href="/">
-			{{ if .MainPage }}
-			<div class="sidebar-focused">
-				<li><b>Homepage</b></li>
-			</div>
-			{{ else }}
-			<div class="sidebar-unfocused">
-				<li>Homepage</li>
-			</div>
-			{{ end }}
-		</a>
 		<div class="sidebar-border">
 		</div>
 		<a href="/profile">
@@ -46,12 +59,6 @@
 			{{ end }}
 		</a>
 		<div class="sidebar-border">
-
-		</div>
-
-		<a href="/userPostHistory"  >
-		<div class="sidebar-border">
-
 		</div>
 		<a href="/your-posts">
 			{{ if .UserPostsPage }}
@@ -95,8 +102,6 @@
 		<div class="sidebar-border">
 
 		</div>
-
-
 		<a href="/create-post">
 			{{ if .CreatePostPage }}
 			<div class="sidebar-focused">

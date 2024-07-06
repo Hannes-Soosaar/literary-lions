@@ -43,30 +43,29 @@ DONE: A Docker image can be built successfully using the Dockerfile.
 DONE: The container runs successfully using the created image.
 DONE: The project has no unused Docker objects.
 DONE: SQL queries are effective and efficient.
+DONE: Categories are effective in organizing discussions.
+DONE: Content has intuitive filtering.
+DONE: Site navigation has the Homepage button why, move to categories all?
+DONE: No "all" selection under Post Categories.
+DONE: The server behaves as expected (no crashes).
+DONE: All pages function correctly (no unhandled 404 errors).
+DONE: The server uses appropriate HTTP response codes, 2XX, 4XX.
+DONE: The interface handles 5XX HTTP response codes gracefully.
+DONE: The project handles HTTP status 400 and 500 errors gracefully.
+DONE: The registration process is  secure.
+DONE: The registration process is user-friendly.
 VERIFY: The number ofOD likes and dislikes is displayed and updated correctly. // Each post has the like dislike count
 VERIFY: The number of likes and dislikes for comments is visible to all users. Hs task
 
 
+
 ---BUGS/Design---
 TODO: the wrong password does not give a proper error
-TODO: No "all" selection under Post Categories.
-TODO: Site navigation has the Homepage button why, move to categories all?
-
-
----Server
-TODO: The project handles HTTP status 400 and 500 errors gracefully.
 TODO: The forum displays a warning message for invalid login attempts.
-TODO: The server behaves as expected (no crashes).
-TODO: All pages function correctly (no unhandled 404 errors).
-TODO: The server uses appropriate HTTP response codes, 2XX, 4XX.
-TODO: The interface handles 5XX HTTP response codes gracefully.
 
 --- User friendliness---
-TODO: Categories are effective in organizing discussions.
-TODO: Content has intuitive filtering.
+
 TODO: Error messages are informative and user-friendly.
 
-TODO: The registration process is user-friendly.
-TODO: The registration process is  secure.
 TODO: The interface is clear, well set out and navigable.
 TODO: Design

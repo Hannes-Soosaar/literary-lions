@@ -2,16 +2,19 @@
 <div class="profile-container">
 	<h1>{{.User.Username}}'s Profile</h1>
 	<div class="flex-container">
-		<div>
-			This is your profile page, here you can change any of profile details or
-			delete your account.
-		</div>
+		<div>This is your profile page.</div>
 	</div>
-	<a>
+<div class="flex-container">
+	<div class="popup-content">
 		<p class="text">Member since: {{ .User.CreatedAt}}</p>
-		<form class="update_form" action="/updateUserProfile" method="POST">
+		<form action="/updateUserProfile" method="POST">
 			<div>You Email:</div>
-			<input type="text" name="email" placeholder="{{ .User.Email}}" /><br />
+			<input
+				class=""
+				type="email"
+				name="email"
+				placeholder="{{ .User.Email}}"
+			/><br />
 			<div>Your Username:</div>
 			<input
 				type="text"
@@ -19,9 +22,9 @@
 				placeholder="{{ .User.Username}}"
 			/><br />
 			<div>Change Password</div>
-			<input type="text" name="newPassword" placeholder="New Password" /><br />
+			<input type="password" name="newPassword" placeholder="New Password" /><br />
 			<input
-				type="text"
+				type="password"
 				name="newPasswordAgain"
 				placeholder="New Password again "
 			/><br />
@@ -29,6 +32,7 @@
 			<p class="text">Last activity: {{ .User.ModifiedAt}}</p>
 			<button class="button" type="submit"><b>update</b></button>
 		</form>
-	</a>
+	</div>
+</div>
 </div>
 {{end}}
