@@ -5,6 +5,7 @@
 		<div>This is your profile page.</div>
 	</div>
 <div class="flex-container">
+	<a>
 	<div class="popup-content">
 		<p class="text">Member since: {{ .User.CreatedAt}}</p>
 		<form action="/updateUserProfile" method="POST">
@@ -32,6 +33,7 @@
 			<p class="text">Last activity: {{ .User.ModifiedAt}}</p>
 			<button class="button" type="submit"><b>update</b></button>
 		</form>
+	</a>
 	</div>
 </div>
 </div>

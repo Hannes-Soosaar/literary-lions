@@ -28,18 +28,21 @@
         window.location.href = "/";
     </script>
     {{ end }}
+
     {{ if .Uuid}}
     <script>
         alert("Welcome, {{.Username}}")
         window.location.href = "/";
     </script>
     {{ end }}
+
     {{ if .RegistrationSuccessMessage}}
     <script>
         alert("{{.RegistrationSuccessMessage}}")
         window.location.href = "/"
     </script>
     {{ end }}
+
 
 </body>
 

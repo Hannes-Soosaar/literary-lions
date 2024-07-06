@@ -301,5 +301,8 @@ func UpdateUserProfile(updatedUser models.User) (string, error) {
 		return successMessage , errorMessage
 	}
 	fmt.Println(successMessage)
+
+	models.GetInstance().SetSuccess(successMessage)
+	models.GetInstance().SetError(errorMessage)
 	return successMessage, errorMessage
 }

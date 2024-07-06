@@ -31,7 +31,7 @@ func main() {
 	http.HandleFunc("/category/", handleCategoryOrSearch)
 	http.HandleFunc("/search", handle.SearchHandler)
 	http.HandleFunc("/your-posts", handle.UserPostsHandler)
-	http.HandleFunc("/userPostHistory", handle.GetGetUserPostHistoryHandler)
+	// http.HandleFunc("/userPostHistory", handle.GetGetUserPostHistoryHandler)
 	http.HandleFunc("/updateUserProfile", handle.UpdateUserProfileHandler)
 
 	err := http.ListenAndServe(config.PORT, nil)

@@ -30,6 +30,7 @@ type TemplateData struct {
 	SearchQuery                string
 	FilterType                 string
 	EmptyMessage               string
+	Message                    Message
 }
 
 func DefaultTemplateData() TemplateData {
@@ -53,7 +54,7 @@ func DefaultTemplateData() TemplateData {
 		Comments:                   []Comment{},
 		CommentReplies:             []CommentReply{},
 		User:                       User{},
-		StaticURL:                  "http://localhost:8080/static", //? what does this do ?
+		StaticURL:                  "http://localhost:8080/static",
 		ShowComments:               false,
 		PostCreatedMessage:         "",
 		DisplayCatID:               0,
@@ -61,5 +62,6 @@ func DefaultTemplateData() TemplateData {
 		SearchQuery:                "",
 		FilterType:                 "",
 		EmptyMessage:               "",
+		Message:                    *GetInstance(),
 	}
 }

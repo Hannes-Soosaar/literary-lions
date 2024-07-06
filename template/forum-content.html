@@ -1,10 +1,12 @@
 {{ define "forum-content"}}
 <div class="forum_content">
+
     {{if .QueryNoResult}}
     <div class="post-container-message">
         <h1>{{.QueryNoResult}}</h1>
     </div>
     {{end}}
+    <h2>{{.Message.Success}}</h2>
     {{ range .AllPosts.AllPosts}}
     <a href="/category/{{.CategoryID}}/{{.ID}}">
         <div class="post-container">
@@ -13,6 +15,7 @@
 
     </a>
     <div class="flex-container">
+        
         <div class="post-likes-dislikes">
             {{ if $.IsLoggedIn }}
             <form action="/like/{{.ID}}" method="post">
