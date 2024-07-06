@@ -45,6 +45,8 @@ func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	render.RenderLandingPage(w, "index.html", data)
+	models.GetInstance().SetSuccess("")
+	models.GetInstance().SetError(nil)
 }
 
 func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
@@ -83,6 +85,8 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	data.RegistrationSuccessMessage = "Account created successfully! You can now log in."
 	data.Title = "Registration"
 	render.RenderLandingPage(w, "index.html", data)
+	models.GetInstance().SetSuccess("")
+	models.GetInstance().SetError(nil)
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -143,6 +147,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		data.IsLoggedIn = true
 	}
 	render.RenderLandingPage(w, "index.html", data)
+	models.GetInstance().SetSuccess("")
+	models.GetInstance().SetError(nil)
 }
 
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
@@ -234,6 +240,7 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 		data.ErrorMessage = "You need to be logged in to access your profile!"
 		render.RenderLandingPage(w, "index.html", data)
 	}
+
 }
 
 func LikeHandler(w http.ResponseWriter, r *http.Request) {
@@ -342,14 +349,17 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	referer := r.Header.Get("Referer")
 	http.Redirect(w, r, referer, http.StatusSeeOther)
+	models.GetInstance().SetSuccess("")
+	models.GetInstance().SetError(nil)
 }
 
-func GetGetUserPostHistoryHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Get user activity activated")
-	LandingPageHandler(w, r)
-}
+// func GetGetUserPostHistoryHandler(w http.ResponseWriter, r *http.Request) {
+// 	fmt.Println("Get user activity activated")
+// 	LandingPageHandler(w, r)
+// }
 
 func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Starting to change the profile!")
 	if !verifyPostMethod(w, r) {
 		return
 	}
@@ -392,5 +402,6 @@ func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Println("Not a user")
 	}
+
 	LogoutHandler(w, r)
 }
