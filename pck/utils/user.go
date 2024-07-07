@@ -63,11 +63,11 @@ func AddActiveUser(user models.User) error {
 	}
 	defer db.Close()
 	if UserWithEmailExists(user.Email) {
-		err := fmt.Errorf("there is User registered with %s this email, pleas register with another email", user.Email)
+		err := fmt.Errorf("a user with the email '%s' already exists. Please use a different email to create your account", user.Email)
 		models.GetInstance().SetError(err)
 		return err
 	} else if UserWithUserNameExists(user.Username) {
-		err := fmt.Errorf("there is User registered with %s this username, pleas register with another username", user.Username)
+		err := fmt.Errorf("a user with the username '%s' already exists. Please choose a different to create you account", user.Username)
 		models.GetInstance().SetError(err)
 		return err
 	} else {
@@ -110,7 +110,7 @@ func FindUserByUUID(userUuid string) models.User {
 }
 
 func AddNewUser(username string, email string, password string) error {
-	var err error 
+	var err error
 	var user models.User
 	user.Username = username
 	user.Email = email
