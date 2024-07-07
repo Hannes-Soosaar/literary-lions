@@ -165,7 +165,7 @@ h3 {
 .post-container-separator {
     width: calc(37% - 50px);
     min-width: 400px;
-    height: 1px;
+    height: 0.1vh;
     background-color: gray;
     margin: 5px 0;
     text-align: left;
