@@ -165,7 +165,7 @@ h3 {
 .post-container-separator {
     width: calc(37% - 50px);
     min-width: 400px;
-    height: 0.1vh;
+    height: 1px;
     background-color: gray;
     margin: 5px 0;
     text-align: left;
@@ -397,8 +397,8 @@ h3 {
 
 .ml60 {
     margin-left: 60px;
+    height: 1px;
 }
-
 
 @media (max-width: 850px) {
     .sidebar {
@@ -736,4 +736,8 @@ textarea:focus {
     box-sizing: border-box;
     text-align: left;
     border: 10px solid transparent;
+}
+
+.post-container .comment-text {
+    margin-right: 60px;
 }
