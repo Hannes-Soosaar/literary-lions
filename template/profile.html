@@ -5,15 +5,25 @@
 	<a>
 		<div class="popup-content profile">
 			<form action="/updateUserProfile" method="POST">
-				<div>Your Email:</div>
+				<div>Change Email:</div>
 				<input type="email" name="email" placeholder="{{ .User.Email}}" /><br />
-				<div>Your Username:</div>
-				<input class="profile" type="text" name="username" placeholder="{{ .User.Username}}" /><br />
+				<input type="hidden" name="ID" value="{{ .User.ID}}" />
+				<button class="button" type="submit"><b>Update</b></button>
+			</form>
+			<form action="/updateUserProfile" method="POST">
+				<br>
+				<div>Change Username:</div>
+				<input type="text" name="username" placeholder="{{ .User.Username}}" /><br />
+				<input type="hidden" name="ID" value="{{ .User.ID}}" />
+				<button class="button" type="submit"><b>Update</b></button>
+			</form>
+			<form action="/updateUserProfile" method="POST">
+				<br>
 				<div>Change Password</div>
 				<input type="password" name="newPassword" placeholder="New Password" minlength="8" /><br />
 				<input type="password" name="newPasswordAgain" placeholder="New Password Again" minlength="8" /><br />
 				<input type="hidden" name="ID" value="{{ .User.ID}}" />
-				<button class="button" type="submit"><b>update</b></button>
+				<button class="button" type="submit"><b>Update</b></button>
 			</form>
 		</div>
 	</a>

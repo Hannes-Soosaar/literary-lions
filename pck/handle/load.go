@@ -360,36 +360,70 @@ func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	sessionUser := utils.FindUserByUserName(verifiedUserName)
 	var updatedUser models.User
-	updatedUser.Password = r.FormValue("newPassword")
-	passwordAgain := r.FormValue("newPasswordAgain")
-	if updatedUser.Password != passwordAgain {
-		data := models.DefaultTemplateData()
-		data.ProfileErrorMessage = "New passwords don't match!"
-		render.RenderProfile(w, "index.html", data)
+
+	formUsr := r.FormValue("username")
+	formEmail := r.FormValue("email")
+	formPwdNew := r.FormValue("newPassword")
+	formPwdNewRepeat := r.FormValue("newPasswordAgain")
+
+	userId := r.FormValue("ID")
+	parsedInt, err := strconv.Atoi(userId)
+	if err != nil {
+		fmt.Println("Unable to get user ID")
+		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
 	}
-	fmt.Println(updatedUser.Password)
-	if (r.FormValue("email")) == "" {
+
+	if (formPwdNew != "") && (formPwdNewRepeat != "") {
+		updatedUser.Password = formPwdNew
+
+		if updatedUser.Password != formPwdNewRepeat {
+			data := models.DefaultTemplateData()
+			data.ProfileErrorMessage = "New passwords don't match!"
+			render.RenderProfile(w, "index.html", data)
+			return
+		}
+	}
+
+	if formEmail == "" {
 		updatedUser.Email = sessionUser.Email
 	} else {
-		updatedUser.Email = r.FormValue("email")
+		fmt.Println("Email:", formEmail)
+		if utils.UserWithEmailExists(formEmail) {
+			data := models.DefaultTemplateData()
+			data.ProfileErrorMessage = "This email is already in use!"
+			if sessionUser.Email == formEmail {
+				data.ProfileErrorMessage = "This is already your email!"
+			}
+			render.RenderProfile(w, "index.html", data)
+			return
+		}
+		updatedUser.Email = formEmail
 	}
-	if (r.FormValue("username")) == "" {
+	if formUsr == "" {
 		updatedUser.Username = sessionUser.Username
 	} else {
-		updatedUser.Username = r.FormValue("username")
+		fmt.Println("Username:", formUsr)
+		if utils.UserWithUserNameExists(formUsr) {
+			data := models.DefaultTemplateData()
+			data.ProfileErrorMessage = "This username is already in use!"
+			if sessionUser.Username == formUsr {
+				data.ProfileErrorMessage = "This is already your username!"
+			}
+			render.RenderProfile(w, "index.html", data)
+			return
+		}
+		updatedUser.Username = formUsr
 	}
+
 	if (r.FormValue("role")) == "" {
 		updatedUser.Role = sessionUser.Role
 	} else {
 		updatedUser.Role = r.FormValue("role")
 	}
-	userId := r.FormValue("ID")
-	parsedInt, err := strconv.Atoi(userId)
-	if err != nil {
-		fmt.Println("Unable to get user ID")
-	}
+
 	updatedUser.ID = int(parsedInt)
+
 	if sessionUser.ID == updatedUser.ID {
 		utils.UpdateUserProfile(updatedUser)
 	} else {
