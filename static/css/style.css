@@ -67,7 +67,7 @@ h3 {
 }
 
 .post-container p {
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .comments-icon img {
@@ -740,8 +740,9 @@ textarea:focus {
 }
 
 .post-container .comment-text {
-    margin-right: 60px;
+    margin-right: 0px;
     max-width: 400px;
+    word-break: break-all;
 }
 
 .single-post .post-container {
