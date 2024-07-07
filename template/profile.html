@@ -1,40 +1,35 @@
 {{ define "profile" }}
-<div class="profile-container">
-	<h1>{{.User.Username}}'s Profile</h1>
-	<div class="flex-container">
-		<div>This is your profile page.</div>
-	</div>
-<div class="flex-container">
+<div class="forum_content">
+	<h2>Welcome " {{.User.Username}} "</h2>
+	<h3>You can update your profile details here. </h3>
 	<a>
-	<div class="popup-content">
-		<p class="text">Member since: {{ .User.CreatedAt}}</p>
-		<form action="/updateUserProfile" method="POST">
-			<div>You Email:</div>
-			<input
-				class=""
-				type="email"
-				name="email"
-				placeholder="{{ .User.Email}}"
-			/><br />
-			<div>Your Username:</div>
-			<input
-				type="text"
-				name="username"
-				placeholder="{{ .User.Username}}"
-			/><br />
-			<div>Change Password</div>
-			<input type="password" name="newPassword" placeholder="New Password" /><br />
-			<input
-				type="password"
-				name="newPasswordAgain"
-				placeholder="New Password again "
-			/><br />
-			<input type="hidden" name="ID" value="{{ .User.ID}}" />
-			<p class="text">Last activity: {{ .User.ModifiedAt}}</p>
-			<button class="button" type="submit"><b>update</b></button>
-		</form>
+		<div class="popup-content profile">
+			<form action="/updateUserProfile" method="POST">
+				<div>You Email:</div>
+				<input
+					type="email"
+					name="email"
+					placeholder="{{ .User.Email}}"
+				/><br />
+				<div>Your Username:</div>
+				<input
+				class="profile"
+					type="text"
+					name="username"
+					placeholder="{{ .User.Username}}"
+				/><br />
+				<div>Change Password</div>
+				<input type="password" name="newPassword" placeholder="New Password" /><br />
+				<input
+					type="password"
+					name="newPasswordAgain"
+					placeholder="New Password Again "
+				/><br />
+				<input type="hidden" name="ID" value="{{ .User.ID}}" />
+				<button class="button" type="submit"><b>update</b></button>
+			</form>	
+		</div>
 	</a>
-	</div>
-</div>
+	<h3>You will be logged out to update your profile</h3>
 </div>
 {{end}}

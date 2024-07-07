@@ -279,6 +279,7 @@ h3 {
     box-sizing: border-box;
     width: calc(100vw - 400px);
     margin: auto;
+    margin-top: 0vw;
     margin-left: 200px;
     text-align: center;
     display: flex;
@@ -528,6 +529,38 @@ h3 {
     border-radius: 15px;
     margin-right: 5px;
 }
+
+.profile input {
+    background: whitesmoke;
+    padding: 10px;
+    margin:10px;
+    width: 90%;
+    min-width: 46px;
+    border: 2px solid goldenrod;
+    border-radius: 15px;
+    margin-right: 5px;
+}
+.profile text {
+    text-align: center;
+    color: blue;
+    margin-right: 5px;
+}
+
+
+.profile button {
+    background: whitesmoke;
+    border: 2px solid goldenrod;
+    border-radius: 15px;
+    height: 39px;
+    width: 70px;
+    margin-left: 5px;
+}
+
+.profile button:hover {
+    background: rgb(230, 230, 230);
+    cursor: pointer;
+}
+
 
 .popup input[type="text"]:focus {
     background-color: rgb(230, 230, 230);
