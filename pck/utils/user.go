@@ -62,7 +62,6 @@ func AddActiveUser(user models.User) error {
 		return err
 	}
 	defer db.Close()
-
 	if UserWithEmailExists(user.Email) {
 		err := fmt.Errorf("there is User registered with %s this email, pleas register with another email", user.Email)
 		models.GetInstance().SetError(err)
@@ -72,6 +71,7 @@ func AddActiveUser(user models.User) error {
 		models.GetInstance().SetError(err)
 		return err
 	} else {
+		fmt.Println("Running the query to add the user.")
 		query := "INSERT INTO users (username,email,password,role,created_at,modified_at,active,uuid) VALUES (?,?,?,?,?,?,?,?)"
 		_, err := db.Exec(query, user.Username, user.Email, user.Password, user.Role, user.CreatedAt, user.ModifiedAt, user.Active, user.UUID)
 		if err != nil {
@@ -80,6 +80,8 @@ func AddActiveUser(user models.User) error {
 			return err
 		}
 	}
+
+	fmt.Println(err)
 	return err
 }
 
@@ -108,6 +110,7 @@ func FindUserByUUID(userUuid string) models.User {
 }
 
 func AddNewUser(username string, email string, password string) error {
+	var err error 
 	var user models.User
 	user.Username = username
 	user.Email = email
@@ -122,11 +125,10 @@ func AddNewUser(username string, email string, password string) error {
 	}
 	user.UUID = userUuid
 	err = AddActiveUser(user)
-	fmt.Printf("Error from Add ActiveUser %v  \n", err)
 	if err != nil {
 		return err
 	}
-	return nil
+	return err
 }
 
 func ValidateUser(userName string, password string) (string, bool, error) {

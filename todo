@@ -60,7 +60,6 @@ DONE: The number ofOD likes and dislikes is displayed and updated correctly. // 
 DONE: The number of likes and dislikes for comments is visible to all users. Hs task
 DONE: Design
 DONE: The forum displays a warning message for invalid login attempts.
-
----BUGS/Design---
-TODO: Update error messages to handle registration with duplicate usernames or emails appropriately.
-TODO: Ensure success messages are displayed when a user successfully changes their email.
+DONE: Update error messages to handle registration with duplicate usernames or emails appropriately.
+DONE: Ensure success messages are displayed when a user successfully changes their email.
+DONE: Post comment message.

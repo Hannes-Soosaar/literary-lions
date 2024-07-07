@@ -51,7 +51,7 @@ func LandingPageHandler(w http.ResponseWriter, r *http.Request) {
 
 func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	var errorMessage string
-	var successMessage string
+	var alertMessage string
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid Request method", http.StatusMethodNotAllowed)
 		return
@@ -66,13 +66,16 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	password := utils.HashString(r.FormValue("password"))
 	err := utils.AddNewUser(username, email, password)
+	fmt.Printf("error in the handler: %v \n",err)
 	if err != nil {
+		fmt.Println("we are setting the error message")
 		models.GetInstance().SetError(err)
+		alertMessage = err.Error()
 	} else {
-		successMessage = fmt.Sprintf("%s was added with the email %s", username, email)
-
+		alertMessage = fmt.Sprintf("%s was added with the email %s", username, email)
 	}
-	models.GetInstance().SetSuccess(successMessage)
+	models.GetInstance().SetSuccess(alertMessage)
+
 	allPosts := utils.GetAllPosts()
 	data := models.DefaultTemplateData()
 	categories := utils.GetActiveCategories()
@@ -81,7 +84,7 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	data.Categories = categories
 	data.AllPosts = allPosts
 	data.ErrorMessage = errorMessage
-	data.RegistrationSuccessMessage = "Account created successfully! You can now log in."
+	data.RegistrationSuccessMessage =alertMessage
 	data.Title = "Registration"
 	render.RenderLandingPage(w, "index.html", data)
 	models.GetInstance().SetSuccess("")

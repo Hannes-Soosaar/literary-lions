@@ -10,7 +10,7 @@ import (
 func verifySession(r *http.Request) (sessionUserName string) {
 	cookie, err := r.Cookie("session_token")
 	if err != nil {
-		err = fmt.Errorf("error %v \n", err)
+		err = fmt.Errorf("error %v", err)
 		return err.Error()
 	}
 	sessionUser := utils.FindUserByUUID(cookie.Value)

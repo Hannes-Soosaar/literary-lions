@@ -10,7 +10,6 @@ import (
 )
 
 func main() {
-
 	fs := http.FileServer(http.Dir("../../static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
 	fmt.Printf("server is running and listening on  Port %s \n", config.PORT)
@@ -31,27 +30,19 @@ func main() {
 	http.HandleFunc("/category/", handleCategoryOrSearch)
 	http.HandleFunc("/search", handle.SearchHandler)
 	http.HandleFunc("/your-posts", handle.UserPostsHandler)
-	// http.HandleFunc("/userPostHistory", handle.GetGetUserPostHistoryHandler)
 	http.HandleFunc("/updateUserProfile", handle.UpdateUserProfileHandler)
-
 	err := http.ListenAndServe(config.PORT, nil)
 	if err != nil {
 		fmt.Printf("Error:%s", err)
 	}
-
 	fmt.Printf("Server started on Port: %s \n", config.PORT)
 }
 
 func handleCategoryOrSearch(w http.ResponseWriter, r *http.Request) {
-	// Split the URL path
 	parts := strings.Split(r.URL.Path, "/")
-	// Check if the URL path matches /category/any_number/search
 	if len(parts) >= 4 && parts[3] == "search" {
-		// Call SearchHandler for /category/any_number/search
 		handle.SearchHandler(w, r)
 		return
 	}
-
-	// Call CategoryHandler for other /category/ URLs
 	handle.CategoryHandler(w, r)
 }
