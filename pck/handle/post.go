@@ -3,7 +3,6 @@ package handle
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -135,7 +134,6 @@ func MarkPostAsUnliked(userID, postID int) error {
 	case err == sql.ErrNoRows:
 		_, err := db.Exec("INSERT INTO user_activity (user_id, post_id, like_activity) VALUES (?, ?, 0)", userID, postID)
 		if err != nil {
-			fmt.Println("error", err)
 			return err
 		}
 	case err != nil:
@@ -190,7 +188,6 @@ func MarkPostAsUndisliked(userID, postID int) error {
 	case err == sql.ErrNoRows:
 		_, err := db.Exec("INSERT INTO user_activity (user_id, post_id, dislike_activity) VALUES (?, ?, 0)", userID, postID)
 		if err != nil {
-			fmt.Println("error", err)
 			return err
 		}
 	case err != nil:
@@ -203,7 +200,6 @@ func MarkPostAsUndisliked(userID, postID int) error {
 			}
 		}
 	}
-
 	return nil
 }
 func MarkCommentAsDisliked(userID, commentID int) error {
@@ -245,7 +241,6 @@ func MarkCommentAsUndisliked(userID, commentID int) error {
 	case err == sql.ErrNoRows:
 		_, err := db.Exec("INSERT INTO user_reply_activity  (user_id, comment_id, dislike_activity) VALUES (?, ?, 0)", userID, commentID)
 		if err != nil {
-			fmt.Println("error", err)
 			return err
 		}
 	case err != nil:
@@ -300,7 +295,6 @@ func MarkCommentAsUnliked(userID, commentID int) error {
 	case err == sql.ErrNoRows:
 		_, err := db.Exec("INSERT INTO user_reply_activity (user_id, comment_id, like_activity) VALUES (?, ?, 0)", userID, commentID)
 		if err != nil {
-			fmt.Println("error", err)
 			return err
 		}
 	case err != nil:
@@ -317,7 +311,6 @@ func MarkCommentAsUnliked(userID, commentID int) error {
 }
 
 func UserPostsHandler(w http.ResponseWriter, r *http.Request) {
-	// Check session token
 	cookie, err := r.Cookie("session_token")
 	if err != nil {
 		http.Redirect(w, r, "/", http.StatusFound)
@@ -329,9 +322,7 @@ func UserPostsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
-	// Retrieve username from session token
 	ctx := context.WithValue(r.Context(), userContextKey, username)
-	// Proceed with handling the request
 	ctxUsername, ok := ctx.Value(userContextKey).(string)
 	if !ok {
 		http.Error(w, "Unable to retrieve username from context", http.StatusInternalServerError)
@@ -375,9 +366,7 @@ func LikedAndDislikedPostsHandler(w http.ResponseWriter, r *http.Request) {
 		{
 			disliked = true
 		}
-
 	}
-	// Check session token
 	cookie, err := r.Cookie("session_token")
 	if err != nil {
 		http.Redirect(w, r, "/", http.StatusFound)
@@ -389,9 +378,7 @@ func LikedAndDislikedPostsHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
-	// Retrieve username from session token
 	ctx := context.WithValue(r.Context(), userContextKey, username)
-	// Proceed with handling the request
 	ctxUsername, ok := ctx.Value(userContextKey).(string)
 	if !ok {
 		http.Error(w, "Unable to retrieve username from context", http.StatusInternalServerError)

@@ -21,11 +21,9 @@ func CategoryHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}
 	categoryID, err := strconv.Atoi(categoryIDstr)
-
 	if err != nil {
 		http.Error(w, "Invalid request", http.StatusBadRequest)
 	}
-
 	sessionToken, err := r.Cookie("session_token")
 	isLoggedIn := err == nil && isValidSession(sessionToken.Value)
 	allPosts := utils.GetAllPosts()

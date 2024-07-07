@@ -66,16 +66,13 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	email := r.FormValue("email")
 	password := utils.HashString(r.FormValue("password"))
 	err := utils.AddNewUser(username, email, password)
-	fmt.Printf("error in the handler: %v \n",err)
 	if err != nil {
-		fmt.Println("we are setting the error message")
 		models.GetInstance().SetError(err)
 		alertMessage = err.Error()
 	} else {
 		alertMessage = fmt.Sprintf("%s was added with the email %s", username, email)
 	}
 	models.GetInstance().SetSuccess(alertMessage)
-
 	allPosts := utils.GetAllPosts()
 	data := models.DefaultTemplateData()
 	categories := utils.GetActiveCategories()
@@ -84,7 +81,7 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	data.Categories = categories
 	data.AllPosts = allPosts
 	data.ErrorMessage = errorMessage
-	data.RegistrationSuccessMessage =alertMessage
+	data.RegistrationSuccessMessage = alertMessage
 	data.Title = "Registration"
 	render.RenderLandingPage(w, "index.html", data)
 	models.GetInstance().SetSuccess("")
@@ -198,7 +195,6 @@ func AuthSessionToken(next http.HandlerFunc) http.HandlerFunc {
 		}
 		ctx := context.WithValue(r.Context(), userContextKey, username)
 		next.ServeHTTP(w, r.WithContext(ctx))
-		// fmt.Println("CTX", ctx)
 	}
 }
 
@@ -358,28 +354,22 @@ func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	verifiedUserName := verifySession(r)
 	if verifiedUserName == "" {
-		fmt.Printf("not a user log in")
 		LandingPageHandler(w, r)
 	}
 	sessionUser := utils.FindUserByUserName(verifiedUserName)
 	var updatedUser models.User
-
 	formUsr := r.FormValue("username")
 	formEmail := r.FormValue("email")
 	formPwdNew := r.FormValue("newPassword")
 	formPwdNewRepeat := r.FormValue("newPasswordAgain")
-
 	userId := r.FormValue("ID")
 	parsedInt, err := strconv.Atoi(userId)
 	if err != nil {
-		fmt.Println("Unable to get user ID")
 		http.Error(w, "Invalid user ID", http.StatusBadRequest)
 		return
 	}
-
 	if (formPwdNew != "") && (formPwdNewRepeat != "") {
 		updatedUser.Password = formPwdNew
-
 		if updatedUser.Password != formPwdNewRepeat {
 			data := models.DefaultTemplateData()
 			data.ProfileErrorMessage = "New passwords don't match!"
@@ -387,7 +377,6 @@ func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-
 	if formEmail == "" {
 		updatedUser.Email = sessionUser.Email
 	} else {
@@ -406,7 +395,6 @@ func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	if formUsr == "" {
 		updatedUser.Username = sessionUser.Username
 	} else {
-		fmt.Println("Username:", formUsr)
 		if utils.UserWithUserNameExists(formUsr) {
 			data := models.DefaultTemplateData()
 			data.ProfileErrorMessage = "This username is already in use!"
@@ -418,20 +406,17 @@ func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		updatedUser.Username = formUsr
 	}
-
 	if (r.FormValue("role")) == "" {
 		updatedUser.Role = sessionUser.Role
 	} else {
 		updatedUser.Role = r.FormValue("role")
 	}
-
 	updatedUser.ID = int(parsedInt)
-
 	if sessionUser.ID == updatedUser.ID {
 		utils.UpdateUserProfile(updatedUser)
 	} else {
-		fmt.Println("Not a user")
+		err := fmt.Errorf("not a user")
+		models.GetInstance().SetError(err)
 	}
-
 	LogoutHandler(w, r)
 }

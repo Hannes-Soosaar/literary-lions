@@ -2,7 +2,6 @@ package handle
 
 import (
 	"database/sql"
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -17,29 +16,24 @@ func CommentHandler(w http.ResponseWriter, r *http.Request) {
 	commentId, _ := strconv.Atoi(commentIdString)
 	postIdString := r.FormValue("postID")
 	postId, _ := strconv.Atoi(postIdString)
-
 	comment := r.FormValue("comment")
 	if !verifyPostMethod(w, r) {
 		return
 	}
 	verifiedUserName := verifySession(r)
 	if verifiedUserName == "" {
-		fmt.Printf("not a user log in")
 		LandingPageHandler(w, r)
 	}
 	sessionUser := utils.FindUserByUserName(verifiedUserName)
-
 	if postIdString == "" {
 		http.Error(w, "Invalid post ID", http.StatusBadRequest)
 		return
 	}
 	if commentIdString == "" {
-		fmt.Printf("Posting comment \n")
 		utils.PostComment(sessionUser.ID, comment, postId)
 	} else {
 		utils.CommentReply(comment, sessionUser.ID, commentId, postId)
 	}
-
 	http.Redirect(w, r, referer, http.StatusFound)
 }
 
@@ -104,8 +98,6 @@ func CommentDislikeHandler(w http.ResponseWriter, r *http.Request) {
 	var commentIDstr string
 	path := r.URL.Path
 	parts := strings.Split(path, "/")
-
-	fmt.Println(parts)
 	for _, part := range parts {
 		_, err := strconv.Atoi(part)
 		if err == nil {
@@ -113,13 +105,11 @@ func CommentDislikeHandler(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 	}
-
 	if commentIDstr == "" {
 		http.Error(w, "Invalid URL", http.StatusBadRequest)
 	}
 	commentID, _ := strconv.Atoi(commentIDstr)
 	HasLiked, HasDisliked := CheckUserReplyActivity(commentID, r)
-
 	username := GetUsernameFromCookie(r)
 	user := utils.FindUserByUserName(username)
 	if !HasLiked {

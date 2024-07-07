@@ -2,21 +2,21 @@
 
 a web forum that allows users to communicate, associate categories with posts, like/dislike posts & comments, and filter posts.
 
+## basic operations
+
+-logon from the top right profile profile icon 
+-the user 
+
 Login
 
 Landing page--
 
-Has user
-Has user roles 
-Has user posts
-Has book
-Has Post
-Has Thread
-Has Password
-Has 
+#Technical details
 
 Necessities:
-go get golang.org/x/crypto/bcrypt
+
+
+# Running app from a Docker container
 
 ~/your_project_folder$ docker build -t lions:1.0 .
 

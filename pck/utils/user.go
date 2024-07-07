@@ -165,7 +165,7 @@ func UserWithEmailExists(email string) bool {
 		return true
 	}
 	if err != nil {
-		fmt.Errorf("error in the query to finding the mail from users", err)
+		err = fmt.Errorf("error in the query to finding the mail from users %v ", err)
 		models.GetInstance().SetError(err)
 		return true
 	}
@@ -183,16 +183,13 @@ func OtherUserWithEmailExists(email string, id int) bool {
 	if exists {
 		err = fmt.Errorf("the email %s has been taken, choose another", email)
 		models.GetInstance().SetError(err)
-		fmt.Println("Exists same email ")
 		return true
 	}
 	if err != nil {
 		err = fmt.Errorf("error in the query to finding the mail from users", err)
 		models.GetInstance().SetError(err)
-		fmt.Println("Query not OK")
 		return true
 	}
-	fmt.Println(exists)
 	return false
 }
 
@@ -243,18 +240,15 @@ func UpdateUserProfile(updatedUser models.User) (string, error) {
 	var successMessage string
 	var errorMessage error
 	oldUser = FindUserByUserID(updatedUser.ID)
-
 	if updatedUser.Password == "" {
 		updatedUser.Password = oldUser.Password
 	} else {
 		updatedUser.Password = HashString(updatedUser.Password)
 		successMessage += "Your password has been updated. \n"
 	}
-
 	if updatedUser.Email != oldUser.Email {
 		successMessage += "Your email has been updated. \n"
 	}
-
 	if !OtherUserWithUserNameExists(updatedUser.Username, oldUser.ID) {
 		if updatedUser.Username != oldUser.Username {
 			successMessage += "Your username has been updated.\n"

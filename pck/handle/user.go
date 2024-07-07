@@ -2,7 +2,6 @@ package handle
 
 import (
 	"database/sql"
-	"fmt"
 	"net/http"
 
 	"gitea.kood.tech/hannessoosaar/literary-lions/intenal/config"
@@ -18,7 +17,6 @@ func CheckUserActivity(postID int, r *http.Request) (bool, bool) {
 	user := utils.FindUserByUserName(username)
 	db, err := sql.Open("sqlite3", config.LION_DB)
 	if err != nil {
-		fmt.Println("Database error:", err)
 		return false, false
 	}
 	defer db.Close()
@@ -30,7 +28,6 @@ func CheckUserActivity(postID int, r *http.Request) (bool, bool) {
 		if err == sql.ErrNoRows {
 			return false, false
 		}
-		fmt.Println("Database error:", err)
 		return false, false
 	}
 	return activity.HasLiked, activity.HasDisliked
@@ -45,7 +42,6 @@ func CheckUserReplyActivity(commentID int, r *http.Request) (bool, bool) {
 	user := utils.FindUserByUserName(username)
 	db, err := sql.Open("sqlite3", config.LION_DB)
 	if err != nil {
-		fmt.Println("Database error:", err)
 		return false, false
 	}
 	defer db.Close()
@@ -57,10 +53,8 @@ func CheckUserReplyActivity(commentID int, r *http.Request) (bool, bool) {
 		if err == sql.ErrNoRows {
 			return false, false
 		}
-		fmt.Println("Database error:", err)
 		return false, false
 	}
-	fmt.Println(activity)
 	return activity.HasLiked, activity.HasDisliked
 }
 
