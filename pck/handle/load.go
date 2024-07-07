@@ -78,7 +78,7 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	data := models.DefaultTemplateData()
 	categories := utils.GetActiveCategories()
 	replies := utils.GetAllReplies()
-	data.CommentReplies=replies
+	data.CommentReplies = replies
 	data.Categories = categories
 	data.AllPosts = allPosts
 	data.ErrorMessage = errorMessage
@@ -142,7 +142,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	data.Uuid = uuid
 	data.AllPosts = allPosts
 	data.Title = "Login"
-	data.CommentReplies=replies
+	data.CommentReplies = replies
 	if isActiveUser {
 		data.IsLoggedIn = true
 	}
@@ -170,7 +170,7 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		break
 	}
 	// render.RenderLandingPage(w, "index.html", data)
-	LandingPageHandler(w,r)
+	LandingPageHandler(w, r)
 }
 
 func isValidSession(sessionToken string) bool {
@@ -233,7 +233,7 @@ func ProfileHandler(w http.ResponseWriter, r *http.Request) {
 	data.ProfilePage = true
 	data.Title = "Your Profile"
 	data.IsLoggedIn = true
-	data.CommentReplies=replies
+	data.CommentReplies = replies
 	if isLoggedIn {
 		render.RenderProfile(w, "index.html", data)
 	} else {
@@ -372,9 +372,9 @@ func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	var updatedUser models.User
 	updatedUser.Password = r.FormValue("newPassword")
 	passwordAgain := r.FormValue("newPasswordAgain")
-	if  (updatedUser.Password == passwordAgain ) || updatedUser.Password ==""{
+	if (updatedUser.Password == passwordAgain) || updatedUser.Password == "" {
 	} else {
-		updatedUser.Password="0"
+		updatedUser.Password = "0"
 	}
 	if (r.FormValue("email")) == "" {
 		updatedUser.Email = sessionUser.Email
@@ -403,5 +403,5 @@ func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Not a user")
 	}
 
-	LogoutHandler(w,r)
+	LogoutHandler(w, r)
 }
