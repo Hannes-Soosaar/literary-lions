@@ -34,7 +34,12 @@
         {{block "posts-by-user" .}}{{end}}
         {{end}}
     </div>
-
+    {{ if .ProfileErrorMessage }}
+    <script>
+        alert("{{.ProfileErrorMessage}}")
+        window.location.href = "/profile";
+    </script>
+    {{ end }}
     {{ if .ErrorMessage }}
     <script>
         alert("{{.ErrorMessage}}")

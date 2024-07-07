@@ -70,7 +70,7 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 		models.GetInstance().SetError(err)
 	} else {
 		successMessage = fmt.Sprintf("%s was added with the email %s", username, email)
-		
+
 	}
 	models.GetInstance().SetSuccess(successMessage)
 	allPosts := utils.GetAllPosts()
@@ -112,7 +112,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 		}
-		sessionToken := uuid 
+		sessionToken := uuid
 		if err != nil {
 			errorMessage = errorMessage + " Failed to generate UUID"
 		}
@@ -128,9 +128,9 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		errorMessage = "The session is not Invalid"
 	}
 
-		if models.GetInstance().GetError() != nil {
-			errorMessage = models.GetInstance().GetError().Error()
-		}
+	if models.GetInstance().GetError() != nil {
+		errorMessage = models.GetInstance().GetError().Error()
+	}
 
 	allPosts := utils.GetAllPosts()
 	data := models.DefaultTemplateData()
@@ -161,7 +161,7 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		Expires: time.Now().Add(-1 * time.Hour),
 		Path:    "/",
 	})
-	sessionStore = map[string]string{} 
+	sessionStore = map[string]string{}
 	allPosts := utils.GetAllPosts()
 	data := models.DefaultTemplateData()
 	data.Title = "Logout"
@@ -251,7 +251,7 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 	parts := strings.Split(path, "/")
 	for _, part := range parts {
 		_, err := strconv.Atoi(part)
-		if err == nil { 
+		if err == nil {
 			postIDstr = part
 			break
 		}
@@ -362,10 +362,13 @@ func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	var updatedUser models.User
 	updatedUser.Password = r.FormValue("newPassword")
 	passwordAgain := r.FormValue("newPasswordAgain")
-	if (updatedUser.Password == passwordAgain) || updatedUser.Password == "" {
-	} else {
-		updatedUser.Password = "0"
+	if updatedUser.Password != passwordAgain {
+		data := models.DefaultTemplateData()
+		data.ProfileErrorMessage = "New passwords don't match!"
+		render.RenderProfile(w, "index.html", data)
+		return
 	}
+	fmt.Println(updatedUser.Password)
 	if (r.FormValue("email")) == "" {
 		updatedUser.Email = sessionUser.Email
 	} else {

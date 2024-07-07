@@ -1,21 +1,8 @@
 {{ define "sidebar"}}
 <div class="sidebar">
-		<ul>
-			<a href="/">
-			{{ if .MainPage }}
-			<div class="sidebar-unfocused">
-				<li>Homepage</li>
-			</div>
-			{{ else }}
-			<div class="sidebar-unfocused">
-				<li>Homepage</li>
-			</div>
-			{{ end }}
-		</a>
-	</ul>	
 	<h4>Post Categories:</h4>
 	<ul>
-			<a href="/">
+		<a href="/">
 			{{ if .MainPage }}
 			<div class="sidebar-focused">
 				<li><b>All Categories</b></li>

@@ -1,33 +1,20 @@
 {{ define "profile" }}
 <div class="forum_content">
-	<h1>Welcome " {{.User.Username}} "</h1>
+	<h1>Welcome, {{.User.Username}}</h1>
 	<h4>You can update your profile details here.</h4>
 	<a>
 		<div class="popup-content profile">
 			<form action="/updateUserProfile" method="POST">
-				<div>You Email:</div>
-				<input
-					type="email"
-					name="email"
-					placeholder="{{ .User.Email}}"
-				/><br />
+				<div>Your Email:</div>
+				<input type="email" name="email" placeholder="{{ .User.Email}}" /><br />
 				<div>Your Username:</div>
-				<input
-				class="profile"
-					type="text"
-					name="username"
-					placeholder="{{ .User.Username}}"
-				/><br />
+				<input class="profile" type="text" name="username" placeholder="{{ .User.Username}}" /><br />
 				<div>Change Password</div>
-				<input type="password" name="newPassword" placeholder="New Password" /><br />
-				<input
-					type="password"
-					name="newPasswordAgain"
-					placeholder="New Password Again "
-				/><br />
+				<input type="password" name="newPassword" placeholder="New Password" minlength="8" /><br />
+				<input type="password" name="newPasswordAgain" placeholder="New Password Again" minlength="8" /><br />
 				<input type="hidden" name="ID" value="{{ .User.ID}}" />
 				<button class="button" type="submit"><b>update</b></button>
-			</form>	
+			</form>
 		</div>
 	</a>
 	<h4>You will be logged out to update your profile</h4>

@@ -31,6 +31,7 @@ type TemplateData struct {
 	FilterType                 string
 	EmptyMessage               string
 	Message                    Message
+	ProfileErrorMessage        string
 }
 
 func DefaultTemplateData() TemplateData {
@@ -63,5 +64,6 @@ func DefaultTemplateData() TemplateData {
 		FilterType:                 "",
 		EmptyMessage:               "",
 		Message:                    *GetInstance(),
+		ProfileErrorMessage:        "",
 	}
 }
