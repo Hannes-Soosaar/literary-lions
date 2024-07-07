@@ -22,7 +22,6 @@ func FindUserByUserName(userName string) models.User {
 	err = row.Scan(&user.ID, &user.Username, &user.Email, &user.Password, &user.Role, &user.CreatedAt, &user.ModifiedAt, &user.Active, &user.UUID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			fmt.Printf("%s, was not found \n", userName)
 			models.GetInstance().SetError(err)
 			return models.User{}
 		}
@@ -46,7 +45,6 @@ func FindUserByUserID(ID int) models.User {
 	err = row.Scan(&user.ID, &user.Username, &user.Email, &user.Password, &user.Role, &user.CreatedAt, &user.ModifiedAt, &user.Active, &user.UUID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			fmt.Printf("user with %d,  was not found \n", ID)
 			models.GetInstance().SetError(err)
 			return models.User{}
 		}
@@ -64,6 +62,7 @@ func AddActiveUser(user models.User) error {
 		return err
 	}
 	defer db.Close()
+
 	if UserWithEmailExists(user.Email) {
 		err := fmt.Errorf("there is User registered with %s this email, pleas register with another email", user.Email)
 		models.GetInstance().SetError(err)
@@ -97,7 +96,6 @@ func FindUserByUUID(userUuid string) models.User {
 	err = row.Scan(&user.ID, &user.Username, &user.Email, &user.Password, &user.Role, &user.CreatedAt, &user.ModifiedAt, &user.Active, &user.UUID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			fmt.Printf("There is no user with the UUID  %s, was not found \n", userUuid)
 			models.GetInstance().SetError(err)
 			return models.User{}
 		}
@@ -135,7 +133,7 @@ func ValidateUser(userName string, password string) (string, bool, error) {
 	user := FindUserByUserName(userName)
 	var uuid string
 	if (user == models.User{}) {
-		err := fmt.Errorf("Username %s  does not exist please register")
+		err := fmt.Errorf("%s is not a user, please register", userName)
 		models.GetInstance().SetError(err)
 		return uuid, false, err
 	} else if user.Active == config.INACTIVE {
@@ -178,18 +176,21 @@ func OtherUserWithEmailExists(email string, id int) bool {
 		fmt.Println("error opening DB", err)
 	}
 	defer db.Close()
-	query := `SELECT * FROM users WHERE username = ? AND id != ?);`
+	query := `(SELECT * FROM users WHERE username = ? AND id != ?);`
 	err = db.QueryRow(query, email, id).Scan(&exists)
 	if exists {
 		err = fmt.Errorf("the email %s has been taken, choose another", email)
 		models.GetInstance().SetError(err)
+		fmt.Println("Exists same email ")
 		return true
 	}
 	if err != nil {
 		err = fmt.Errorf("error in the query to finding the mail from users", err)
 		models.GetInstance().SetError(err)
+		fmt.Println("Query not OK")
 		return true
 	}
+	fmt.Println(exists)
 	return false
 }
 
@@ -227,7 +228,6 @@ func OtherUserWithUserNameExists(userName string, id int) bool {
 	if exists {
 		return true
 	}
-	fmt.Printf("The query gives us the following result %v ", exists)
 	if err != nil {
 		err = fmt.Errorf("error in the query to finding the username from users %v", err)
 		models.GetInstance().SetError(err)
@@ -241,21 +241,30 @@ func UpdateUserProfile(updatedUser models.User) (string, error) {
 	var successMessage string
 	var errorMessage error
 	oldUser = FindUserByUserID(updatedUser.ID)
+
 	if updatedUser.Password == "" {
 		updatedUser.Password = oldUser.Password
 	} else {
 		updatedUser.Password = HashString(updatedUser.Password)
 		successMessage += "Your password has been updated. \n"
 	}
+
+
+	fmt.Println(updatedUser.Email)
+
 	if !OtherUserWithEmailExists(updatedUser.Email, oldUser.ID) {
+
+
 		if updatedUser.Email != oldUser.Email {
 			successMessage += "Your email has been updated. \n"
 		}
 	} else {
+		fmt.Println("Reverting back to ol")
+		// updatedUser.Email= oldUser.Email
 		errorMessage = fmt.Errorf("there is a user with the same email")
 	}
+
 	if !OtherUserWithUserNameExists(updatedUser.Username, oldUser.ID) {
-		fmt.Println("User with same name does not  Exists ")
 		if updatedUser.Username != oldUser.Username {
 			successMessage += "Your username has been updated.\n"
 		}

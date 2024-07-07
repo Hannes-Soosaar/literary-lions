@@ -13,7 +13,6 @@ import (
 
 func CommentHandler(w http.ResponseWriter, r *http.Request) {
 	referer := r.Header.Get("Referer")
-	fmt.Printf("the full content of r is %v \n", r)
 	commentIdString := r.FormValue("commentID")
 	commentId, _ := strconv.Atoi(commentIdString)
 	postIdString := r.FormValue("postID")
@@ -38,7 +37,6 @@ func CommentHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("Posting comment \n")
 		utils.PostComment(sessionUser.ID, comment, postId)
 	} else {
-		fmt.Printf("Replying to comment \n")
 		utils.CommentReply(comment, sessionUser.ID, commentId, postId)
 	}
 

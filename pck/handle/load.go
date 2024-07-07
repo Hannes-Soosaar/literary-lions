@@ -350,7 +350,6 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Starting to change the profile!")
 	if !verifyPostMethod(w, r) {
 		return
 	}
