@@ -21,9 +21,11 @@ A web forum that allows users to communicate, associate categories with posts, l
   To run the app in dev mode execute the following commands in the terminal.
 
     1. Initialize the Lions database
+
         $ make liondb
 
     2. Start the server
+
         $ make run 
 
 # Running the built app from a Docker container
@@ -33,12 +35,14 @@ To running the app from a Docker container on linux (ubuntu).
   1. install the latest version of Docker from the developer https://docs.docker.com/desktop/install/linux-install/
 
   2. create the image by entering to the terminal in the folder where the Docker file named "Dockerfile" is:
+    
         $ docker build -t lions:1.0 .
 
   3. to run the created image on port 8080 run the following command in the terminal
+    
      $  docker run -p 8080:8080 lions:1.0
 
-The app is now running and can be accessed on with your browser navigating to localhost:8080
+The app is now running and can be accessed with your browser navigating to localhost:8080
 
 # Credits and Bugs
 
