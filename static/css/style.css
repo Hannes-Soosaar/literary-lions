@@ -387,6 +387,7 @@ h3 {
     margin-left: 90px;
     margin-right: 75px;
     word-wrap: break-word;
+    max-width: 370px;
 }
 
 .comment-text,
@@ -740,4 +741,10 @@ textarea:focus {
 
 .post-container .comment-text {
     margin-right: 60px;
+    max-width: 400px;
+}
+
+.single-post .post-container {
+    width: calc(37% - 30px);
+    min-width: 550px;
 }
