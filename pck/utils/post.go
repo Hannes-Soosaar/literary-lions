@@ -21,12 +21,10 @@ func AddNewPost(categoryID int, title string, body string, userID int) error {
 		return err
 	}
 	defer statement.Close()
-
 	_, err = statement.Exec(title, body, userID, categoryID)
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
@@ -102,7 +100,6 @@ func FindUserLikedPosts(posts models.Posts, userID int) models.Posts {
 		return posts
 	}
 	defer rows.Close()
-
 	var likedPostIDs []int
 	for rows.Next() {
 		var userIDfromDB int
@@ -120,7 +117,6 @@ func FindUserLikedPosts(posts models.Posts, userID int) models.Posts {
 	if err = rows.Err(); err != nil {
 		fmt.Println("Error during rows iteration:", err)
 	}
-
 	var likedPosts models.Posts
 	for _, post := range posts.AllPosts {
 		for _, postID := range likedPostIDs {
@@ -130,7 +126,6 @@ func FindUserLikedPosts(posts models.Posts, userID int) models.Posts {
 			}
 		}
 	}
-
 	return likedPosts
 }
 
@@ -147,7 +142,6 @@ func FindUserDislikedPosts(posts models.Posts, userID int) models.Posts {
 		return posts
 	}
 	defer rows.Close()
-
 	var dislikedPostIDs []int
 	for rows.Next() {
 		var userIDfromDB int
@@ -175,7 +169,6 @@ func FindUserDislikedPosts(posts models.Posts, userID int) models.Posts {
 			}
 		}
 	}
-
 	return dislikedPosts
 }
 
@@ -211,25 +204,4 @@ func FindPostsByUserName(userName string) models.Posts {
 		fmt.Println("Error during rows iteration:", err)
 	}
 	return models.Posts{}
-}
-
-func FindPostByCategory(categoryName string) models.Posts {
-	//TODO: GetPostFromCategory
-
-	return models.Posts{}
-}
-
-func UpdatedComment(commentId int) {
-
-}
-
-func UpdateEmotes(emote string) {
-	//TODO: GetAllPostLikes
-	//TODO: GetAllPostDislikes no need to implement, if there is a counter you can just
-	//TODO: AddLike and RemoveLike
-	//TODO: Add dislike and RemoveDisLike
-
-}
-func CreateNewPost(post string, userName string) {
-	// TODO: AddUserPost
 }

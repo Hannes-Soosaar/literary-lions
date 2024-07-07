@@ -5,8 +5,6 @@ import (
 	"fmt"
 )
 
-
-// This is the first iteration of the UUID  
 func GenerateUUID() (string,error){
     u := make([]byte, 16)
     if _, err := rand.Read(u); err != nil {

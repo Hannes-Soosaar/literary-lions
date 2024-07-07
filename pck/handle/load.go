@@ -67,13 +67,12 @@ func RegistrationHandler(w http.ResponseWriter, r *http.Request) {
 	password := utils.HashString(r.FormValue("password"))
 	err := utils.AddNewUser(username, email, password)
 	if err != nil {
-		fmt.Println("We are in the error path of the Registration handler")
-		errorMessage = err.Error()
-		fmt.Println(errorMessage)
+		models.GetInstance().SetError(err)
 	} else {
 		successMessage = fmt.Sprintf("%s was added with the email %s", username, email)
+		
 	}
-	fmt.Println(successMessage)
+	models.GetInstance().SetSuccess(successMessage)
 	allPosts := utils.GetAllPosts()
 	data := models.DefaultTemplateData()
 	categories := utils.GetActiveCategories()
@@ -113,7 +112,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 		}
-		sessionToken := uuid // Made it so the session has the same uuid as the user.
+		sessionToken := uuid 
 		if err != nil {
 			errorMessage = errorMessage + " Failed to generate UUID"
 		}
@@ -126,8 +125,12 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		})
 	} else {
 		uuid = ""
-		errorMessage = "Not a valid user!"
+		errorMessage = "The session is not Invalid"
 	}
+
+		if models.GetInstance().GetError() != nil {
+			errorMessage = models.GetInstance().GetError().Error()
+		}
 
 	allPosts := utils.GetAllPosts()
 	data := models.DefaultTemplateData()
@@ -158,7 +161,7 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		Expires: time.Now().Add(-1 * time.Hour),
 		Path:    "/",
 	})
-	sessionStore = map[string]string{} //! empties the sessions storage variable on logout.
+	sessionStore = map[string]string{} 
 	allPosts := utils.GetAllPosts()
 	data := models.DefaultTemplateData()
 	data.Title = "Logout"
@@ -169,7 +172,6 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		delete(sessionStore, key)
 		break
 	}
-	// render.RenderLandingPage(w, "index.html", data)
 	LandingPageHandler(w, r)
 }
 
@@ -191,29 +193,25 @@ func AuthSessionToken(next http.HandlerFunc) http.HandlerFunc {
 			http.Redirect(w, r, "/", http.StatusFound)
 			return
 		}
-
 		ctx := context.WithValue(r.Context(), userContextKey, username)
 		next.ServeHTTP(w, r.WithContext(ctx))
-		fmt.Println("CTX", ctx)
+		// fmt.Println("CTX", ctx)
 	}
 }
 
 func ProfileHandler(w http.ResponseWriter, r *http.Request) {
-	// Check session token
 	cookie, err := r.Cookie("session_token")
 	if err != nil {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 	sessionToken := cookie.Value
-	username, exists := sessionStore[sessionToken] //! Only works in this file as sessionStore is stored as a global variable.
+	username, exists := sessionStore[sessionToken]
 	if !exists {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
-	// Retrieve username from session token
 	ctx := context.WithValue(r.Context(), userContextKey, username)
-	// Proceed with handling the request
 	ctxUsername, ok := ctx.Value(userContextKey).(string)
 	if !ok {
 		http.Error(w, "Unable to retrieve username from context", http.StatusInternalServerError)
@@ -252,9 +250,8 @@ func LikeHandler(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 	parts := strings.Split(path, "/")
 	for _, part := range parts {
-		// Check if the part is a numeric string
 		_, err := strconv.Atoi(part)
-		if err == nil { // Found the numeric part which is the postID
+		if err == nil { 
 			postIDstr = part
 			break
 		}
@@ -306,9 +303,8 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 	parts := strings.Split(path, "/")
 	for _, part := range parts {
-		// Check if the part is a numeric string
 		_, err := strconv.Atoi(part)
-		if err == nil { // Found the numeric part which is the postID
+		if err == nil {
 			postIDstr = part
 			break
 		}
@@ -352,11 +348,6 @@ func DislikeHandler(w http.ResponseWriter, r *http.Request) {
 	models.GetInstance().SetSuccess("")
 	models.GetInstance().SetError(nil)
 }
-
-// func GetGetUserPostHistoryHandler(w http.ResponseWriter, r *http.Request) {
-// 	fmt.Println("Get user activity activated")
-// 	LandingPageHandler(w, r)
-// }
 
 func UpdateUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Starting to change the profile!")

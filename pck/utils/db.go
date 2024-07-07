@@ -27,12 +27,11 @@ func InitiateDb() {
 		log.Fatal(err)
 	}
 	defer db.Close()
-
 	err = db.Ping()
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Database Open")
+	fmt.Println("Starting SQL script Open")
 	sql, err := os.ReadFile(config.INIT_SQL)
 	if err != nil {
 		log.Fatal(err)
@@ -42,12 +41,12 @@ func InitiateDb() {
 		fmt.Println("Database Open", config.INIT_SQL)
 		log.Fatal(err)
 	}
-
+	fmt.Println("Database populated")
 }
 
 //! THIS FUNCTION IS TO BE RAN ONLY ONCE IT WILL HASH ALL PWs IF ALREADY RAN IT WILL DO A HASH OF A HASH  
 func PasswordHashing(){
-	fmt.Println("Opening Database for PW hashing")
+	fmt.Println("Opening Database for initial PW encryption")
 	db, err := sql.Open("sqlite3", config.LION_DB)
 	if err != nil {
 		log.Fatal(err)
@@ -55,7 +54,7 @@ func PasswordHashing(){
 	defer db.Close()
 	var users []models.User
 	queryRead := "SELECT id,password FROM users"
-	rows,err := db.Query(queryRead)
+	rows,_ := db.Query(queryRead)
 	for rows.Next(){
 		var user models.User
 		err := rows.Scan(&user.ID,&user.Password)
@@ -75,6 +74,7 @@ func PasswordHashing(){
 			panic(err.Error())
 		}
 	}
+	fmt.Println("PWs encrypted!")
 }
 
 func WipeDb() {
@@ -84,15 +84,14 @@ func WipeDb() {
 		log.Fatal(err)
 	}
 	defer db.Close()
-
 	sql, err := os.ReadFile(config.RESET_SQL)
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	_, err = db.Exec(string(sql))
 	if err != nil {
 		fmt.Println("Failed to execute SQL script")
 		log.Fatal(err)
 	}
+	fmt.Println("Database wiped!")
 }

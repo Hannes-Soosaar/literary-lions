@@ -14,7 +14,6 @@ import (
 )
 
 func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
-	// Check session token
 	cookie, err := r.Cookie("session_token")
 	if err != nil {
 		http.Redirect(w, r, "/", http.StatusFound)
@@ -26,9 +25,7 @@ func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
-	// Retrieve username from session token
 	ctx := context.WithValue(r.Context(), userContextKey, username)
-	// Proceed with handling the request
 	ctxUsername, ok := ctx.Value(userContextKey).(string)
 	if !ok {
 		http.Error(w, "Unable to retrieve username from context", http.StatusInternalServerError)
@@ -44,7 +41,6 @@ func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
 	data.CreatePostPage = true
 	data.IsLoggedIn = true
 	data.Title = "Create Post"
-
 	if isLoggedIn {
 		render.RenderPostPage(w, "index.html", data)
 	} else {
@@ -54,7 +50,6 @@ func CreatePostHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func SubmitPostHandler(w http.ResponseWriter, r *http.Request) {
-
 	cookie, err := r.Cookie("session_token")
 	if err != nil {
 		http.Redirect(w, r, "/", http.StatusFound)
@@ -66,9 +61,7 @@ func SubmitPostHandler(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
-
 	user := utils.FindUserByUserName(username)
-
 	if r.Method != http.MethodPost {
 		http.Error(w, "Invalid Request method", http.StatusMethodNotAllowed)
 		return
@@ -79,7 +72,6 @@ func SubmitPostHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-
 	userID := user.ID
 	categoryIDstr := r.Form.Get("category")
 	categoryID, err := strconv.Atoi(categoryIDstr)
@@ -90,11 +82,9 @@ func SubmitPostHandler(w http.ResponseWriter, r *http.Request) {
 	title := r.Form.Get("title")
 	body := r.Form.Get("body")
 	err = utils.AddNewPost(categoryID, title, body, userID)
-
 	if err != nil {
 		http.Error(w, "Error creating post", http.StatusBadRequest)
 	}
-
 	data := models.DefaultTemplateData()
 	data.PostCreatedMessage = "Post was created successfully!"
 	categories := utils.GetActiveCategories()
@@ -112,12 +102,10 @@ func MarkPostAsLiked(userID, postID int) error {
 		return err
 	}
 	defer db.Close()
-	// Check if there's already an entry for this user and post
 	var likeActivity bool
 	err = db.QueryRow("SELECT like_activity FROM user_activity WHERE user_id = ? AND post_id = ?", userID, postID).Scan(&likeActivity)
 	switch {
 	case err == sql.ErrNoRows:
-		// No existing entry, insert a new one
 		_, err := db.Exec("INSERT INTO user_activity (user_id, post_id, like_activity) VALUES (?, ?, 1)", userID, postID)
 		if err != nil {
 			return err
@@ -125,7 +113,6 @@ func MarkPostAsLiked(userID, postID int) error {
 	case err != nil:
 		return err
 	default:
-		// There's an existing entry, update it
 		if !likeActivity {
 			_, err := db.Exec("UPDATE user_activity SET like_activity = 1 WHERE user_id = ? AND post_id = ?", userID, postID)
 			if err != nil {
@@ -133,7 +120,6 @@ func MarkPostAsLiked(userID, postID int) error {
 			}
 		}
 	}
-
 	return nil
 }
 
@@ -143,13 +129,10 @@ func MarkPostAsUnliked(userID, postID int) error {
 		return err
 	}
 	defer db.Close()
-	// Check if there's already an entry for this user and post
 	var likeActivity bool
 	err = db.QueryRow("SELECT like_activity FROM user_activity WHERE user_id = ? AND post_id = ?", userID, postID).Scan(&likeActivity)
 	switch {
 	case err == sql.ErrNoRows:
-		fmt.Println("No existing entry?")
-		// No existing entry, insert a new one with dislike_activity set to 1
 		_, err := db.Exec("INSERT INTO user_activity (user_id, post_id, like_activity) VALUES (?, ?, 0)", userID, postID)
 		if err != nil {
 			fmt.Println("error", err)
@@ -158,11 +141,9 @@ func MarkPostAsUnliked(userID, postID int) error {
 	case err != nil:
 		return err
 	default:
-		// There's an existing entry, update it
 		if likeActivity {
 			_, err := db.Exec("UPDATE user_activity SET like_activity = 0 WHERE user_id = ? AND post_id = ?", userID, postID)
 			if err != nil {
-				fmt.Println("Liking set to 0")
 				return err
 			}
 		}
@@ -176,12 +157,10 @@ func MarkPostAsDisliked(userID, postID int) error {
 		return err
 	}
 	defer db.Close()
-	// Check if there's already an entry for this user and post
 	var dislikeActivity bool
 	err = db.QueryRow("SELECT dislike_activity FROM user_activity WHERE user_id = ? AND post_id = ?", userID, postID).Scan(&dislikeActivity)
 	switch {
 	case err == sql.ErrNoRows:
-		// No existing entry, insert a new one
 		_, err := db.Exec("INSERT INTO user_activity (user_id, post_id, dislike_activity) VALUES (?, ?, 1)", userID, postID)
 		if err != nil {
 			return err
@@ -189,7 +168,6 @@ func MarkPostAsDisliked(userID, postID int) error {
 	case err != nil:
 		return err
 	default:
-		// There's an existing entry, update it
 		if !dislikeActivity {
 			_, err := db.Exec("UPDATE user_activity SET dislike_activity = 1 WHERE user_id = ? AND post_id = ?", userID, postID)
 			if err != nil {
@@ -206,13 +184,10 @@ func MarkPostAsUndisliked(userID, postID int) error {
 		return err
 	}
 	defer db.Close()
-	// Check if there's already an entry for this user and post
 	var dislikeActivity bool
 	err = db.QueryRow("SELECT dislike_activity FROM user_activity WHERE user_id = ? AND post_id = ?", userID, postID).Scan(&dislikeActivity)
 	switch {
 	case err == sql.ErrNoRows:
-		fmt.Println("No existing entry?")
-		// No existing entry, insert a new one with dislike_activity set to 1
 		_, err := db.Exec("INSERT INTO user_activity (user_id, post_id, dislike_activity) VALUES (?, ?, 0)", userID, postID)
 		if err != nil {
 			fmt.Println("error", err)
@@ -221,11 +196,9 @@ func MarkPostAsUndisliked(userID, postID int) error {
 	case err != nil:
 		return err
 	default:
-		// There's an existing entry, update it
 		if dislikeActivity {
 			_, err := db.Exec("UPDATE user_activity SET dislike_activity = 0 WHERE user_id = ? AND post_id = ?", userID, postID)
 			if err != nil {
-				fmt.Println("Dis-liking set to 0")
 				return err
 			}
 		}
@@ -270,7 +243,6 @@ func MarkCommentAsUndisliked(userID, commentID int) error {
 	err = db.QueryRow("SELECT dislike_activity FROM user_reply_activity WHERE user_id = ? AND comment_id = ?", userID, commentID).Scan(&dislikeActivity)
 	switch {
 	case err == sql.ErrNoRows:
-		fmt.Println("No existing entry?")
 		_, err := db.Exec("INSERT INTO user_reply_activity  (user_id, comment_id, dislike_activity) VALUES (?, ?, 0)", userID, commentID)
 		if err != nil {
 			fmt.Println("error", err)
@@ -282,7 +254,6 @@ func MarkCommentAsUndisliked(userID, commentID int) error {
 		if dislikeActivity {
 			_, err := db.Exec("UPDATE user_reply_activity SET dislike_activity = 0 WHERE user_id = ? AND comment_id = ?", userID, commentID)
 			if err != nil {
-				fmt.Println("Disiking set to 0")
 				return err
 			}
 		}
@@ -327,7 +298,6 @@ func MarkCommentAsUnliked(userID, commentID int) error {
 	err = db.QueryRow("SELECT like_activity FROM user_reply_activity WHERE user_id = ? AND comment_id = ?", userID, commentID).Scan(&likeActivity)
 	switch {
 	case err == sql.ErrNoRows:
-		fmt.Println("No existing entry?")
 		_, err := db.Exec("INSERT INTO user_reply_activity (user_id, comment_id, like_activity) VALUES (?, ?, 0)", userID, commentID)
 		if err != nil {
 			fmt.Println("error", err)
@@ -339,7 +309,6 @@ func MarkCommentAsUnliked(userID, commentID int) error {
 		if likeActivity {
 			_, err := db.Exec("UPDATE user_reply_activity SET like_activity = 0 WHERE user_id = ? AND comment_id = ?", userID, commentID)
 			if err != nil {
-				fmt.Println("Liking set to 0")
 				return err
 			}
 		}

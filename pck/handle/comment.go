@@ -54,9 +54,8 @@ func CommentLikeHandler(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 	parts := strings.Split(path, "/")
 	for _, part := range parts {
-		// Check if the part is a numeric string
 		_, err := strconv.Atoi(part)
-		if err == nil { // Found the numeric part which is the ! commentID
+		if err == nil { 
 			commentIDstr = part
 			break
 		}

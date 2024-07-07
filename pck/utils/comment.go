@@ -39,6 +39,7 @@ func GetActivePostComments(postId int) []models.Comment {
 	}
 	return activeComments
 }
+
 func GetActiveComments() []models.Comment {
 	var activeComments []models.Comment
 	db, err := sql.Open("sqlite3", config.LION_DB)
@@ -101,8 +102,6 @@ func GetActiveUserComments(userId int) []models.Comment {
 	return activeComments
 }
 
-
-
 func PostComment(userId int, comment string, postId int) error {
 	db, err := sql.Open("sqlite3", config.LION_DB)
 	if err != nil {
@@ -110,56 +109,13 @@ func PostComment(userId int, comment string, postId int) error {
 		return err
 	}
 	query := "INSERT INTO comments(body,user_id,likes,dislikes,post_id,created_at,modified_at,active) VALUES (?,?,0,0,?,datetime('now'),datetime('now'),1)"
-	_,err = db.Exec(query,comment,userId,postId)
+	_, err = db.Exec(query, comment, userId, postId)
 	if err != nil {
-	log.Fatal(err)
+		log.Fatal(err)
 		return err
 	}
 	return nil
 }
-//TODO: start work on liking comments
-func LikeComment(commentID int) {
-
-}
-//TODO: start work on liking comments
-func DislikeComment(commentID int) {
-
-}
-
-//! discontinued logic.
-// func PostChildComment(parentCommentId int, childCommentId int) error {
-// 	db, err := sql.Open("sqlite3", config.LION_DB)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 		return err
-// 	}
-// 	query := "INSERT INTO comment_relations (parent_comment_id,child_comment_id)"
-// 	_,err = db.Exec(query,parentCommentId,childCommentId)
-// 	if err != nil {
-// 	log.Fatal(err)
-// 		return err
-// 	}
-// 	return nil
-// }
-
-
-
-//! discontinued logic 
-// func RemoveCommentById(commentID int) (string, error) {
-// 	var successMessage string
-// 	db, err := sql.Open("sqlite3", config.LION_DB)
-// 	if err != nil {
-// 		log.Fatal(err)
-// 		return successMessage, err
-// 	}
-// 	query := "DELETE FROM comments WHERE id = ?"
-// 	_,err = db.Exec(query,commentID)
-// 	if err != nil {
-// 	log.Fatal(err)
-// 		return successMessage, err
-// 	}
-// 	return successMessage, err
-// }
 
 func CommentReply(reply string, userId, CommentId, postId int) error {
 	db, err := sql.Open("sqlite3", config.LION_DB)
@@ -168,15 +124,15 @@ func CommentReply(reply string, userId, CommentId, postId int) error {
 		return err
 	}
 	query := "INSERT INTO comment_replies(body,user_id,comment_id,post_id,created_at, active) VALUES (?,?,?,?,datetime('now'),1)"
-	_,err = db.Exec(query,reply,userId,CommentId,postId)
+	_, err = db.Exec(query, reply, userId, CommentId, postId)
 	if err != nil {
-	log.Fatal(err)
+		log.Fatal(err)
 		return err
-	} 
+	}
 	return nil
 }
-// NOT USED ON THE SITE YET
-func GetCommentRepliesById (CommentId int) []models.CommentReply {
+
+func GetCommentRepliesById(CommentId int) []models.CommentReply {
 	var commentReplies []models.CommentReply
 	db, err := sql.Open("sqlite3", config.LION_DB)
 	if err != nil {
@@ -184,7 +140,7 @@ func GetCommentRepliesById (CommentId int) []models.CommentReply {
 	}
 	defer db.Close()
 	query := "SELECT * FROM comment_replies WHERE  comment_id = ?"
-	rows, err := db.Query(query,CommentId)
+	rows, err := db.Query(query, CommentId)
 	if err != nil {
 		fmt.Printf("there is an error getting rows %v \n", err)
 		return []models.CommentReply{}
@@ -192,7 +148,7 @@ func GetCommentRepliesById (CommentId int) []models.CommentReply {
 	defer rows.Close()
 	for rows.Next() {
 		var CommentReply models.CommentReply
-		err := rows.Scan(&CommentReply.ID,&CommentReply.Body,&CommentReply.UserId,&CommentReply.CommentId, &CommentReply.PostId, &CommentReply.CreatedAt, &CommentReply.CreatedAt )
+		err := rows.Scan(&CommentReply.ID, &CommentReply.Body, &CommentReply.UserId, &CommentReply.CommentId, &CommentReply.PostId, &CommentReply.CreatedAt, &CommentReply.CreatedAt)
 		if err != nil {
 			fmt.Printf("error reading from a row %v  \n", err)
 			return commentReplies
@@ -207,8 +163,7 @@ func GetCommentRepliesById (CommentId int) []models.CommentReply {
 	return commentReplies
 }
 
-// Gets all replies 
-func GetAllReplies () []models.CommentReply {
+func GetAllReplies() []models.CommentReply {
 	var commentReplies []models.CommentReply
 	db, err := sql.Open("sqlite3", config.LION_DB)
 	if err != nil {
@@ -224,7 +179,7 @@ func GetAllReplies () []models.CommentReply {
 	defer rows.Close()
 	for rows.Next() {
 		var CommentReply models.CommentReply
-		err := rows.Scan(&CommentReply.ID,&CommentReply.Body,&CommentReply.UserId,&CommentReply.CommentId, &CommentReply.PostId, &CommentReply.CreatedAt, &CommentReply.CreatedAt )
+		err := rows.Scan(&CommentReply.ID, &CommentReply.Body, &CommentReply.UserId, &CommentReply.CommentId, &CommentReply.PostId, &CommentReply.CreatedAt, &CommentReply.CreatedAt)
 		if err != nil {
 			fmt.Printf("error reading from a row %v  \n", err)
 			return commentReplies

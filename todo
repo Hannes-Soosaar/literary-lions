@@ -55,16 +55,11 @@ DONE: The project handles HTTP status 400 and 500 errors gracefully.
 DONE: The registration process is  secure.
 DONE: The registration process is user-friendly.
 DONE: The interface is clear, well set out and navigable.
-VERIFY: The number ofOD likes and dislikes is displayed and updated correctly. // Each post has the like dislike count
-VERIFY: The number of likes and dislikes for comments is visible to all users. Hs task
-VERIFY: Design
-
-
+DONE: The number ofOD likes and dislikes is displayed and updated correctly. // Each post has the like dislike count
+DONE: The number of likes and dislikes for comments is visible to all users. Hs task
+DONE: Design
 
 ---BUGS/Design---
 TODO: the wrong password does not give a proper error
 TODO: The forum displays a warning message for invalid login attempts.
 TODO: Error messages are informative and user-friendly.
-
-
-

@@ -22,7 +22,6 @@ func FilterPostForSearch(FilterType string, SearchQuery string, catID int) model
 	} else {
 		postsToSort = GetAllPosts().AllPosts
 	}
-
 	if SearchQuery != "" {
 		postsToSort = FilterPostByKeyword(SearchQuery, postsToSort)
 	}

@@ -31,7 +31,6 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 		}
 		categoryID, err := strconv.Atoi(categoryIDstr)
-
 		if err != nil {
 			http.Error(w, "Invalid request", http.StatusBadRequest)
 		}
@@ -53,7 +52,6 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 		data.AllPosts = allPosts
 		data.MainPage = true
 	}
-
 	data.IsLoggedIn = isLoggedIn
 	data.Title = "Search results"
 	data.ProfilePage = false
@@ -90,12 +88,10 @@ func SearchHandler(w http.ResponseWriter, r *http.Request) {
 				if len(parts) >= 3 && parts[2] == "search" {
 					render.RenderCategoryPage(w, "category-filtered-posts.html", data)
 					return
-
 				} else {
 					render.RenderLandingPage(w, "index.html", data)
 					return
 				}
-
 			}
 		}
 	}
