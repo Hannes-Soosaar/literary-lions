@@ -6,7 +6,9 @@
         <h1>{{.QueryNoResult}}</h1>
     </div>
     {{end}}
+    {{if .Message.Success}}
     <h2>{{.Message.Success}}</h2>
+    {{end}}
     {{ range .AllPosts.AllPosts}}
     <a href="/category/{{.CategoryID}}/{{.ID}}">
         <div class="post-container">

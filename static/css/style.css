@@ -9,6 +9,11 @@ body {
     overflow: hidden;
 }
 
+.wrapper {
+    max-width: 1920px;
+    margin: 0 auto;
+}
+
 .commentText {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 30px;
@@ -110,6 +115,7 @@ h3 {
     align-items: center;
     /* Aligns items vertically center */
     margin-left: 0;
+    word-wrap: break-word;
 }
 
 .post-comment-amount {
@@ -378,7 +384,15 @@ h3 {
     font-size: 15px !important;
     color: black;
     margin: 10px;
-    margin-left: 120px;
+    margin-left: 90px;
+    margin-right: 75px;
+    word-wrap: break-word;
+}
+
+.comment-text,
+.reply-text {
+    word-wrap: break-word;
+    /* Ensure long words break and wrap */
 }
 
 .ml60 {
@@ -554,13 +568,14 @@ h3 {
 .profile input {
     background: whitesmoke;
     padding: 10px;
-    margin:10px;
+    margin: 10px;
     width: 90%;
     min-width: 46px;
     border: 2px solid goldenrod;
     border-radius: 15px;
     margin-right: 5px;
 }
+
 .profile text {
     text-align: center;
     color: blue;
@@ -621,6 +636,7 @@ h3 {
     align-items: center;
     word-wrap: break-word;
 }
+
 .single-post {
     padding: 20px;
     box-sizing: border-box;
