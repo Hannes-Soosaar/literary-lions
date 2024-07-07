@@ -365,6 +365,27 @@ h3 {
     max-height: 92vh;
 }
 
+.comment-text {
+    text-align: start !important;
+    font-size: 20px !important;
+    color: darkblue;
+    margin: 10px;
+    margin-left: 60px;
+}
+
+.reply-text {
+    text-align: start !important;
+    font-size: 15px !important;
+    color: black;
+    margin: 10px;
+    margin-left: 120px;
+}
+
+.ml60 {
+    margin-left: 60px;
+}
+
+
 @media (max-width: 850px) {
     .sidebar {
         display: none;
@@ -587,6 +608,20 @@ h3 {
 }
 
 .filtered-post {
+    padding: 20px;
+    box-sizing: border-box;
+    width: calc(100vw - 400px);
+    margin: auto;
+    margin-left: 200px;
+    margin-top: 0vw;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    word-wrap: break-word;
+}
+.single-post {
     padding: 20px;
     box-sizing: border-box;
     width: calc(100vw - 400px);

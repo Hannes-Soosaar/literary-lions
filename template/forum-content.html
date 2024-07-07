@@ -12,10 +12,8 @@
         <div class="post-container">
             <h1>{{.Title}}</h1>
             <p>{{.Body}}</p>
-
     </a>
     <div class="flex-container">
-        
         <div class="post-likes-dislikes">
             {{ if $.IsLoggedIn }}
             <form action="/like/{{.ID}}" method="post">

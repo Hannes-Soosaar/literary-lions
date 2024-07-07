@@ -1,7 +1,7 @@
 {{ define "profile" }}
 <div class="forum_content">
-	<h2>Welcome " {{.User.Username}} "</h2>
-	<h3>You can update your profile details here. </h3>
+	<h1>Welcome " {{.User.Username}} "</h1>
+	<h4>You can update your profile details here.</h4>
 	<a>
 		<div class="popup-content profile">
 			<form action="/updateUserProfile" method="POST">
@@ -30,6 +30,6 @@
 			</form>	
 		</div>
 	</a>
-	<h3>You will be logged out to update your profile</h3>
+	<h4>You will be logged out to update your profile</h4>
 </div>
 {{end}}

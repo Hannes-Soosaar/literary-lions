@@ -1,11 +1,12 @@
 {{ define "filtered-posts"}}
-<div class="filtered-post">
+<div class="single-post">
 	{{ range .AllPosts.AllPosts}}
 	<a href="/category/{{.CategoryID}}/{{.ID}}">
 		<div class="post-container">
 			<h1>{{.Title}}</h1>
 			<p>{{.Body}}</p>
 			<div class="flex-container">
+
 				<div class="post-likes-dislikes">
 					{{if $.IsLoggedIn }}
 					<form action="/like/{{.ID}}" method="post">
@@ -15,6 +16,7 @@
 							<span class="like-number">{{.Likes}}</span>
 						</button>
 					</form>
+
 					{{if $.IsLoggedIn }}
 					<form action="/dislike/{{.ID}}" method="post">
 					{{end}}
@@ -24,6 +26,7 @@
 						</button>
 					</form>
 				</div>
+
 				{{if $.ShowComments}} {{if $.IsLoggedIn }}
 				<div class="post-comment-amount">
 					<a href="#comment">
@@ -38,13 +41,12 @@
 				</div>
 				{{end}} {{end}}
 			</div>
-		</div>
+
 
 		{{$postID := .ID}}
 
 		<div id="comment" class="popup">
 			<div class="popup-content">
-				<!-- <a href="#comment" class="close">&times;</a> -->
                 <a href="#" class="close">&times;</a>
 				<form action="/postComment/{{.ID}}/" method="POST">
 					{{$postID}} {{.ID}}
@@ -61,22 +63,24 @@
 			</div>
 		</div>
 	</a>
-
-	<h2>Comments</h2>
+</div>
+</br>
+<!-- end of first section -->
+<div>
+	<h1 class="comment-text">User comments</h1>
+	<div class="post-container-separator ml60"></div>
+	<br/>
+	
 
 	{{if $.ShowComments}} {{range $.Comments}}
         {{$commentID:= .ID}}
-
-	<div>
-		<div>
-			{{if eq .PostID $postID}}
-			
-        <div class="post-container">
-			<div class="bodyText">             
-                {{.ID}} {{.Body}}</div>
+		{{if eq .PostID $postID}}
+	
 		
-
-			<div class="flex-container">
+		<div class="comment-text">{{.Body}}</div>
+		<br/>
+<!-- This is the like and dislike container with the reply button -->
+			<div class="flex-container ml60">	
 				<div class="post-likes-dislikes">
 					{{if $.IsLoggedIn }}
 					<form action="/comment-like/{{$commentID}}" method="post">
@@ -94,34 +98,40 @@
 							<span class="dislike-number">{{.Dislikes}}</span>
 						</button>
 					</form>
-				</div>
-
+			</div>
+			
 			{{if $.IsLoggedIn }}
 			<div class="post-comment-amount">
 				<a href="#comment_reply_{{.ID}}">
 					<div class="comments-icon">
-						<!-- Change the image to  a reply icon -->
 						<img
 							src="{{ $.StaticURL}}/images/CommentsIcon.png" 
 							alt="CommentsIcon"
 						/>
 						<span class="comments-number">Reply</span>
 					</div>
+				</a>
 			</div>
 			{{end}}
-        </div>
-		
 
+		</div>
+				<br/>
+				<div class="post-container-separator ml60"></div>
+				<br/>
+
+
+<!-- modify the replies here  -->
             {{range $.CommentReplies}} {{if eq .CommentId $commentID}}
-            <div class="post-container">
-                        {{.Body}}
+            <div class="reply-text">	
+                {{.Body}}
             </div>
-			<!-- Repeat what is done with Comments with replies one more loop here -->
             {{end}}
             {{end}}
+<br/>
+<div class="post-container-separator ml60"></div>
+<br/>
 			<div>
-
-                <!-- the popup class need to be modified a bit -->
+<!-- the popup class need to be modified a bit -->
 				<div id="comment_reply_{{.ID}}" class="popup">
 					<div class="popup-content"> 
 						<a href="#" class="close">&times;</a>
@@ -152,9 +162,8 @@
 					</div>
 				</div>
 				{{if $.IsLoggedIn }} {{end}} {{end}} {{end}}
-			</div>
 			{{end}}
-		</div>
-	</div>
 	{{ end }} {{ end }}
+</div>
+
 </div>
