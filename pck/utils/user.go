@@ -251,19 +251,8 @@ func UpdateUserProfile(updatedUser models.User) (string, error) {
 		successMessage += "Your password has been updated. \n"
 	}
 
-
-	fmt.Println(updatedUser.Email)
-
-	if !OtherUserWithEmailExists(updatedUser.Email, oldUser.ID) {
-
-
-		if updatedUser.Email != oldUser.Email {
-			successMessage += "Your email has been updated. \n"
-		}
-	} else {
-		fmt.Println("Reverting back to ol")
-		// updatedUser.Email= oldUser.Email
-		errorMessage = fmt.Errorf("there is a user with the same email")
+	if updatedUser.Email != oldUser.Email {
+		successMessage += "Your email has been updated. \n"
 	}
 
 	if !OtherUserWithUserNameExists(updatedUser.Username, oldUser.ID) {
@@ -282,7 +271,7 @@ func UpdateUserProfile(updatedUser models.User) (string, error) {
 	query := "UPDATE users SET username=? ,email=?, password=?, role=?, active = 1, modified_at = CURRENT_TIMESTAMP WHERE id = ?"
 	_, err = db.Exec(query, updatedUser.Username, updatedUser.Email, updatedUser.Password, updatedUser.Role, updatedUser.ID)
 	if err != nil {
-		errorMessage = fmt.Errorf ("error, updating user %v ", err)
+		errorMessage = fmt.Errorf("error, updating user %v ", err)
 		models.GetInstance().SetError(errorMessage)
 		return successMessage, errorMessage
 	}
