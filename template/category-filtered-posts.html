@@ -26,7 +26,7 @@
                         </form>
                         {{ if $.IsLoggedIn }}
                         <form action="/dislike/{{.ID}}" method="post">
-                        {{ end }}
+                            {{ end }}
                             <button type="submit" class="dislike-icon">
                                 <img src="{{ $.StaticURL}}/images/thumbsdown.png" alt="Dislike" />
                                 <span class="dislike-number">{{.Dislikes}}</span>
@@ -44,8 +44,8 @@
                     </div>
                     {{end}} -->
                 </div>
-
         </div>
+
         {{if $.ShowComments}}
         <div id="comment" class="popup">
             <div class="popup-content">
@@ -60,6 +60,6 @@
         </div>
         {{end}}
     </a>
-
+    <div class="post-container-separator"></div>
     {{ end }}
     {{ end }}
