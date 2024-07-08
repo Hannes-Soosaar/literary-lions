@@ -61,8 +61,9 @@ func FilterPostForSearch(FilterType string, SearchQuery string, catID int) model
 
 func FilterPostByKeyword(SearchQuery string, allPosts []models.Post) []models.Post {
 	var filteredPosts []models.Post
+	lowerCaseSearchQuery := strings.ToLower(SearchQuery)
 	for _, post := range allPosts {
-		if strings.Contains(post.Title, SearchQuery) || strings.Contains(post.Body, SearchQuery) {
+		if strings.Contains(strings.ToLower(post.Title), lowerCaseSearchQuery) || strings.Contains(strings.ToLower(post.Body), lowerCaseSearchQuery) {
 			filteredPosts = append(filteredPosts, post)
 		}
 	}
