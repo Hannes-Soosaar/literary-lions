@@ -19,7 +19,12 @@
 		</select>
 		<input type="text" name="search-query" {{if not .SearchQuery}}placeholder="Search..."
 			{{else}}value="{{.SearchQuery}}" {{end}} />
+		<div class="info-popup">
+			<p>Tip: Use <strong>title:keyword</strong> to search by title, <strong>body:keyword</strong> to search by
+				body, or just a keyword to search both.</p>
+		</div>
 		<button type="submit"><b>Search</b></button>
+
 	</form>
 	{{ end }}
 	<div class="account-icon">

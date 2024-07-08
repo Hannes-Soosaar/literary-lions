@@ -60,12 +60,35 @@ func FilterPostForSearch(FilterType string, SearchQuery string, catID int) model
 }
 
 func FilterPostByKeyword(SearchQuery string, allPosts []models.Post) []models.Post {
+
 	var filteredPosts []models.Post
 	lowerCaseSearchQuery := strings.ToLower(SearchQuery)
+
+	if strings.Contains(lowerCaseSearchQuery, "title:") {
+		_, lowerCaseSearchQuery, _ = strings.Cut(lowerCaseSearchQuery, "title:")
+		for _, post := range allPosts {
+			if strings.Contains(strings.ToLower(post.Title), lowerCaseSearchQuery) {
+				filteredPosts = append(filteredPosts, post)
+			}
+		}
+		return filteredPosts
+	}
+
+	if strings.Contains(lowerCaseSearchQuery, "body:") {
+		_, lowerCaseSearchQuery, _ = strings.Cut(lowerCaseSearchQuery, "body:")
+		for _, post := range allPosts {
+			if strings.Contains(strings.ToLower(post.Body), lowerCaseSearchQuery) {
+				filteredPosts = append(filteredPosts, post)
+			}
+		}
+		return filteredPosts
+	}
+
 	for _, post := range allPosts {
 		if strings.Contains(strings.ToLower(post.Title), lowerCaseSearchQuery) || strings.Contains(strings.ToLower(post.Body), lowerCaseSearchQuery) {
 			filteredPosts = append(filteredPosts, post)
 		}
 	}
+
 	return filteredPosts
 }
